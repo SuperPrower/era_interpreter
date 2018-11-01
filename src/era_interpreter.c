@@ -19,7 +19,7 @@ int free_era(struct era_t *era)
 	return 0;
 }
 
-size_t read_file(char *filename, struct era_t *era)
+uint64_t read_file(char *filename, struct era_t *era)
 {
 	FILE * executable;
 	executable = fopen(filename, "rb");
@@ -27,5 +27,5 @@ size_t read_file(char *filename, struct era_t *era)
 	size_t bytes_read = fread((void*) era->memory, sizeof(uint8_t), MEM_SIZE, executable);
 
 	fclose(executable);
-	return bytes_read;
+	return (uint64_t) bytes_read;
 }
