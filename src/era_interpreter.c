@@ -48,13 +48,24 @@ uint64_t read_file(char *filename, struct era_t *era)
 		case(0):
 		{
 			uint32_t length = 0;
+
+			// Skip the padding
+			fseek(executable, 1, SEEK_CUR);
+			if(ferror(executable) != 0 || feof(executable) != 0)
+			{
+				status = READ_ERROR_READ;
+				goto cleanup;
+			}
+
+			// Load the length
 			fread((void*)length, sizeof(uint32_t), 1, executable);
 			if(ferror(executable) != 0 || feof(executable) != 0)
 			{
 				status = READ_ERROR_READ;
 				goto cleanup;
 			}
-			era->registers[PC] = (length + HEADER_V1_SIZE) / 2;
+
+			// Load the static data and the code
 			fread((void*) era->memory, sizeof(uint8_t), MEM_SIZE, executable);
 			// We CAN get EOF here, but errors are still possible
 			if(ferror(executable) != 0)
@@ -62,6 +73,9 @@ uint64_t read_file(char *filename, struct era_t *era)
 				status = READ_ERROR_READ;
 				goto cleanup;
 			}
+
+			// Populate PC. +1 is because we need to start PAST the data
+			era->registers[PC] = (length + HEADER_V1_SIZE) / 2 + 1;
 			break;
 		}
 		default:
