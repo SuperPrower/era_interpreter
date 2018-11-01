@@ -11,14 +11,22 @@
 #define SP 29
 #define FP 28
 
+// Not sure about these names
+// Unable to open the file
+#define READ_ERROR_FILE 1
+// Incorrect version
+#define READ_ERROR_VERSION 2
+// Read failure
+#define READ_ERROR_READ 3
+
 struct era_t {
 	uint16_t *memory;	/// machine memory
 	uint32_t *registers;	/// common registers
-	uint32_t IR;		/// instruction register
+	uint16_t IR;		/// instruction register
 };
 
 /**
- * Initializa ERA interpreter: allocate memory and registers
+ * Initialize ERA interpreter: allocate memory and registers
  * @param[out]	era	pointer to era structure
  *
  * @returns 0 on success
@@ -26,8 +34,8 @@ struct era_t {
 int init_era(struct era_t *era);
 
 /**
- * de-allocate ERA struct
- * @param[in]	era	struct to deallocate
+ * Deallocate ERA struct
+ * @param[in]	ERA	struct to deallocate
  *
  * @returns 0 on success
  */
@@ -40,7 +48,7 @@ int free_era(struct era_t *era);
  * @param[in]	filename	file to be loaded
  * @param[out]	era		pointer to allocated era structure
  *
- * @returns	count of bytes readed into memory
+ * @returns	0 on success, error code on failure
  */
 uint64_t read_file(char *filename, struct era_t *era);
 
