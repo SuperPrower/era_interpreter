@@ -13,8 +13,8 @@
 
 struct era_t {
 	uint16_t *memory;	/// machine memory
-	uint16_t *registers;	/// common registers
-	uint16_t IR;		/// instruction register
+	uint32_t *registers;	/// common registers
+	uint32_t IR;		/// instruction register
 };
 
 /**
