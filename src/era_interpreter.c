@@ -79,6 +79,24 @@ uint64_t read_file(char *filename, struct era_t *era)
 			era->registers[PC] = length;
 			break;
 		}
+		/*
+		case 1:
+		{
+			uint32_t data_start;
+			uint32_t data_length;
+			uint32_t code_start;
+			uint32_t code_length;
+
+			// Skip the padding
+			fseek(executable, 1, SEEK_CUR);
+			if(ferror(executable) != 0 || feof(executable) != 0)
+			{
+				status = READ_ERROR_READ;
+				goto cleanup;
+			}
+			break;
+		}
+		 */
 		default:
 			status = READ_ERROR_VERSION;
 			goto cleanup;
