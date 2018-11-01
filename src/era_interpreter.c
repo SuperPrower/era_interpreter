@@ -83,6 +83,9 @@ uint64_t read_file(char *filename, struct era_t *era)
 			goto cleanup;
 	}
 
+	// We always have static data at the beginning of memory
+	era->registers[SB] = 0;
+
 	cleanup:
 	fclose(executable);
 	return status;
