@@ -11,6 +11,10 @@
 #define SP 29
 #define FP 28
 
+// Convenience functions, to make sure it's hard to mess stuff up
+#define ERA_WORDS(bytes) (bytes) * sizeof(era_word_t)
+#define ERA_LWORDS(bytes) (bytes) * sizeof(era_lword_t)
+
 // Not sure about these names
 // Unable to open the file
 #define READ_ERROR_FILE 1
@@ -19,10 +23,14 @@
 // Read failure
 #define READ_ERROR_READ 3
 
+typedef uint16_t era_word_t;
+// Long Word
+typedef uint32_t era_lword_t;
+
 struct era_t {
-	uint16_t *memory;	/// machine memory
-	uint32_t *registers;	/// common registers
-	uint16_t IR;		/// instruction register
+	era_word_t *memory;	/// machine memory
+	era_lword_t *registers;	/// common registers
+	era_word_t IR;		/// instruction register
 };
 
 /**
