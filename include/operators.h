@@ -3,13 +3,6 @@
 
 #include "era_interpreter.h"
 
-// NB: can't use identifier like 8_BIT, had to add F_ (Format) prefix
-enum format_t {
-	F_8_BIT,
-	F_16_BIT,
-	F_32_BIT,
-};
-
 /**
  * @brief Rj += Ri
  * Add content of registers i and j and store result in register j

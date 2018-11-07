@@ -25,6 +25,13 @@ struct era_t {
 	uint16_t IR;		/// instruction register
 };
 
+// NB: can't use identifier like 8_BIT, had to add F_ (Format) prefix
+enum format_t {
+	F_8_BIT,
+	F_16_BIT,
+	F_32_BIT,
+};
+
 /**
  * Initialize ERA interpreter: allocate memory and registers
  * @param[out]	era	pointer to era structure
