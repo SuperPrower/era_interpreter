@@ -8,8 +8,8 @@
 
 int init_era(struct era_t *era)
 {
-	era->memory = (uint16_t*) malloc(sizeof(uint16_t) * MEM_SIZE);
-	era->registers = (uint16_t*) malloc(sizeof(uint16_t) * N_REGISTERS);
+	era->memory = (word_t*) malloc(sizeof(word_t) * MEM_SIZE);
+	era->registers = (word_t*) malloc(sizeof(word_t) * N_REGISTERS);
 
 	return 0;
 }
@@ -26,6 +26,7 @@ int free_era(struct era_t *era)
 uint64_t read_file(char *filename, struct era_t *era)
 {
 	FILE * executable;
+	// NOTE : header fields are independent from words and stuff and have fixed bit size
 	uint8_t version = 0;
 	uint64_t status = 0;
 	executable = fopen(filename, "rb");
@@ -66,7 +67,7 @@ uint64_t read_file(char *filename, struct era_t *era)
 			}
 
 			// Load the static data and the code
-			fread((void*) era->memory, sizeof(uint8_t), MEM_SIZE, executable);
+			fread((void*) era->memory, sizeof(word_t), MEM_SIZE, executable);
 			// We CAN get EOF here, but errors are still possible
 			if(ferror(executable) != 0)
 			{
@@ -75,7 +76,7 @@ uint64_t read_file(char *filename, struct era_t *era)
 			}
 
 			// Populate PC. +1 is because we need to start PAST the data
-			era->registers[PC] = (length + HEADER_V1_SIZE) / 2 + 1;
+			era->registers[PC] = length + HEADER_V1_SIZE+ 1;
 			break;
 		}
 		default:
