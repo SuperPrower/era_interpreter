@@ -3,9 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Sizes are in bytes
-#define HEADER_V1_SIZE 6
-
 int init_era(struct era_t *era)
 {
 	era->memory = (word_t*) malloc(sizeof(word_t) * MEM_SIZE);
@@ -27,8 +24,10 @@ uint64_t read_file(char *filename, struct era_t *era)
 {
 	FILE * executable;
 	// NOTE : header fields are independent from words and stuff and have fixed bit size
-	uint8_t version = 0;
+	// 255 is used to make sure invalid reads are detected
+	uint8_t version = 255;
 	uint64_t status = 0;
+
 	executable = fopen(filename, "rb");
 
 	if(executable == NULL)
@@ -36,8 +35,8 @@ uint64_t read_file(char *filename, struct era_t *era)
 		return READ_ERROR_FILE;
 	}
 
-	fread((void*)version, sizeof(uint8_t), 1, executable);
-
+	// Get the version
+	fread((void*)&version, sizeof(uint8_t), 1, executable);
 	if(ferror(executable) != 0 || feof(executable) != 0)
 	{
 		status = READ_ERROR_READ;
@@ -59,7 +58,7 @@ uint64_t read_file(char *filename, struct era_t *era)
 			}
 
 			// Load the length
-			fread((void*)length, sizeof(uint32_t), 1, executable);
+			fread((void*)&length, sizeof(uint32_t), 1, executable);
 			if(ferror(executable) != 0 || feof(executable) != 0)
 			{
 				status = READ_ERROR_READ;
@@ -75,10 +74,31 @@ uint64_t read_file(char *filename, struct era_t *era)
 				goto cleanup;
 			}
 
-			// Populate PC. +1 is because we need to start PAST the data
-			era->registers[PC] = length + HEADER_V1_SIZE+ 1;
+			// Populate PC
+			// I was a bit dumb at first.
+			// length relates to the length of data in the global data + code, NOT in the file.
+			// We don't need to modify it
+			era->registers[PC] = length;
 			break;
 		}
+		/*
+		case 1:
+		{
+			uint32_t data_start;
+			uint32_t data_length;
+			uint32_t code_start;
+			uint32_t code_length;
+
+			// Skip the padding
+			fseek(executable, 1, SEEK_CUR);
+			if(ferror(executable) != 0 || feof(executable) != 0)
+			{
+				status = READ_ERROR_READ;
+				goto cleanup;
+			}
+			break;
+		}
+		 */
 		default:
 			status = READ_ERROR_VERSION;
 			goto cleanup;
