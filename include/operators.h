@@ -3,13 +3,6 @@
 
 #include "era_interpreter.h"
 
-// NB: can't use identifier like 8_BIT, had to add F_ (Format) prefix
-enum format_t {
-	F_8_BIT,
-	F_16_BIT,
-	F_32_BIT,
-};
-
 /**
  * @brief Rj += Ri
  * Add content of registers i and j and store result in register j
@@ -21,7 +14,7 @@ enum format_t {
  *
  * @returns 0 on success
  */
-int add(struct era_t *era, uint8_t i, uint8_t j, enum format_t format);
+int add(struct era_t *era, sword_t i, sword_t j, enum format_t format);
 
 /**
  * @brief Rj -= Ri
@@ -34,7 +27,7 @@ int add(struct era_t *era, uint8_t i, uint8_t j, enum format_t format);
  *
  * @returns 0 on success
  */
-int sub(struct era_t *era, uint8_t i, uint8_t j, enum format_t format);
+int sub(struct era_t *era, sword_t i, sword_t j, enum format_t format);
 
 /**
  * @brief Rj = Ri >> 1
@@ -48,7 +41,7 @@ int sub(struct era_t *era, uint8_t i, uint8_t j, enum format_t format);
  *
  * @returns 0 on success
  */
-int asr(struct era_t *era, uint8_t i, uint8_t j, enum format_t format);
+int asr(struct era_t *era, sword_t i, sword_t j, enum format_t format);
 
 /**
  * @brief Rj = Ri << 1
@@ -62,6 +55,6 @@ int asr(struct era_t *era, uint8_t i, uint8_t j, enum format_t format);
  *
  * @returns 0 on success
  */
-int asl(struct era_t *era, uint8_t i, uint8_t j, enum format_t format);
+int asl(struct era_t *era, sword_t i, sword_t j, enum format_t format);
 
 #endif /* ifndef ERA_OPERATORS_H */

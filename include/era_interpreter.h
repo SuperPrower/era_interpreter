@@ -2,7 +2,7 @@
 #define ERA_INTERPRETER_H
 
 #include <stdio.h>
-#include <stdint.h>
+#include "era_types.h"
 
 #define MEM_SIZE (64 * 1024) /// memory size in words
 #define N_REGISTERS (32)
@@ -10,10 +10,6 @@
 #define SB 30
 #define SP 29
 #define FP 28
-
-// Convenience functions, to make sure it's hard to mess stuff up
-#define ERA_WORDS(bytes) (bytes) * sizeof(era_word_t)
-#define ERA_LWORDS(bytes) (bytes) * sizeof(era_lword_t)
 
 // Not sure about these names
 // Unable to open the file
@@ -23,14 +19,10 @@
 // Read failure
 #define READ_ERROR_READ 3
 
-typedef uint16_t era_word_t;
-// Long Word
-typedef uint32_t era_lword_t;
-
 struct era_t {
-	era_word_t *memory;	/// machine memory
-	era_lword_t *registers;	/// common registers
-	era_word_t IR;		/// instruction register
+	word_t *memory;		/// machine memory
+	lword_t *registers;	/// common registers
+	word_t IR;			/// instruction register
 };
 
 /**
