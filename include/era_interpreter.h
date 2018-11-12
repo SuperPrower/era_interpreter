@@ -2,7 +2,7 @@
 #define ERA_INTERPRETER_H
 
 #include <stdio.h>
-#include <stdint.h>
+#include "era_types.h"
 
 #define MEM_SIZE (64 * 1024) /// memory size in words
 #define N_REGISTERS (32)
@@ -20,9 +20,9 @@
 #define READ_ERROR_READ 3
 
 struct era_t {
-	uint16_t *memory;	/// machine memory
-	uint32_t *registers;	/// common registers
-	uint16_t IR;		/// instruction register
+	word_t *memory;		/// machine memory
+	lword_t *registers;	/// common registers
+	word_t IR;			/// instruction register
 };
 
 // NB: can't use identifier like 8_BIT, had to add F_ (Format) prefix

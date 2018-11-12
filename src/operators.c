@@ -2,46 +2,46 @@
 
 /* SUB */
 
-int add8(struct era_t *era, uint8_t i, uint8_t j)
+int add8(struct era_t *era, sword_t i, sword_t j)
 {
 	// get last 8 bits only
 	int8_t v1 = era->registers[i] & 0xFF;
 	int8_t v2 = era->registers[j] & 0xFF;
 
 	// avoid implicit casting by inserting bits wit AND
-	uint32_t res = 0XFFFFFFFF & (v1 + v2);
+	lword_t res = 0XFFFFFFFF & (v1 + v2);
 	era->registers[j] = res;
 
 	return 0;
 }
 
-int add16(struct era_t *era, uint8_t i, uint8_t j)
+int add16(struct era_t *era, sword_t i, sword_t j)
 {
 	// get last 16 bits only
 	int16_t v1 = era->registers[i] & 0xFFFF;
 	int16_t v2 = era->registers[j] & 0xFFFF;
 
 	// avoid implicit casting by inserting bits wit AND
-	uint32_t res = 0XFFFFFFFF & (v1 + v2);
+	lword_t res = 0XFFFFFFFF & (v1 + v2);
 	era->registers[j] = res;
 
 	return 0;
 }
 
-int add32(struct era_t *era, uint8_t i, uint8_t j)
+int add32(struct era_t *era, sword_t i, sword_t j)
 {
 	// get last 32 bits only
 	int32_t v1 = era->registers[i] & 0xFFFFFFFF;
 	int32_t v2 = era->registers[j] & 0xFFFFFFFF;
 
 	// avoid implicit casting by inserting bits wit AND
-	uint32_t res = 0XFFFFFFFF & (v1 + v2);
+	lword_t res = 0XFFFFFFFF & (v1 + v2);
 	era->registers[j] = res;
 
 	return 0;
 }
 
-int add(struct era_t *era, uint8_t i, uint8_t j, enum format_t format)
+int add(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 {
 	switch(format) {
 	case F_8_BIT:
@@ -59,46 +59,46 @@ int add(struct era_t *era, uint8_t i, uint8_t j, enum format_t format)
 
 /* SUB */
 
-int sub8(struct era_t *era, uint8_t i, uint8_t j)
+int sub8(struct era_t *era, sword_t i, sword_t j)
 {
 	// get last 8 bits only
 	int8_t v1 = era->registers[i] & 0xFF;
 	int8_t v2 = era->registers[j] & 0xFF;
 
 	// avoid implicit casting by inserting bits wit AND
-	uint32_t res = 0XFFFFFFFF & (v2 - v1);
+	lword_t res = 0XFFFFFFFF & (v2 - v1);
 	era->registers[j] = res;
 
 	return 0;
 }
 
-int sub16(struct era_t *era, uint8_t i, uint8_t j)
+int sub16(struct era_t *era, sword_t i, sword_t j)
 {
 	// get last 16 bits only
 	int16_t v1 = era->registers[i] & 0xFFFF;
 	int16_t v2 = era->registers[j] & 0xFFFF;
 
 	// avoid implicit casting by inserting bits wit AND
-	uint32_t res = 0XFFFFFFFF & (v2 - v1);
+	lword_t res = 0XFFFFFFFF & (v2 - v1);
 	era->registers[j] = res;
 
 	return 0;
 }
 
-int sub32(struct era_t *era, uint8_t i, uint8_t j)
+int sub32(struct era_t *era, sword_t i, sword_t j)
 {
 	// get last 32 bits only
 	int32_t v1 = era->registers[i] & 0xFFFFFFFF;
 	int32_t v2 = era->registers[j] & 0xFFFFFFFF;
 
 	// avoid implicit casting by inserting bits wit AND
-	uint32_t res = 0XFFFFFFFF & (v2 - v1);
+	lword_t res = 0XFFFFFFFF & (v2 - v1);
 	era->registers[j] = res;
 
 	return 0;
 }
 
-int sub(struct era_t *era, uint8_t i, uint8_t j, enum format_t format)
+int sub(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 {
 	switch(format) {
 	case F_8_BIT:
@@ -117,7 +117,7 @@ int sub(struct era_t *era, uint8_t i, uint8_t j, enum format_t format)
 
 /* ASR */
 
-int asr8(struct era_t *era, uint8_t i, uint8_t j)
+int asr8(struct era_t *era, sword_t i, sword_t j)
 {
 	// get last 7 bits only
 	int8_t v1 = era->registers[i] & 0x7F;
@@ -128,13 +128,13 @@ int asr8(struct era_t *era, uint8_t i, uint8_t j)
 	v1 = v1 | (era->registers[i] & 0x80);
 
 	// avoid implicit casting by inserting bits wit AND
-	uint32_t res = 0XFFFFFFFF & v1;
+	lword_t res = 0XFFFFFFFF & v1;
 	era->registers[j] = res;
 
 	return 0;
 }
 
-int asr16(struct era_t *era, uint8_t i, uint8_t j)
+int asr16(struct era_t *era, sword_t i, sword_t j)
 {
 	// get last 15 bits only
 	int16_t v1 = era->registers[i] & 0x7FFF;
@@ -145,13 +145,13 @@ int asr16(struct era_t *era, uint8_t i, uint8_t j)
 	v1 = v1 | (era->registers[i] & 0x8000);
 
 	// avoid implicit casting by inserting bits wit AND
-	uint32_t res = 0XFFFFFFFF & v1;
+	lword_t res = 0XFFFFFFFF & v1;
 	era->registers[j] = res;
 
 	return 0;
 }
 
-int asr32(struct era_t *era, uint8_t i, uint8_t j)
+int asr32(struct era_t *era, sword_t i, sword_t j)
 {
 	// get last 31 bits only
 	int32_t v1 = era->registers[i] & 0x7FFFFF;
@@ -162,13 +162,13 @@ int asr32(struct era_t *era, uint8_t i, uint8_t j)
 	v1 = v1 | (era->registers[i] & 0x800000);
 
 	// avoid implicit casting by inserting bits wit AND
-	uint32_t res = 0XFFFFFFFF & v1;
+	lword_t res = 0XFFFFFFFF & v1;
 	era->registers[j] = res;
 
 	return 0;
 }
 
-int asr(struct era_t *era, uint8_t i, uint8_t j, enum format_t format)
+int asr(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 {
 	switch(format) {
 	case F_8_BIT:
@@ -187,7 +187,7 @@ int asr(struct era_t *era, uint8_t i, uint8_t j, enum format_t format)
 
 /* ASL */
 
-int asl8(struct era_t *era, uint8_t i, uint8_t j)
+int asl8(struct era_t *era, sword_t i, sword_t j)
 {
 	// get last 7 bits only
 	int8_t v1 = era->registers[i] & 0x7F;
@@ -198,13 +198,13 @@ int asl8(struct era_t *era, uint8_t i, uint8_t j)
 	v1 = (v1 | 0x80) & (era->registers[i] & 0x80);
 
 	// avoid implicit casting by inserting bits wit AND
-	uint32_t res = 0XFFFFFFFF & v1;
+	lword_t res = 0XFFFFFFFF & v1;
 	era->registers[j] = res;
 
 	return 0;
 }
 
-int asl16(struct era_t *era, uint8_t i, uint8_t j)
+int asl16(struct era_t *era, sword_t i, sword_t j)
 {
 	// get last 15 bits only
 	int16_t v1 = era->registers[i] & 0x7FFF;
@@ -215,13 +215,13 @@ int asl16(struct era_t *era, uint8_t i, uint8_t j)
 	v1 = (v1 | 0x8000) & (era->registers[i] & 0x8000);
 
 	// avoid implicit casting by inserting bits wit AND
-	uint32_t res = 0XFFFFFFFF & v1;
+	lword_t res = 0XFFFFFFFF & v1;
 	era->registers[j] = res;
 
 	return 0;
 }
 
-int asl32(struct era_t *era, uint8_t i, uint8_t j)
+int asl32(struct era_t *era, sword_t i, sword_t j)
 {
 	// get last 31 bits only
 	int32_t v1 = era->registers[i] & 0x7FFFFF;
@@ -232,13 +232,13 @@ int asl32(struct era_t *era, uint8_t i, uint8_t j)
 	v1 = (v1 | 0x800000) & (era->registers[i] & 0x800000);
 
 	// avoid implicit casting by inserting bits wit AND
-	uint32_t res = 0XFFFFFFFF & v1;
+	lword_t res = 0XFFFFFFFF & v1;
 	era->registers[j] = res;
 
 	return 0;
 }
 
-int asl(struct era_t *era, uint8_t i, uint8_t j, enum format_t format)
+int asl(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 {
 	switch(format) {
 	case F_8_BIT:
