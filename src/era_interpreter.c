@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "util.h"
+
 int init_era(struct era_t *era)
 {
 	era->memory = (word_t*) malloc(sizeof(word_t) * MEM_SIZE);
@@ -48,6 +50,7 @@ uint64_t read_file(char *filename, struct era_t *era)
 		case(0):
 		{
 			uint32_t length = 0;
+			size_t read = 0;
 
 			// Skip the padding
 			fseek(executable, 1, SEEK_CUR);
@@ -66,12 +69,22 @@ uint64_t read_file(char *filename, struct era_t *era)
 			}
 
 			// Load the static data and the code
-			fread((void*) era->memory, sizeof(word_t), MEM_SIZE, executable);
+			read = fread((void*) era->memory, sizeof(word_t), MEM_SIZE, executable);
 			// We CAN get EOF here, but errors are still possible
 			if(ferror(executable) != 0)
 			{
 				status = READ_ERROR_READ;
 				goto cleanup;
+			}
+
+			// Deal with little-endianess
+			if(little_endian() == 1)
+			{
+				length = swap_lword(length);
+				for(size_t c = 0; c < read; ++c)
+				{
+					era->memory[c] = swap_word(era->memory[c]);
+				}
 			}
 
 			// Populate PC
