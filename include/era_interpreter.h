@@ -19,17 +19,16 @@
 // Read failure
 #define READ_ERROR_READ 3
 
+// TODO: Make dynamic later on: either get it from the file or from command line?
+// Seeing as we're trying to make it API-like, we should also add functions to modify the values on the fly
+// Sizes are in words
+#define HEAP_SIZE 100
+#define STACK_SIZE 100
+
 struct era_t {
 	word_t *memory;		/// machine memory
 	lword_t *registers;	/// common registers
 	word_t IR;			/// instruction register
-};
-
-// NB: can't use identifier like 8_BIT, had to add F_ (Format) prefix
-enum format_t {
-	F_8_BIT,
-	F_16_BIT,
-	F_32_BIT,
 };
 
 /**

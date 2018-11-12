@@ -17,7 +17,7 @@
  *
  * @returns 0 on success, error code "MEMORY_ERROR_*" on error
  */
-int ld(struct era_t *era, uint8_t i, uint8_t j, enum format_t format);
+int ld(struct era_t *era, sword_t i, sword_t j, enum format_t format);
 
 /**
  * @brief Rj = Ri + constant
@@ -30,7 +30,7 @@ int ld(struct era_t *era, uint8_t i, uint8_t j, enum format_t format);
  *
  * @returns 0 on success, error code "MEMORY_ERROR_*" on error
  */
-int lda(struct era_t *era, uint8_t i, uint8_t j, enum format_t format);
+int lda(struct era_t *era, sword_t i, sword_t j, enum format_t format);
 
 /**
  * @brief Rj = *Ri
@@ -43,7 +43,7 @@ int lda(struct era_t *era, uint8_t i, uint8_t j, enum format_t format);
  *
  * @returns 0 on success, error code "MEMORY_ERROR_*" on error
  */
-int ldc(struct era_t *era, uint8_t i, uint8_t j, enum format_t format);
+int ldc(struct era_t *era, sword_t i, sword_t j, enum format_t format);
 
 /**
  * @brief Rj = Ri + constant
@@ -56,7 +56,7 @@ int ldc(struct era_t *era, uint8_t i, uint8_t j, enum format_t format);
  *
  * @returns 0 on success, error code "MEMORY_ERROR_*" on error
  */
-int st(struct era_t *era, uint8_t i, uint8_t j, enum format_t format);
+int st(struct era_t *era, sword_t i, sword_t j, enum format_t format);
 
 /**
  * @brief Rj = *Ri
@@ -69,6 +69,6 @@ int st(struct era_t *era, uint8_t i, uint8_t j, enum format_t format);
  *
  * @returns 0 on success, error code "MEMORY_ERROR_*" on error
  */
-int mov(struct era_t *era, uint8_t i, uint8_t j, enum format_t format);
+int mov(struct era_t *era, sword_t i, sword_t j, enum format_t format);
 
 #endif //ERA_MEMORY_H
