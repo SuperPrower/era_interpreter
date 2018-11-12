@@ -24,6 +24,18 @@ lword_t read_lword(struct era_t *era, lword_t address)
 	return (lword_t)(era->memory[address] << (sizeof(word_t) * 8) | era->memory[address + 1]);
 }
 
+int write_lword(struct era_t *era, lword_t address, lword_t word)
+{
+	// TODO: Add dynamic memory sizing
+	if(address > MEM_SIZE || address + 1 > MEM_SIZE)
+		return 1;
+
+	era->memory[address] = (word_t)((word >> 16) & 0xffff);
+	era->memory[address + 1] = (word_t)(word & 0xffff);
+
+	return 0;
+}
+
 uint8_t little_endian()
 {
 	// Little-endian:
