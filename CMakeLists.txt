@@ -23,4 +23,5 @@ include_directories(include)
 add_executable(${PROJECT_NAME}
 	src/main.c
 	src/era_interpreter.c
+    src/util.c
 	)
