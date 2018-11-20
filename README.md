@@ -1,19 +1,23 @@
 ## Building
 
-In the directory with `CMakeLists.txt` file, run following commands:
+### Dependencies
+Project uses CMake building system, and CMocka testing framework. Please refer to your distribution documentation to find out how to install them.
+
+### Building process
+In the directory with `CMakeLists.txt` file, run following command:
 
 ```
 cmake -H. -Bbuild
-cmake --build build
 ```
 
-(Note to S): Adding `-DCMAKE_EXPORT_COMPILE_COMMANDS=ON` to the first command will generate `compile_commands.json`
+You can add following options to this command:
+- `-DCMAKE_BUILD_TYPE=Debug` - will enable debug symbols and tests
+- `-DCMAKE_EXPORT_COMPILE_COMMANDS=ON` - will generate `compile_commands.json` (This is standard CMake practice. It may be useful to anyone who uses cquery language server or vim autocomplete plugin from wide variety of choices)
+
+Finally, build binaries:
+```
+cmake --build build
+```
 
 ### Tests
-To build tests, you will need to set `CMAKE_BUILD_TYPE` to `Debug`:
-```
-cmake -H. -Bbuild -DCMAKE_BUILD_TYPE=Debug
-cmake --build build
-```
-
-Currently, tests build as separate binary. To run them, execute `runUnitTests`, located in `./bin/runUnitTests`
+If you have enabled tests (as described above), you can run set of tests by changing directory to `build` and running `ctest`. You can add `-V` flag for verbose output.

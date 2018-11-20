@@ -12,16 +12,19 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
 	message("Debug enabled, will build tests")
 	message("===============================")
 
-	# enable testing and add gtest target
-	add_subdirectory(tests)
+	# enable testing and add test target
 	enable_testing()
+	add_subdirectory(test)
 
 endif()
 
 include_directories(include)
 
-add_executable(${PROJECT_NAME}
-	src/main.c
-	src/era_interpreter.c
-    src/util.c
-	)
+# Build all files as library so that they can be re-used for tests
+add_library(lib_era
+		src/era_interpreter.c
+		src/util.c
+		)
+
+add_executable(${PROJECT_NAME} src/main.c)
+target_link_libraries(${PROJECT_NAME} lib_era)
