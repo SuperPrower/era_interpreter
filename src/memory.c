@@ -22,7 +22,7 @@ int ld(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 
 int lda(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 {
-	if (format != F_32_BIT)
+	if (format != F_8_BIT)
 		return MEMORY_ERROR_WRONG_FORMAT;
 
 	if (i > PC || j > PC)
