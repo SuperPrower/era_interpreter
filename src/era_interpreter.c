@@ -49,69 +49,12 @@ uint64_t read_file(char *filename, struct era_t *era)
 	{
 		case(0):
 		{
-			uint32_t length = 0;
-			size_t read = 0;
-
-			// Skip the padding
-			fseek(executable, 1, SEEK_CUR);
-			if(ferror(executable) != 0 || feof(executable) != 0)
-			{
-				status = READ_ERROR_READ;
-				goto cleanup;
-			}
-
-			// Load the length
-			fread((void*)&length, sizeof(uint32_t), 1, executable);
-			if(ferror(executable) != 0 || feof(executable) != 0)
-			{
-				status = READ_ERROR_READ;
-				goto cleanup;
-			}
-
-			// Load the static data and the code
-			read = fread((void*) era->memory, sizeof(word_t), MEM_SIZE, executable);
-			// We CAN get EOF here, but errors are still possible
-			if(ferror(executable) != 0)
-			{
-				status = READ_ERROR_READ;
-				goto cleanup;
-			}
-
-			// Deal with little-endianess
-			if(little_endian() == 1)
-			{
-				length = swap_lword(length);
-				for(size_t c = 0; c < read; ++c)
-				{
-					era->memory[c] = swap_word(era->memory[c]);
-				}
-			}
-
-			// Populate PC
-			// I was a bit dumb at first.
-			// length relates to the length of data in the global data + code, NOT in the file.
-			// We don't need to modify it
-			era->registers[PC] = length;
-			break;
+			status = read_v0_file(era, executable);
 		}
-		/*
 		case 1:
 		{
-			uint32_t data_start;
-			uint32_t data_length;
-			uint32_t code_start;
-			uint32_t code_length;
-
-			// Skip the padding
-			fseek(executable, 1, SEEK_CUR);
-			if(ferror(executable) != 0 || feof(executable) != 0)
-			{
-				status = READ_ERROR_READ;
-				goto cleanup;
-			}
-			break;
+			status = read_v1_file(era, executable);
 		}
-		 */
 		default:
 			status = READ_ERROR_VERSION;
 			goto cleanup;
