@@ -29,7 +29,7 @@ int ld(struct era_t *era, sword_t i, sword_t j, enum format_t format);
  * @param[in] era - pointer to era structure
  * @param[in] i	- no. of register
  * @param[in] j	- no. of register
- * @param[in] format - operation format, F_32_BIT required
+ * @param[in] format - operation format, F_8_BIT required
  *
  * @returns 0 on success, error code "MEMORY_ERROR_*" on error
  */
