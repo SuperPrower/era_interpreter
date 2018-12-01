@@ -9,6 +9,9 @@ word_t read_word(struct era_t *era, lword_t address);
 
 lword_t read_lword(struct era_t *era, lword_t address);
 
+// Get the mask for bit extraction based on the given format
+lword_t get_mask(enum format_t format);
+
 // Returns 0 on success, 1 on failure
 // TODO: type-dependent, VERY bad
 int write_lword(struct era_t *era, lword_t address, lword_t word);

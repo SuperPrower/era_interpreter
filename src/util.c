@@ -24,6 +24,21 @@ lword_t read_lword(struct era_t *era, lword_t address)
 	return (lword_t)(era->memory[address] << (sizeof(word_t) * 8) | era->memory[address + 1]);
 }
 
+lword_t get_mask(enum format_t format)
+{
+	switch(format)
+	{
+		case F_32_BIT:
+			return 0xffffffff;
+		case F_16_BIT:
+			return 0x0000ffff;
+		case F_8_BIT:
+			return 0x000000ff;
+		default:
+			return 0x00000000;
+	}
+}
+
 int write_lword(struct era_t *era, lword_t address, lword_t word)
 {
 	// TODO: Add dynamic memory sizing
