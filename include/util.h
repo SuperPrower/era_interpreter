@@ -3,6 +3,10 @@
 
 #include "era_interpreter.h"
 
+uint64_t read_v0_file(struct era_t *era, FILE *executable);
+
+uint64_t read_v1_file(struct era_t *era, FILE *executable);
+
 sword_t read_sword(struct era_t *era, lword_t address);
 
 word_t read_word(struct era_t *era, lword_t address);
