@@ -7,7 +7,7 @@ int ld(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 	if (format != F_32_BIT)
 		return MEMORY_ERROR_WRONG_FORMAT;
 
-	if (i > N_REGISTERS || j > N_REGISTERS)
+	if (i >= N_REGISTERS || j >= N_REGISTERS)
 		return MEMORY_ERROR_WRONG_REGISTER;
 
 	lword_t address = era->registers[i];
