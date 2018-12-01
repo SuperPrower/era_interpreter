@@ -51,12 +51,19 @@ uint64_t read_v0_file(struct era_t *era, FILE *executable)
 
 uint64_t read_v1_file(struct era_t *era, FILE *executable)
 {
+	// Data start offset from the start in bytes
 	uint32_t data_start;
+	// Data length in words
 	uint32_t data_length;
+	// Code start offset from the start in bytes
 	uint32_t code_start;
+	// Data length in words
 	uint32_t code_length;
+
+	// Temporary buffers to store the data from file
 	word_t *code;
 	word_t *data;
+	// Number of words read
 	size_t read;
 
 	// Skip the padding
@@ -99,8 +106,8 @@ uint64_t read_v1_file(struct era_t *era, FILE *executable)
 		data_length = swap_lword(data_length);
 	}
 
-	code = (word_t*)malloc(code_length);
-	data = (word_t*)malloc(data_length);
+	code = (word_t*)malloc(code_length * sizeof(word_t));
+	data = (word_t*)malloc(data_length * sizeof(word_t));
 
 	// TODO: Make sure this always works
 	// TODO: Could get the length of a file and additionally check against it
@@ -124,7 +131,6 @@ uint64_t read_v1_file(struct era_t *era, FILE *executable)
 	// TODO: Not sure about this one. Makes sense, but looks dangerous
 	memcpy(era->memory + data_length, code, code_length * sizeof(word_t));
 
-	// TODO: Should work
 	era->registers[PC] = data_length;
 
 	// Deal with little-endianess
