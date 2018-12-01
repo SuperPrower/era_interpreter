@@ -67,7 +67,7 @@ int st(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 
 int mov(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 {
-	if (i >= N_REGISTERS || j > N_REGISTERS)
+	if (i >= N_REGISTERS || j >= N_REGISTERS)
 		return MEMORY_ERROR_WRONG_REGISTER;
 
 	lword_t mask;
