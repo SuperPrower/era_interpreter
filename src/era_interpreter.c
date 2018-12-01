@@ -50,10 +50,12 @@ uint64_t read_file(char *filename, struct era_t *era)
 		case(0):
 		{
 			status = read_v0_file(era, executable);
+			break;
 		}
 		case 1:
 		{
 			status = read_v1_file(era, executable);
+			break;
 		}
 		default:
 			status = READ_ERROR_VERSION;
