@@ -7,7 +7,7 @@ int ld(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 	if (format != F_32_BIT)
 		return MEMORY_ERROR_WRONG_FORMAT;
 
-	if (i > PC || j > PC)
+	if (i >= N_REGISTERS || j >= N_REGISTERS)
 		return MEMORY_ERROR_WRONG_REGISTER;
 
 	lword_t address = era->registers[i];
@@ -25,7 +25,7 @@ int lda(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 	if (format != F_8_BIT)
 		return MEMORY_ERROR_WRONG_FORMAT;
 
-	if (i > PC || j > PC)
+	if (i >= N_REGISTERS || j >= N_REGISTERS)
 		return MEMORY_ERROR_WRONG_REGISTER;
 
 	lword_t constant = read_lword(era, era->registers[PC]);
@@ -43,7 +43,7 @@ int ldc(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 	if (format != F_32_BIT)
 		return MEMORY_ERROR_WRONG_FORMAT;
 
-	if (j > PC)
+	if (j >= N_REGISTERS)
 		return MEMORY_ERROR_WRONG_REGISTER;
 
 	era->registers[j] = i;
@@ -56,7 +56,7 @@ int st(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 	if (format != F_32_BIT)
 		return MEMORY_ERROR_WRONG_FORMAT;
 
-	if (i > PC || j > PC)
+	if (i >= N_REGISTERS || j >= N_REGISTERS)
 		return MEMORY_ERROR_WRONG_REGISTER;
 
 	if(write_lword(era, era->registers[j], era->registers[i]) == 1)
@@ -67,7 +67,7 @@ int st(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 
 int mov(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 {
-	if (i > PC || j > PC)
+	if (i >= N_REGISTERS || j >= N_REGISTERS)
 		return MEMORY_ERROR_WRONG_REGISTER;
 
 	lword_t mask;
