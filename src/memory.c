@@ -70,20 +70,7 @@ int mov(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 	if (i >= N_REGISTERS || j >= N_REGISTERS)
 		return MEMORY_ERROR_WRONG_REGISTER;
 
-	lword_t mask;
-
-	switch(format)
-	{
-		case F_32_BIT:
-			mask = 0xffffffff;
-			break;
-		case F_16_BIT:
-			mask = 0x0000ffff;
-			break;
-		case F_8_BIT:
-			mask = 0x000000ff;
-			break;
-	}
+	lword_t mask = get_mask(format);
 
 	// AND with the inverse of the mask - preserve everything except for the values we are copying
 	era->registers[j] &= ~mask;
