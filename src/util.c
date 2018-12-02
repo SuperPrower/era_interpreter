@@ -224,3 +224,33 @@ lword_t swap_lword(lword_t word)
 	p4 = (word >> 24) & 255;
 	return (lword_t)((p1 << 24) + (p2 << 16) + (p3 << 8) + p4);
 }
+
+int32_t reg_put(enum format_t format, int32_t number)
+{
+	switch(format) {
+	case F_8_BIT:
+		return 0xFFFFFFFF & (int8_t)(number);
+
+	case F_16_BIT:
+		return 0xFFFFFFFF & (int16_t)(number);
+
+	case F_32_BIT:
+		return 0xFFFFFFFF & (int32_t)(number);
+
+	}
+}
+
+int32_t reg_get(enum format_t format, int32_t number)
+{
+	switch(format) {
+	case F_8_BIT:
+		return (int8_t)(number & 0xFF);
+
+	case F_16_BIT:
+		return (int16_t)(number & 0xFFFF);
+
+	case F_32_BIT:
+		return (int32_t)(number & 0xFFFFFFFF);
+
+	}
+}

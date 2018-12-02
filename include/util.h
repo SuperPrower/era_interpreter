@@ -28,4 +28,24 @@ word_t swap_word(word_t word);
 
 lword_t swap_lword(lword_t word);
 
+/**
+ * Helper function used to put 2th complement integers in registers
+ *
+ * Usage: era->registers[i] = reg_put(F_16_BIT, -1078);
+ *
+ * @param[in] format: integer format (size)
+ * @param[in] number: number to put
+ */
+int32_t reg_put(enum format_t format, int32_t number);
+
+/**
+ * Helper function used to get 2th complement integers from registers
+ *
+ * Usage: int32_t res = reg_get(F_16_BIT, era->registers[i]);
+ *
+ * @param[in] format: integer format (size)
+ * @param[in] number: number to put
+ */
+int32_t reg_get(enum format_t format, int32_t number);
+
 #endif //ERA_UTIL_H
