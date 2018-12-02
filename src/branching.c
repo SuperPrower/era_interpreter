@@ -9,10 +9,10 @@
 #define CND_MORE   0x00000001
 #define CND_LESS   0x00000002
 
-int cnd(struct era_t *era, sword_t i, sword_t j, enum format_t format)
+sword_t cnd(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 {
 	if (i >= N_REGISTERS || j >= N_REGISTERS)
-		return BRANCH_ERROR_WRONG_REGISTER;
+		return ERA_STATUS_WRONG_REGISTER;
 
 	lword_t mask = get_mask(format);
 
@@ -35,13 +35,13 @@ int cnd(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 		era->registers[j] |= CND_LESS;
 	}
 
-	return 0;
+	return ERA_STATUS_NONE;
 }
 
-int cbr(struct era_t *era, sword_t i, sword_t j, enum format_t format)
+sword_t cbr(struct era_t * era, sword_t i, sword_t j, enum format_t format)
 {
 	if (i >= N_REGISTERS || j >= N_REGISTERS)
-		return BRANCH_ERROR_WRONG_REGISTER;
+		return ERA_STATUS_WRONG_REGISTER;
 
 	if (era->registers[i] != 0)
 	{
@@ -50,22 +50,39 @@ int cbr(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 	// TODO : Sanity checking
 	era->registers[PC] = era->registers[j];
 
-	return 0;
+	return ERA_STATUS_NONE;
 }
 
-int nop(struct era_t *era, sword_t i, sword_t j, enum format_t format)
+sword_t nop(struct era_t * era, sword_t i, sword_t j, enum format_t format)
 {
 	if (format != F_16_BIT)
 	{
 		// Congratulations, you messed up a NOP function somehow.
-		return BRANCH_ERROR_WRONG_FORMAT;
+		return ERA_STATUS_WRONG_FORMAT;
 	}
 
-	return 0;
+	return ERA_STATUS_NONE;
 }
 
-int stop(struct era_t *era, sword_t i, sword_t j, enum format_t format)
+sword_t stop(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 {
-	era->error_code = ERA_STATUS_STOP;
-	return 0;
+	if (format != F_16_BIT)
+	{
+		return ERA_STATUS_WRONG_FORMAT;
+	}
+	return ERA_STATUS_STOP;
+}
+
+sword_t nopstop(struct era_t *era, sword_t i, sword_t j, enum format_t format)
+{
+	switch (format)
+	{
+		case F_8_BIT:
+			return stop(era, i, j, format);
+		case F_16_BIT:
+			return nop(era, i, j, format);
+		default:
+			return ERA_STATUS_WRONG_FORMAT;
+	}
+	return ERA_STATUS_NONE;
 }

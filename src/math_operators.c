@@ -1,8 +1,9 @@
 #include "math_operators.h"
+#include "era_status.h"
 
 /* ADD */
 
-int add8(struct era_t *era, sword_t i, sword_t j)
+sword_t add8(struct era_t *era, sword_t i, sword_t j)
 {
 	// get last 8 bits only
 	int8_t v1 = era->registers[i] & 0xFF;
@@ -12,10 +13,10 @@ int add8(struct era_t *era, sword_t i, sword_t j)
 	lword_t res = 0XFFFFFFFF & (v1 + v2);
 	era->registers[j] = res;
 
-	return 0;
+	return ERA_STATUS_NONE;
 }
 
-int add16(struct era_t *era, sword_t i, sword_t j)
+sword_t add16(struct era_t *era, sword_t i, sword_t j)
 {
 	// get last 16 bits only
 	int16_t v1 = era->registers[i] & 0xFFFF;
@@ -25,10 +26,10 @@ int add16(struct era_t *era, sword_t i, sword_t j)
 	lword_t res = 0XFFFFFFFF & (v1 + v2);
 	era->registers[j] = res;
 
-	return 0;
+	return ERA_STATUS_NONE;
 }
 
-int add32(struct era_t *era, sword_t i, sword_t j)
+sword_t add32(struct era_t *era, sword_t i, sword_t j)
 {
 	// get last 32 bits only
 	int32_t v1 = era->registers[i] & 0xFFFFFFFF;
@@ -38,10 +39,10 @@ int add32(struct era_t *era, sword_t i, sword_t j)
 	lword_t res = 0XFFFFFFFF & (v1 + v2);
 	era->registers[j] = res;
 
-	return 0;
+	return ERA_STATUS_NONE;
 }
 
-int add(struct era_t *era, sword_t i, sword_t j, enum format_t format)
+sword_t add(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 {
 	switch(format) {
 	case F_8_BIT:
@@ -54,12 +55,12 @@ int add(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 		return add32(era, i, j);
 
 	}
-	return 0;
+	return ERA_STATUS_NONE;
 }
 
 /* SUB */
 
-int sub8(struct era_t *era, sword_t i, sword_t j)
+sword_t sub8(struct era_t *era, sword_t i, sword_t j)
 {
 	// get last 8 bits only
 	int8_t v1 = era->registers[i] & 0xFF;
@@ -69,10 +70,10 @@ int sub8(struct era_t *era, sword_t i, sword_t j)
 	lword_t res = 0XFFFFFFFF & (v2 - v1);
 	era->registers[j] = res;
 
-	return 0;
+	return ERA_STATUS_NONE;
 }
 
-int sub16(struct era_t *era, sword_t i, sword_t j)
+sword_t sub16(struct era_t *era, sword_t i, sword_t j)
 {
 	// get last 16 bits only
 	int16_t v1 = era->registers[i] & 0xFFFF;
@@ -82,10 +83,10 @@ int sub16(struct era_t *era, sword_t i, sword_t j)
 	lword_t res = 0XFFFFFFFF & (v2 - v1);
 	era->registers[j] = res;
 
-	return 0;
+	return ERA_STATUS_NONE;
 }
 
-int sub32(struct era_t *era, sword_t i, sword_t j)
+sword_t sub32(struct era_t *era, sword_t i, sword_t j)
 {
 	// get last 32 bits only
 	int32_t v1 = era->registers[i] & 0xFFFFFFFF;
@@ -95,10 +96,10 @@ int sub32(struct era_t *era, sword_t i, sword_t j)
 	lword_t res = 0XFFFFFFFF & (v2 - v1);
 	era->registers[j] = res;
 
-	return 0;
+	return ERA_STATUS_NONE;
 }
 
-int sub(struct era_t *era, sword_t i, sword_t j, enum format_t format)
+sword_t sub(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 {
 	switch(format) {
 	case F_8_BIT:
@@ -112,12 +113,12 @@ int sub(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 
 	}
 
-	return 0;
+	return ERA_STATUS_NONE;
 }
 
 /* ASR */
 
-int asr8(struct era_t *era, sword_t i, sword_t j)
+sword_t asr8(struct era_t *era, sword_t i, sword_t j)
 {
 	// get last 7 bits only
 	int8_t v1 = era->registers[i] & 0x7F;
@@ -131,10 +132,10 @@ int asr8(struct era_t *era, sword_t i, sword_t j)
 	lword_t res = 0XFFFFFFFF & v1;
 	era->registers[j] = res;
 
-	return 0;
+	return ERA_STATUS_NONE;
 }
 
-int asr16(struct era_t *era, sword_t i, sword_t j)
+sword_t asr16(struct era_t *era, sword_t i, sword_t j)
 {
 	// get last 15 bits only
 	int16_t v1 = era->registers[i] & 0x7FFF;
@@ -148,10 +149,10 @@ int asr16(struct era_t *era, sword_t i, sword_t j)
 	lword_t res = 0XFFFFFFFF & v1;
 	era->registers[j] = res;
 
-	return 0;
+	return ERA_STATUS_NONE;
 }
 
-int asr32(struct era_t *era, sword_t i, sword_t j)
+sword_t asr32(struct era_t *era, sword_t i, sword_t j)
 {
 	// get last 31 bits only
 	int32_t v1 = era->registers[i] & 0x7FFFFFFF;
@@ -166,10 +167,10 @@ int asr32(struct era_t *era, sword_t i, sword_t j)
 	lword_t res = 0XFFFFFFFF & v1;
 	era->registers[j] = res;
 
-	return 0;
+	return ERA_STATUS_NONE;
 }
 
-int asr(struct era_t *era, sword_t i, sword_t j, enum format_t format)
+sword_t asr(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 {
 	switch(format) {
 	case F_8_BIT:
@@ -183,12 +184,12 @@ int asr(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 
 	}
 
-	return 0;
+	return ERA_STATUS_NONE;
 }
 
 /* ASL */
 
-int asl8(struct era_t *era, sword_t i, sword_t j)
+sword_t asl8(struct era_t *era, sword_t i, sword_t j)
 {
 	// get last 7 bits only
 	int8_t v1 = era->registers[i] & 0x7F;
@@ -202,10 +203,10 @@ int asl8(struct era_t *era, sword_t i, sword_t j)
 	lword_t res = 0XFFFFFFFF & v1;
 	era->registers[j] = res;
 
-	return 0;
+	return ERA_STATUS_NONE;
 }
 
-int asl16(struct era_t *era, sword_t i, sword_t j)
+sword_t asl16(struct era_t *era, sword_t i, sword_t j)
 {
 	// get last 15 bits only
 	int16_t v1 = era->registers[i] & 0x7FFF;
@@ -219,10 +220,10 @@ int asl16(struct era_t *era, sword_t i, sword_t j)
 	lword_t res = 0XFFFFFFFF & v1;
 	era->registers[j] = res;
 
-	return 0;
+	return ERA_STATUS_NONE;
 }
 
-int asl32(struct era_t *era, sword_t i, sword_t j)
+sword_t asl32(struct era_t *era, sword_t i, sword_t j)
 {
 	// get last 31 bits only
 	int32_t v1 = era->registers[i] & 0x7FFFFFFF;
@@ -236,10 +237,10 @@ int asl32(struct era_t *era, sword_t i, sword_t j)
 	lword_t res = 0XFFFFFFFF & v1;
 	era->registers[j] = res;
 
-	return 0;
+	return ERA_STATUS_NONE;
 }
 
-int asl(struct era_t *era, sword_t i, sword_t j, enum format_t format)
+sword_t asl(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 {
 	switch(format) {
 	case F_8_BIT:
@@ -253,5 +254,5 @@ int asl(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 
 	}
 
-	return 0;
+	return ERA_STATUS_NONE;
 }

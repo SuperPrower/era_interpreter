@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "era_status.h"
+
 uint64_t read_v0_file(struct era_t *era, FILE *executable)
 {
 	uint32_t length = 0;
@@ -12,14 +14,14 @@ uint64_t read_v0_file(struct era_t *era, FILE *executable)
 	fseek(executable, 1, SEEK_CUR);
 	if(ferror(executable) != 0 || feof(executable) != 0)
 	{
-		return READ_ERROR_READ;
+		return ERA_STATUS_FILE_READ_ERROR;
 	}
 
 	// Load the length
 	fread((void*)&length, sizeof(uint32_t), 1, executable);
 	if(ferror(executable) != 0 || feof(executable) != 0)
 	{
-		return READ_ERROR_READ;
+		return ERA_STATUS_FILE_READ_ERROR;
 	}
 
 	// Load the static data and the code
@@ -27,7 +29,7 @@ uint64_t read_v0_file(struct era_t *era, FILE *executable)
 	// We CAN get EOF here, but errors are still possible
 	if(ferror(executable) != 0)
 	{
-		return READ_ERROR_READ;
+		return ERA_STATUS_FILE_READ_ERROR;
 	}
 
 	// Deal with little-endianess
@@ -46,7 +48,7 @@ uint64_t read_v0_file(struct era_t *era, FILE *executable)
 	// We don't need to modify it
 	era->registers[PC] = length;
 
-	return 0;
+	return ERA_STATUS_NONE;
 }
 
 uint64_t read_v1_file(struct era_t *era, FILE *executable)
@@ -70,31 +72,31 @@ uint64_t read_v1_file(struct era_t *era, FILE *executable)
 	fseek(executable, 1, SEEK_CUR);
 	if(ferror(executable) != 0 || feof(executable) != 0)
 	{
-		return READ_ERROR_READ;
+		return ERA_STATUS_FILE_READ_ERROR;
 	}
 
 	// Read info about static data
 	fread((void*)&data_start, sizeof(uint32_t), 1, executable);
 	if(ferror(executable) != 0 || feof(executable) != 0 || data_start == 0)
 	{
-		return READ_ERROR_READ;
+		return ERA_STATUS_FILE_READ_ERROR;
 	}
 	fread((void*)&data_length, sizeof(uint32_t), 1, executable);
 	if(ferror(executable) != 0 || feof(executable) != 0 || data_length == 0)
 	{
-		return READ_ERROR_READ;
+		return ERA_STATUS_FILE_READ_ERROR;
 	}
 
 	// Read info about code
 	fread((void*)&code_start, sizeof(uint32_t), 1, executable);
 	if(ferror(executable) != 0 || feof(executable) != 0 || code_start == 0)
 	{
-		return READ_ERROR_READ;
+		return ERA_STATUS_FILE_READ_ERROR;
 	}
 	fread((void*)&code_length, sizeof(uint32_t), 1, executable);
 	if(ferror(executable) != 0 || feof(executable) != 0 || code_length == 0)
 	{
-		return READ_ERROR_READ;
+		return ERA_STATUS_FILE_READ_ERROR;
 	}
 
 	// Deal with little-endianess
@@ -115,7 +117,7 @@ uint64_t read_v1_file(struct era_t *era, FILE *executable)
 	read = fread(data, sizeof(word_t), data_length, executable);
 	if(ferror(executable) != 0 || feof(executable) != 0 || read != data_length)
 	{
-		return READ_ERROR_READ;
+		return ERA_STATUS_FILE_READ_ERROR;
 	}
 
 
@@ -123,7 +125,7 @@ uint64_t read_v1_file(struct era_t *era, FILE *executable)
 	read = fread(code, sizeof(word_t), code_length, executable);
 	if(ferror(executable) != 0 || feof(executable) != 0 || read != code_length)
 	{
-		return READ_ERROR_READ;
+		return ERA_STATUS_FILE_READ_ERROR;
 	}
 
 	// Copy the data into the ERA memory
@@ -145,7 +147,7 @@ uint64_t read_v1_file(struct era_t *era, FILE *executable)
 	free(data);
 	free(code);
 
-	return 0;
+	return ERA_STATUS_NONE;
 }
 
 sword_t read_sword(struct era_t *era, lword_t address)

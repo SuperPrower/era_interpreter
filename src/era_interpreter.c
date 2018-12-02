@@ -6,6 +6,17 @@
 #include "util.h"
 #include "era_status.h"
 
+// Operations for the step function
+#include "branching.h"
+#include "logic.h"
+#include "memory.h"
+#include "math_operators.h"
+
+typedef sword_t (*era_command)(struct era_t*, sword_t, sword_t, enum format_t);
+
+// The execution array is indexed by the command code. The format is parsed separately.
+era_command commands[] = {&nopstop, &ld, &ldaldc, &st, &mov, &add, &sub, &asr, &asl, &or, &and, &xor, &lsl, &lsr, &cnd, &cbr};
+
 int init_era(struct era_t *era)
 {
 	era->memory = (word_t*) malloc(sizeof(word_t) * MEM_SIZE);
@@ -36,14 +47,14 @@ uint64_t read_file(char *filename, struct era_t *era)
 
 	if(executable == NULL)
 	{
-		return READ_ERROR_FILE;
+		return ERA_STATUS_FILE_ERROR;
 	}
 
 	// Get the version
 	fread((void*)&version, sizeof(uint8_t), 1, executable);
 	if(ferror(executable) != 0 || feof(executable) != 0)
 	{
-		status = READ_ERROR_READ;
+		status = ERA_STATUS_FILE_READ_ERROR;
 		goto cleanup;
 	}
 
@@ -60,7 +71,7 @@ uint64_t read_file(char *filename, struct era_t *era)
 			break;
 		}
 		default:
-			status = READ_ERROR_VERSION;
+			status = ERA_STATUS_FILE_VERSION_ERROR;
 			goto cleanup;
 	}
 
@@ -69,5 +80,26 @@ uint64_t read_file(char *filename, struct era_t *era)
 
 	cleanup:
 	fclose(executable);
+	return status;
+}
+
+sword_t step(struct era_t *era)
+{
+	word_t command = read_word(era, era->registers[PC]);
+	sword_t format = (sword_t) (command >> 14 & 0x3);
+	sword_t code = (sword_t)(command >> 10 & 0xF);
+	sword_t i = (sword_t)(command >> 5 & 0x1F);
+	sword_t j = (sword_t)(command & 0x1F);
+	++(era->registers[PC]);
+	return commands[code](era, i, j, format);
+}
+
+sword_t execute(struct era_t *era)
+{
+	sword_t status = ERA_STATUS_NONE;
+	while (status == ERA_STATUS_NONE)
+	{
+		status = step(era);
+	}
 	return status;
 }
