@@ -14,6 +14,19 @@ static void null_test_success(void **state)
 }
 
 
+/* loads binary file for mathematical operations test */
+static void setup_math_test(void **state)
+{
+	// todo
+
+}
+
+static int teardown_math_test(void **state)
+{
+	// todo
+
+	return 0;
+}
 
 int main(void)
 {

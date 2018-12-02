@@ -24,6 +24,10 @@ include_directories(include)
 add_library(lib_era
 		src/era_interpreter.c
 		src/util.c
+		src/branching.c
+		src/math_operators.c
+		src/memory.c
+		src/logic.c
 		)
 
 add_executable(${PROJECT_NAME} src/main.c)

@@ -1,6 +1,6 @@
-#include "operators.h"
+#include "math_operators.h"
 
-/* SUB */
+/* ADD */
 
 int add8(struct era_t *era, sword_t i, sword_t j)
 {
@@ -8,7 +8,7 @@ int add8(struct era_t *era, sword_t i, sword_t j)
 	int8_t v1 = era->registers[i] & 0xFF;
 	int8_t v2 = era->registers[j] & 0xFF;
 
-	// avoid implicit casting by inserting bits wit AND
+	// avoid implicit casting by inserting bits with AND
 	lword_t res = 0XFFFFFFFF & (v1 + v2);
 	era->registers[j] = res;
 
@@ -21,7 +21,7 @@ int add16(struct era_t *era, sword_t i, sword_t j)
 	int16_t v1 = era->registers[i] & 0xFFFF;
 	int16_t v2 = era->registers[j] & 0xFFFF;
 
-	// avoid implicit casting by inserting bits wit AND
+	// avoid implicit casting by inserting bits with AND
 	lword_t res = 0XFFFFFFFF & (v1 + v2);
 	era->registers[j] = res;
 
@@ -34,7 +34,7 @@ int add32(struct era_t *era, sword_t i, sword_t j)
 	int32_t v1 = era->registers[i] & 0xFFFFFFFF;
 	int32_t v2 = era->registers[j] & 0xFFFFFFFF;
 
-	// avoid implicit casting by inserting bits wit AND
+	// avoid implicit casting by inserting bits with AND
 	lword_t res = 0XFFFFFFFF & (v1 + v2);
 	era->registers[j] = res;
 
@@ -154,12 +154,13 @@ int asr16(struct era_t *era, sword_t i, sword_t j)
 int asr32(struct era_t *era, sword_t i, sword_t j)
 {
 	// get last 31 bits only
-	int32_t v1 = era->registers[i] & 0x7FFFFF;
+	int32_t v1 = era->registers[i] & 0x7FFFFFFF;
 	// shift
 	v1 >>= 1;
 
 	// add sign back
-	v1 = v1 | (era->registers[i] & 0x800000);
+	v1 = v1 | (era->registers[i] & 0x80000000);
+
 
 	// avoid implicit casting by inserting bits wit AND
 	lword_t res = 0XFFFFFFFF & v1;
@@ -194,8 +195,8 @@ int asl8(struct era_t *era, sword_t i, sword_t j)
 	// shift
 	v1 <<= 1;
 
-	// add sign back, but this time by setting sign bit to 1 and using and
-	v1 = (v1 | 0x80) & (era->registers[i] & 0x80);
+	// add sign back, but this time by setting it to 0 and then using OR
+	v1 = (v1 & 0x7F) | (era->registers[i] & 0x80);
 
 	// avoid implicit casting by inserting bits wit AND
 	lword_t res = 0XFFFFFFFF & v1;
@@ -211,8 +212,8 @@ int asl16(struct era_t *era, sword_t i, sword_t j)
 	// shift
 	v1 <<= 1;
 
-	// add sign back, but this time by setting sign bit to 1 and using and
-	v1 = (v1 | 0x8000) & (era->registers[i] & 0x8000);
+	// add sign back, but this time by setting it to 0 and then using OR
+	v1 = (v1 & 0x7FFF) | (era->registers[i] & 0x8000);
 
 	// avoid implicit casting by inserting bits wit AND
 	lword_t res = 0XFFFFFFFF & v1;
@@ -224,12 +225,12 @@ int asl16(struct era_t *era, sword_t i, sword_t j)
 int asl32(struct era_t *era, sword_t i, sword_t j)
 {
 	// get last 31 bits only
-	int32_t v1 = era->registers[i] & 0x7FFFFF;
+	int32_t v1 = era->registers[i] & 0x7FFFFFFF;
 	// shift
 	v1 <<= 1;
 
-	// add sign back, but this time by setting sign bit to 1 and using and
-	v1 = (v1 | 0x800000) & (era->registers[i] & 0x800000);
+	// add sign back, but this time by setting it to 0 and then using OR
+	v1 = (v1 & 0x7FFFFFFF) | (era->registers[i] & 0x80000000);
 
 	// avoid implicit casting by inserting bits wit AND
 	lword_t res = 0XFFFFFFFF & v1;

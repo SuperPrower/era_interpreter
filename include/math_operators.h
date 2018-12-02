@@ -1,5 +1,5 @@
-#ifndef ERA_OPERATORS_H
-#define ERA_OPERATORS_H
+#ifndef ERA_MATH_OPERATORS_H
+#define ERA_MATH_OPERATORS_H
 
 #include "era_interpreter.h"
 
@@ -57,4 +57,4 @@ int asr(struct era_t *era, sword_t i, sword_t j, enum format_t format);
  */
 int asl(struct era_t *era, sword_t i, sword_t j, enum format_t format);
 
-#endif /* ifndef ERA_OPERATORS_H */
+#endif /* ifndef ERA_MATH_OPERATORS_H */
