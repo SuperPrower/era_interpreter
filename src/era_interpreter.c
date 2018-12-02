@@ -4,11 +4,13 @@
 #include <stdlib.h>
 
 #include "util.h"
+#include "era_status.h"
 
 int init_era(struct era_t *era)
 {
 	era->memory = (word_t*) malloc(sizeof(word_t) * MEM_SIZE);
 	era->registers = (lword_t*) malloc(sizeof(lword_t) * N_REGISTERS);
+	era->status_code = ERA_STATUS_NONE;
 
 	return 0;
 }
