@@ -6,7 +6,8 @@
 #include <stdlib.h>
 
 #include "era_interpreter.h"
-#include "operators.h"
+#include "math_operators.h"
+#include "util.h"
 
 /*
  * Bunch of tests on math operators
@@ -47,7 +48,7 @@ static void format_8_tests(void **state)
 
 	// ADD test with negative numbers
 	era->registers[0] = 5;
-	era->registers[1] = 0xFFFFFFFF & (int8_t)(-4);
+	era->registers[1] = reg_put(F_8_BIT, -4);
 	add(era, 1, 0, F_8_BIT);
 	assert_int_equal(era->registers[0], 1);
 
@@ -58,34 +59,33 @@ static void format_8_tests(void **state)
 	assert_int_equal(era->registers[0], 7);
 
 	// SUB test with negative numbers and result
-	era->registers[0] = -6;
-	era->registers[1] = 0xFFFFFFFF & (int8_t)(-4);
+	era->registers[0] = reg_put(F_8_BIT, -6);
+	era->registers[1] = reg_put(F_8_BIT, -4);
 	sub(era, 1, 0, F_8_BIT);
-	assert_int_equal((int8_t)(era->registers[0] & 0xFF), -2);
+	assert_int_equal(reg_get(F_8_BIT, era->registers[0]), -2);
 
 	// ASR test
 	era->registers[0] = 5;
 	asr(era, 0, 0, F_8_BIT);
 	// don't forget proper retrieval to avoid incorrect type conversion
-	assert_int_equal((int8_t)(era->registers[0] & 0xFF), 2);
+	assert_int_equal(reg_get(F_8_BIT, era->registers[0]), 2);
 
 	// ASR test with negative numbers
 	// put -3 in there, but as a 8-bit 2th complement, not 32-bit
-	era->registers[0] = 0xFFFFFFFF & (int8_t)(-3);
+	era->registers[0] = reg_put(F_8_BIT, -3);
 	asr(era, 0, 0, F_8_BIT);
 	// don't forget proper retrieval to avoid incorrect type conversion
-	assert_int_equal((int8_t)(era->registers[0] & 0xFF), -66);
+	assert_int_equal(reg_get(F_8_BIT, era->registers[0]), -66);
 
 	// ASL test
-	era->registers[0] = 0xFFFFFFFF & (int8_t)(5);
+	era->registers[0] = reg_put(F_8_BIT, 5);
 	asl(era, 0, 0, F_8_BIT);
-	assert_int_equal((int8_t)(era->registers[0] & 0xFF), 10);
+	assert_int_equal(reg_get(F_8_BIT, era->registers[0]), 10);
 
 	// ASL test with negative numbers
-	era->registers[0] = 0xFFFFFFFF & (int8_t)(-5);
+	era->registers[0] = reg_put(F_8_BIT, -5);
 	asl(era, 0, 0, F_8_BIT);
-	assert_int_equal((int8_t)(era->registers[0] & 0xFF), -10);
-
+	assert_int_equal(reg_get(F_8_BIT, era->registers[0]), -10);
 }
 
 static void format_16_tests(void **state)
@@ -100,7 +100,7 @@ static void format_16_tests(void **state)
 
 	// ADD test with negative numbers
 	era->registers[0] = 5;
-	era->registers[1] = 0xFFFFFFFF & (int16_t)(-4);
+	era->registers[1] = reg_put(F_16_BIT, -4);
 	add(era, 1, 0, F_16_BIT);
 	assert_int_equal(era->registers[0], 1);
 
@@ -112,31 +112,31 @@ static void format_16_tests(void **state)
 
 	// SUB test with negative numbers and result
 	era->registers[0] = -6;
-	era->registers[1] = 0xFFFFFFFF & (int16_t)(-4);
+	era->registers[1] = reg_put(F_16_BIT, -4);
 	sub(era, 1, 0, F_16_BIT);
-	assert_int_equal((int16_t)(era->registers[0] & 0xFFFF), -2);
+	assert_int_equal(reg_get(F_16_BIT, era->registers[0]), -2);
 
 	// ASR test
 	era->registers[0] = 513;
 	asr(era, 0, 0, F_16_BIT);
 	// don't forget proper retrieval to avoid incorrect type conversion
-	assert_int_equal((int16_t)(era->registers[0] & 0xFFFF), 256);
+	assert_int_equal(reg_get(F_16_BIT, era->registers[0]), 256);
 
 	// ASR test with negative numbers
-	era->registers[0] = 0xFFFFFFFF & (int16_t)(-513);
+	era->registers[0] = reg_put(F_16_BIT, -513);
 	asr(era, 0, 0, F_16_BIT);
 	// don't forget proper retrieval to avoid incorrect type conversion
-	assert_int_equal((int16_t)(era->registers[0] & 0xFFFF), -16641);
+	assert_int_equal(reg_get(F_16_BIT, era->registers[0]), -16641);
 
 	// ASL test
-	era->registers[0] = 0xFFFFFFFF & (int16_t)(5);
+	era->registers[0] = reg_put(F_16_BIT, 5);
 	asl(era, 0, 0, F_16_BIT);
-	assert_int_equal((int16_t)(era->registers[0] & 0xFFFF), 10);
+	assert_int_equal(reg_get(F_16_BIT, era->registers[0]), 10);
 
 	// ASL test with negative numbers
-	era->registers[0] = 0xFFFFFFFF & (int16_t)(-5);
+	era->registers[0] = reg_put(F_16_BIT, -5);
 	asl(era, 0, 0, F_16_BIT);
-	assert_int_equal((int16_t)(era->registers[0] & 0xFFFF), -10);
+	assert_int_equal(reg_get(F_16_BIT, era->registers[0]), -10);
 
 }
 
@@ -152,7 +152,7 @@ static void format_32_tests(void **state)
 
 	// ADD test with negative numbers
 	era->registers[0] = 5;
-	era->registers[1] = 0xFFFFFFFF & (int32_t)(-4);
+	era->registers[1] = reg_put(F_32_BIT, -4);
 	add(era, 1, 0, F_32_BIT);
 	assert_int_equal(era->registers[0], 1);
 
@@ -164,32 +164,31 @@ static void format_32_tests(void **state)
 
 	// SUB test with negative numbers and result
 	era->registers[0] = -6;
-	era->registers[1] = 0xFFFFFFFF & (int32_t)(-4);
+	era->registers[1] = reg_put(F_32_BIT, -4);
 	sub(era, 1, 0, F_32_BIT);
-	assert_int_equal((int32_t)(era->registers[0] & 0xFFFFFFFF), -2);
+	assert_int_equal(reg_get(F_32_BIT, era->registers[0]), -2);
 
 	// ASR test
 	era->registers[0] = 3221337;
 	asr(era, 0, 0, F_32_BIT);
 	// don't forget proper retrieval to avoid incorrect type conversion
-	assert_int_equal((int32_t)(era->registers[0] & 0xFFFFFFFF), 1610668);
+	assert_int_equal(reg_get(F_32_BIT, era->registers[0]), 1610668);
 
 	// ASR test with negative numbers
-	era->registers[0] = 0xFFFFFFFF & (int32_t)(-3221337);
+	era->registers[0] = reg_put(F_32_BIT, -3221337);
 	asr(era, 0, 0, F_32_BIT);
 	// don't forget proper retrieval to avoid incorrect type conversion
-	assert_int_equal((int32_t)(era->registers[0] & 0xFFFFFFFF), (int32_t)(-1075352493));
+	assert_int_equal(reg_get(F_32_BIT, era->registers[0]), (int32_t)(-1075352493));
 
 	// ASL test
-	era->registers[0] = 0xFFFFFFFF & (int32_t)(3221337);
+	era->registers[0] = reg_put(F_32_BIT, 3221337);
 	asl(era, 0, 0, F_32_BIT);
-	assert_int_equal((int32_t)(era->registers[0] & 0xFFFFFFFF), 6442674);
+	assert_int_equal(reg_get(F_32_BIT, era->registers[0]), 6442674);
 
 	// ASL test with negative numbers
-	era->registers[0] = 0xFFFFFFFF & (int32_t)(-3221337);
+	era->registers[0] = reg_put(F_32_BIT, -3221337);
 	asl(era, 0, 0, F_32_BIT);
-	assert_int_equal((int32_t)(era->registers[0] & 0xFFFFFFFF), -6442674);
-
+	assert_int_equal(reg_get(F_32_BIT, era->registers[0]), -6442674);
 
 }
 
