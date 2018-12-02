@@ -10,7 +10,7 @@
 #include "branching.h"
 #include "logic.h"
 #include "memory.h"
-#include "operators.h"
+#include "math_operators.h"
 
 typedef sword_t (*era_command)(struct era_t*, sword_t, sword_t, enum format_t);
 
