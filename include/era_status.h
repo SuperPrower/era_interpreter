@@ -4,8 +4,8 @@
 // TODO : put all errors that result in halting here
 
 // No error
-#define ERROR_NONE 0
+#define ERA_STATUS_NONE 0
 // Normal exit caused by STOP
-#define ERROR_STOP 1
+#define ERA_STATUS_STOP 1
 
 #endif //ERA_ERA_ERRORS_H
