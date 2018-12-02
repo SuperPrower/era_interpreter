@@ -32,8 +32,8 @@ int lda(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 
 	era->registers[j] = era->registers[i] + constant;
 
-	// TODO: The assumption here
-	++(era->registers[PC]);
+	// TODO : I think this is correct, but this should be tested.
+	era->registers[PC] += 2;
 
 	return 0;
 }
