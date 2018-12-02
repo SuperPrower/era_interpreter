@@ -90,6 +90,7 @@ sword_t step(struct era_t *era)
 	sword_t code = (sword_t)(command >> 10 & 0xF);
 	sword_t i = (sword_t)(command >> 5 & 0x1F);
 	sword_t j = (sword_t)(command & 0x1F);
+	++(era->registers[PC]);
 	return commands[code](era, i, j, format);
 }
 
@@ -99,7 +100,6 @@ sword_t execute(struct era_t *era)
 	while (status == ERA_STATUS_NONE)
 	{
 		status = step(era);
-		++(era->registers[PC]);
 	}
 	return status;
 }
