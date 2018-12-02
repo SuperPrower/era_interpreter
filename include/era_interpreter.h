@@ -71,6 +71,6 @@ sword_t step(struct era_t * era);
  *
  * @returns 0 on success
  */
-int execute(struct era_t *era);
+sword_t execute(struct era_t * era);
 
 #endif /* ifndef ERA_INTERPRETER_H */

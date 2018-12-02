@@ -83,7 +83,7 @@ uint64_t read_file(char *filename, struct era_t *era)
 	return status;
 }
 
-sword_t step(struct era_t * era)
+sword_t step(struct era_t *era)
 {
 	word_t command = read_word(era, era->registers[PC]);
 	sword_t format = (sword_t) (command >> 14 & 0x3);
@@ -93,3 +93,13 @@ sword_t step(struct era_t * era)
 	return commands[code](era, i, j, format);
 }
 
+sword_t execute(struct era_t *era)
+{
+	sword_t status = ERA_STATUS_NONE;
+	while (status == ERA_STATUS_NONE)
+	{
+		status = step(era);
+		++(era->registers[PC]);
+	}
+	return status;
+}
