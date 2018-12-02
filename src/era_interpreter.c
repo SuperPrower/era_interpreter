@@ -36,14 +36,14 @@ uint64_t read_file(char *filename, struct era_t *era)
 
 	if(executable == NULL)
 	{
-		return READ_ERROR_FILE;
+		return ERA_STATUS_FILE_ERROR;
 	}
 
 	// Get the version
 	fread((void*)&version, sizeof(uint8_t), 1, executable);
 	if(ferror(executable) != 0 || feof(executable) != 0)
 	{
-		status = READ_ERROR_READ;
+		status = ERA_STATUS_FILE_READ_ERROR;
 		goto cleanup;
 	}
 
@@ -60,7 +60,7 @@ uint64_t read_file(char *filename, struct era_t *era)
 			break;
 		}
 		default:
-			status = READ_ERROR_VERSION;
+			status = ERA_STATUS_FILE_VERSION_ERROR;
 			goto cleanup;
 	}
 

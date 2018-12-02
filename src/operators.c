@@ -12,7 +12,7 @@ int add8(struct era_t *era, sword_t i, sword_t j)
 	lword_t res = 0XFFFFFFFF & (v1 + v2);
 	era->registers[j] = res;
 
-	return 0;
+	return ERA_STATUS_NONE;
 }
 
 int add16(struct era_t *era, sword_t i, sword_t j)
@@ -25,7 +25,7 @@ int add16(struct era_t *era, sword_t i, sword_t j)
 	lword_t res = 0XFFFFFFFF & (v1 + v2);
 	era->registers[j] = res;
 
-	return 0;
+	return ERA_STATUS_NONE;
 }
 
 int add32(struct era_t *era, sword_t i, sword_t j)
@@ -38,7 +38,7 @@ int add32(struct era_t *era, sword_t i, sword_t j)
 	lword_t res = 0XFFFFFFFF & (v1 + v2);
 	era->registers[j] = res;
 
-	return 0;
+	return ERA_STATUS_NONE;
 }
 
 int add(struct era_t *era, sword_t i, sword_t j, enum format_t format)
@@ -54,7 +54,7 @@ int add(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 		return add32(era, i, j);
 
 	}
-	return 0;
+	return ERA_STATUS_NONE;
 }
 
 /* SUB */
@@ -69,7 +69,7 @@ int sub8(struct era_t *era, sword_t i, sword_t j)
 	lword_t res = 0XFFFFFFFF & (v2 - v1);
 	era->registers[j] = res;
 
-	return 0;
+	return ERA_STATUS_NONE;
 }
 
 int sub16(struct era_t *era, sword_t i, sword_t j)
@@ -82,7 +82,7 @@ int sub16(struct era_t *era, sword_t i, sword_t j)
 	lword_t res = 0XFFFFFFFF & (v2 - v1);
 	era->registers[j] = res;
 
-	return 0;
+	return ERA_STATUS_NONE;
 }
 
 int sub32(struct era_t *era, sword_t i, sword_t j)
@@ -95,7 +95,7 @@ int sub32(struct era_t *era, sword_t i, sword_t j)
 	lword_t res = 0XFFFFFFFF & (v2 - v1);
 	era->registers[j] = res;
 
-	return 0;
+	return ERA_STATUS_NONE;
 }
 
 int sub(struct era_t *era, sword_t i, sword_t j, enum format_t format)
@@ -112,7 +112,7 @@ int sub(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 
 	}
 
-	return 0;
+	return ERA_STATUS_NONE;
 }
 
 /* ASR */
@@ -131,7 +131,7 @@ int asr8(struct era_t *era, sword_t i, sword_t j)
 	lword_t res = 0XFFFFFFFF & v1;
 	era->registers[j] = res;
 
-	return 0;
+	return ERA_STATUS_NONE;
 }
 
 int asr16(struct era_t *era, sword_t i, sword_t j)
@@ -148,7 +148,7 @@ int asr16(struct era_t *era, sword_t i, sword_t j)
 	lword_t res = 0XFFFFFFFF & v1;
 	era->registers[j] = res;
 
-	return 0;
+	return ERA_STATUS_NONE;
 }
 
 int asr32(struct era_t *era, sword_t i, sword_t j)
@@ -165,7 +165,7 @@ int asr32(struct era_t *era, sword_t i, sword_t j)
 	lword_t res = 0XFFFFFFFF & v1;
 	era->registers[j] = res;
 
-	return 0;
+	return ERA_STATUS_NONE;
 }
 
 int asr(struct era_t *era, sword_t i, sword_t j, enum format_t format)
@@ -182,7 +182,7 @@ int asr(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 
 	}
 
-	return 0;
+	return ERA_STATUS_NONE;
 }
 
 /* ASL */
@@ -201,7 +201,7 @@ int asl8(struct era_t *era, sword_t i, sword_t j)
 	lword_t res = 0XFFFFFFFF & v1;
 	era->registers[j] = res;
 
-	return 0;
+	return ERA_STATUS_NONE;
 }
 
 int asl16(struct era_t *era, sword_t i, sword_t j)
@@ -218,7 +218,7 @@ int asl16(struct era_t *era, sword_t i, sword_t j)
 	lword_t res = 0XFFFFFFFF & v1;
 	era->registers[j] = res;
 
-	return 0;
+	return ERA_STATUS_NONE;
 }
 
 int asl32(struct era_t *era, sword_t i, sword_t j)
@@ -235,7 +235,7 @@ int asl32(struct era_t *era, sword_t i, sword_t j)
 	lword_t res = 0XFFFFFFFF & v1;
 	era->registers[j] = res;
 
-	return 0;
+	return ERA_STATUS_NONE;
 }
 
 int asl(struct era_t *era, sword_t i, sword_t j, enum format_t format)
@@ -252,5 +252,5 @@ int asl(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 
 	}
 
-	return 0;
+	return ERA_STATUS_NONE;
 }

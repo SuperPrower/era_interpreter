@@ -11,14 +11,6 @@
 #define SP 29
 #define FP 28
 
-// Not sure about these names
-// Unable to open the file
-#define READ_ERROR_FILE 1
-// Incorrect version
-#define READ_ERROR_VERSION 2
-// Read failure
-#define READ_ERROR_READ 3
-
 // TODO: Make dynamic later on: either get it from the file or from command line?
 // Seeing as we're trying to make it API-like, we should also add functions to modify the values on the fly
 // Sizes are in words

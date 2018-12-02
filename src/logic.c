@@ -1,6 +1,7 @@
 #include "logic.h"
 
 #include "util.h"
+#include "era_status.h"
 
 enum logic_op_t {
 	LOGIC_OR,
@@ -14,7 +15,7 @@ enum logic_op_t {
 int logic_operation(struct era_t *era, sword_t i, sword_t j, enum format_t format, enum logic_op_t operator)
 {
 	if (i >= N_REGISTERS || j >= N_REGISTERS)
-		return LOGIC_ERROR_WRONG_REGISTER;
+		return ERA_STATUS_WRONG_REGISTER;
 
 	lword_t mask = get_mask(format);
 
@@ -45,10 +46,10 @@ int logic_operation(struct era_t *era, sword_t i, sword_t j, enum format_t forma
 			era->registers[j] |= (era->registers[i] & mask) >> 1;
 			break;
 		default:
-			return LOGIC_ERROR_WRONG_OPERATOR;
+			return ERA_STATUS_WRONG_OPERATOR;
 	}
 
-	return 0;
+	return ERA_STATUS_NONE;
 }
 
 int or(struct era_t *era, sword_t i, sword_t j, enum format_t format)

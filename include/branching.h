@@ -3,9 +3,6 @@
 
 #include "era_interpreter.h"
 
-#define BRANCH_ERROR_WRONG_REGISTER 1
-#define BRANCH_ERROR_WRONG_FORMAT 2
-
 /**
  * @brief Rj ?= Ri
  * Compares Rj and Ri and puts the results of comparison into 4 lowest bits of Rj

@@ -3,9 +3,6 @@
 
 #include "era_interpreter.h"
 
-#define LOGIC_ERROR_WRONG_REGISTER 1
-#define LOGIC_ERROR_WRONG_OPERATOR 2
-
 /**
  * @brief Rj BITWISE OR Ri
  * Applies the OR operator to every bit of Rj and Ri and stores the result in Rj

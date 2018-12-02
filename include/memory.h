@@ -3,10 +3,6 @@
 
 #include "era_interpreter.h"
 
-#define MEMORY_ERROR_OUT_OF_BOUNDS 1
-#define MEMORY_ERROR_WRONG_FORMAT 2
-#define MEMORY_ERROR_WRONG_REGISTER 3
-
 /**
  * @brief Rj = *Ri
  * Load contents from memory address in Ri to Rj
