@@ -6,12 +6,20 @@ project(era_tests)
 
 find_package(CMocka REQUIRED)
 
-set(TEST_SOURCES tests.c)
+set(TEST_SOURCES
+	base_tests.c
+	math_tests.c
+	)
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
-add_executable(era_tests ${TEST_SOURCES})
-target_link_libraries(era_tests lib_era cmocka)
+add_executable(era_base_tests base_tests.c)
+add_executable(era_math_tests math_tests.c)
 
-# add_dependencies(era_tests era_tests)
-add_test(sample_test ${EXECUTABLE_OUTPUT_PATH}/era_tests)
+target_link_libraries(era_base_tests lib_era cmocka)
+target_link_libraries(era_math_tests lib_era cmocka)
+
+add_test(base_tests ${EXECUTABLE_OUTPUT_PATH}/era_base_tests)
+add_test(math_tests ${EXECUTABLE_OUTPUT_PATH}/era_math_tests)
+
+# add more test in similar manner
