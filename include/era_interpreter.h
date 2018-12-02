@@ -62,7 +62,7 @@ uint64_t read_file(char *filename, struct era_t *era);
  *
  * @returns 0 on success
  */
-int step(struct era_t *era);
+sword_t step(struct era_t * era);
 
 /**
  * Execute until halted

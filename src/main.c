@@ -11,8 +11,10 @@ int main(int argc, char *argv[])
 	//uint64_t bytes_read = read_file("test.bin", era);
 	//printf("Read %lu bytes\n", bytes_read);
 
-	read_file("tests/v0Test.bin", era);
+	read_file("test_binaries/v0Test.bin", era);
 	printf("%u", read_lword(era, 2));
+
+	step(era);
 
 	free_era(era);
 	return 0;

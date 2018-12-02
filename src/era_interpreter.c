@@ -12,10 +12,10 @@
 #include "memory.h"
 #include "operators.h"
 
-typedef sword_t (*command)(struct era_t*, sword_t, sword_t, enum format_t);
+typedef sword_t (*era_command)(struct era_t*, sword_t, sword_t, enum format_t);
 
 // The execution array is indexed by the command code. The format is parsed separately.
-command commands[] = {&nopstop, &ld, &ldaldc, &st, &mov, &add, &sub, &asr, &asl, &or, &and, &xor, &lsl, &lsr, &cnd, &cbr};
+era_command commands[] = {&nopstop, &ld, &ldaldc, &st, &mov, &add, &sub, &asr, &asl, &or, &and, &xor, &lsl, &lsr, &cnd, &cbr};
 
 int init_era(struct era_t *era)
 {
@@ -83,7 +83,13 @@ uint64_t read_file(char *filename, struct era_t *era)
 	return status;
 }
 
-int step(struct era_t *era)
+sword_t step(struct era_t * era)
 {
-	return ERA_STATUS_NONE;
+	word_t command = read_word(era, era->registers[PC]);
+	sword_t format = (sword_t) (command >> 14 & 0x3);
+	sword_t code = (sword_t)(command >> 10 & 0xF);
+	sword_t i = (sword_t)(command >> 5 & 0x1F);
+	sword_t j = (sword_t)(command & 0x1F);
+	return commands[code](era, i, j, format);
 }
+

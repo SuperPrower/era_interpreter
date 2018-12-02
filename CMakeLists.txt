@@ -25,6 +25,9 @@ add_library(lib_era
 		src/era_interpreter.c
 		src/util.c
 		src/branching.c
+		src/logic.c
+		src/memory.c
+		src/operators.c
 		)
 
 add_executable(${PROJECT_NAME} src/main.c)
