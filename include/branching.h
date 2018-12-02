@@ -14,7 +14,7 @@
  *
  * @returns 0 on success, error code "MEMORY_ERROR_*" on error
  */
-int cnd(struct era_t *era, sword_t i, sword_t j, enum format_t format);
+sword_t cnd(struct era_t *era, sword_t i, sword_t j, enum format_t format);
 
 /**
  * @brief if Ri goto Rj
@@ -27,7 +27,7 @@ int cnd(struct era_t *era, sword_t i, sword_t j, enum format_t format);
  *
  * @returns 0 on success, error code "MEMORY_ERROR_*" on error
  */
-int cbr(struct era_t *era, sword_t i, sword_t j, enum format_t format);
+sword_t cbr(struct era_t * era, sword_t i, sword_t j, enum format_t format);
 
 /**
  * @brief does nothing
@@ -39,7 +39,7 @@ int cbr(struct era_t *era, sword_t i, sword_t j, enum format_t format);
  *
  * @returns 0 on success, error code "MEMORY_ERROR_*" on error
  */
-int nop(struct era_t *era, sword_t i, sword_t j, enum format_t format);
+sword_t nop(struct era_t * era, sword_t i, sword_t j, enum format_t format);
 
 /**
  * @brief stops the execution
@@ -51,6 +51,9 @@ int nop(struct era_t *era, sword_t i, sword_t j, enum format_t format);
  *
  * @returns 0 on success, error code "MEMORY_ERROR_*" on error
  */
-int stop(struct era_t *era, sword_t i, sword_t j, enum format_t format);
+sword_t stop(struct era_t *era, sword_t i, sword_t j, enum format_t format);
+
+// Utility function for the execution table
+sword_t nopstop(struct era_t *era, sword_t i, sword_t j, enum format_t format);
 
 #endif //ERA_BRANCHING_H

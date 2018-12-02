@@ -14,7 +14,7 @@
  *
  * @returns 0 on success, error code "MEMORY_ERROR_*" on error
  */
-int or(struct era_t *era, sword_t i, sword_t j, enum format_t format);
+sword_t or(struct era_t *era, sword_t i, sword_t j, enum format_t format);
 
 /**
  * @brief Rj BITWISE AND Ri
@@ -27,7 +27,7 @@ int or(struct era_t *era, sword_t i, sword_t j, enum format_t format);
  *
  * @returns 0 on success, error code "MEMORY_ERROR_*" on error
  */
-int and(struct era_t *era, sword_t i, sword_t j, enum format_t format);
+sword_t and(struct era_t *era, sword_t i, sword_t j, enum format_t format);
 
 /**
  * @brief Rj BITWISE XOR Ri
@@ -40,7 +40,7 @@ int and(struct era_t *era, sword_t i, sword_t j, enum format_t format);
  *
  * @returns 0 on success, error code "MEMORY_ERROR_*" on error
  */
-int xor(struct era_t *era, sword_t i, sword_t j, enum format_t format);
+sword_t xor(struct era_t *era, sword_t i, sword_t j, enum format_t format);
 
 /**
  * @brief Rj = Ri << 1
@@ -54,7 +54,7 @@ int xor(struct era_t *era, sword_t i, sword_t j, enum format_t format);
  *
  * @returns 0 on success, error code "MEMORY_ERROR_*" on error
  */
-int lsl(struct era_t *era, sword_t i, sword_t j, enum format_t format);
+sword_t lsl(struct era_t *era, sword_t i, sword_t j, enum format_t format);
 
 /**
  * @brief *Rj >> *Ri
@@ -68,6 +68,6 @@ int lsl(struct era_t *era, sword_t i, sword_t j, enum format_t format);
  *
  * @returns 0 on success, error code "MEMORY_ERROR_*" on error
  */
-int lsr(struct era_t *era, sword_t i, sword_t j, enum format_t format);
+sword_t lsr(struct era_t *era, sword_t i, sword_t j, enum format_t format);
 
 #endif //ERA_LOGIC_H

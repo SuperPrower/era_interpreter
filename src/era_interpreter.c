@@ -6,6 +6,17 @@
 #include "util.h"
 #include "era_status.h"
 
+// Operations for the step function
+#include "branching.h"
+#include "logic.h"
+#include "memory.h"
+#include "operators.h"
+
+typedef sword_t (*command)(struct era_t*, sword_t, sword_t, enum format_t);
+
+// The execution array is indexed by the command code. The format is parsed separately.
+command commands[] = {&nopstop, &ld, &ldaldc, &st, &mov, &add, &sub, &asr, &asl, &or, &and, &xor, &lsl, &lsr, &cnd, &cbr};
+
 int init_era(struct era_t *era)
 {
 	era->memory = (word_t*) malloc(sizeof(word_t) * MEM_SIZE);
@@ -70,4 +81,9 @@ uint64_t read_file(char *filename, struct era_t *era)
 	cleanup:
 	fclose(executable);
 	return status;
+}
+
+int step(struct era_t *era)
+{
+	return ERA_STATUS_NONE;
 }

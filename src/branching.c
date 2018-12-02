@@ -9,7 +9,7 @@
 #define CND_MORE   0x00000001
 #define CND_LESS   0x00000002
 
-int cnd(struct era_t *era, sword_t i, sword_t j, enum format_t format)
+sword_t cnd(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 {
 	if (i >= N_REGISTERS || j >= N_REGISTERS)
 		return ERA_STATUS_WRONG_REGISTER;
@@ -38,7 +38,7 @@ int cnd(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 	return ERA_STATUS_NONE;
 }
 
-int cbr(struct era_t *era, sword_t i, sword_t j, enum format_t format)
+sword_t cbr(struct era_t * era, sword_t i, sword_t j, enum format_t format)
 {
 	if (i >= N_REGISTERS || j >= N_REGISTERS)
 		return ERA_STATUS_WRONG_REGISTER;
@@ -53,7 +53,7 @@ int cbr(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 	return ERA_STATUS_NONE;
 }
 
-int nop(struct era_t *era, sword_t i, sword_t j, enum format_t format)
+sword_t nop(struct era_t * era, sword_t i, sword_t j, enum format_t format)
 {
 	if (format != F_16_BIT)
 	{
@@ -64,7 +64,25 @@ int nop(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 	return ERA_STATUS_NONE;
 }
 
-int stop(struct era_t *era, sword_t i, sword_t j, enum format_t format)
+sword_t stop(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 {
+	if (format != F_16_BIT)
+	{
+		return ERA_STATUS_WRONG_FORMAT;
+	}
 	return ERA_STATUS_STOP;
+}
+
+sword_t nopstop(struct era_t *era, sword_t i, sword_t j, enum format_t format)
+{
+	switch (format)
+	{
+		case F_8_BIT:
+			return stop(era, i, j, format);
+		case F_16_BIT:
+			return nop(era, i, j, format);
+		default:
+			return ERA_STATUS_WRONG_FORMAT;
+	}
+	return ERA_STATUS_NONE;
 }

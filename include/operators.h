@@ -14,7 +14,7 @@
  *
  * @returns 0 on success
  */
-int add(struct era_t *era, sword_t i, sword_t j, enum format_t format);
+sword_t add(struct era_t * era, sword_t i, sword_t j, enum format_t format);
 
 /**
  * @brief Rj -= Ri
@@ -27,7 +27,7 @@ int add(struct era_t *era, sword_t i, sword_t j, enum format_t format);
  *
  * @returns 0 on success
  */
-int sub(struct era_t *era, sword_t i, sword_t j, enum format_t format);
+sword_t sub(struct era_t *era, sword_t i, sword_t j, enum format_t format);
 
 /**
  * @brief Rj = Ri >> 1
@@ -41,7 +41,7 @@ int sub(struct era_t *era, sword_t i, sword_t j, enum format_t format);
  *
  * @returns 0 on success
  */
-int asr(struct era_t *era, sword_t i, sword_t j, enum format_t format);
+sword_t asr(struct era_t *era, sword_t i, sword_t j, enum format_t format);
 
 /**
  * @brief Rj = Ri << 1
@@ -55,6 +55,6 @@ int asr(struct era_t *era, sword_t i, sword_t j, enum format_t format);
  *
  * @returns 0 on success
  */
-int asl(struct era_t *era, sword_t i, sword_t j, enum format_t format);
+sword_t asl(struct era_t *era, sword_t i, sword_t j, enum format_t format);
 
 #endif /* ifndef ERA_OPERATORS_H */

@@ -2,7 +2,7 @@
 
 #include "util.h"
 
-int ld(struct era_t *era, sword_t i, sword_t j, enum format_t format)
+sword_t ld(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 {
 	if (format != F_32_BIT)
 		return ERA_STATUS_WRONG_FORMAT;
@@ -20,7 +20,7 @@ int ld(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 	return ERA_STATUS_NONE;
 }
 
-int lda(struct era_t *era, sword_t i, sword_t j, enum format_t format)
+sword_t lda(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 {
 	if (format != F_8_BIT)
 		return ERA_STATUS_WRONG_FORMAT;
@@ -38,7 +38,7 @@ int lda(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 	return ERA_STATUS_NONE;
 }
 
-int ldc(struct era_t *era, sword_t i, sword_t j, enum format_t format)
+sword_t ldc(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 {
 	if (format != F_32_BIT)
 		return ERA_STATUS_WRONG_FORMAT;
@@ -51,7 +51,7 @@ int ldc(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 	return ERA_STATUS_NONE;
 }
 
-int st(struct era_t *era, sword_t i, sword_t j, enum format_t format)
+sword_t st(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 {
 	if (format != F_32_BIT)
 		return ERA_STATUS_WRONG_FORMAT;
@@ -65,7 +65,7 @@ int st(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 	return ERA_STATUS_NONE;
 }
 
-int mov(struct era_t *era, sword_t i, sword_t j, enum format_t format)
+sword_t mov(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 {
 	if (i >= N_REGISTERS || j >= N_REGISTERS || j == PC)
 		return ERA_STATUS_WRONG_REGISTER;
@@ -76,5 +76,19 @@ int mov(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 	era->registers[j] &= ~mask;
 	era->registers[j] |= era->registers[i] & mask;
 
+	return ERA_STATUS_NONE;
+}
+
+sword_t ldaldc(struct era_t *era, sword_t i, sword_t j, enum format_t format)
+{
+	switch (format)
+	{
+		case F_8_BIT:
+			return lda(era, i, j, format);
+		case F_32_BIT:
+			return ldc(era, i, j, format);
+		default:
+			return ERA_STATUS_WRONG_FORMAT;
+	}
 	return ERA_STATUS_NONE;
 }
