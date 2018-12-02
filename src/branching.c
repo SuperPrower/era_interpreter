@@ -1,6 +1,7 @@
 #include "branching.h"
 
 #include "util.h"
+#include "era_status.h"
 
 // NOTE : Not sure if it's better to put them here or as variables into the function
 #define CND_RESULT 0x0000000f
@@ -65,6 +66,6 @@ int nop(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 
 int stop(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 {
-	//TODO : Implement somehow - no execution loop to end right now
+	era->error_code = ERA_STATUS_STOP;
 	return 0;
 }

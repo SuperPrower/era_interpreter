@@ -26,9 +26,14 @@
 #define STACK_SIZE 100
 
 struct era_t {
-	word_t *memory;		/// machine memory
 	lword_t *registers;	/// common registers
+	word_t *memory;		/// machine memory
 	word_t IR;			/// instruction register
+	// Status code field, checked every iteration of running a program
+	// 0 - normal execution, no error
+	// 1 - normal exit, caused by STOP
+	// Other codes will probably be divided among different classes of errors
+	sword_t status_code;
 };
 
 /**
