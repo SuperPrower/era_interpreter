@@ -8,7 +8,7 @@
 int init_era(struct era_t *era)
 {
 	era->memory = (word_t*) malloc(sizeof(word_t) * MEM_SIZE);
-	era->registers = (word_t*) malloc(sizeof(word_t) * N_REGISTERS);
+	era->registers = (lword_t*) malloc(sizeof(lword_t) * N_REGISTERS);
 
 	return 0;
 }
@@ -50,10 +50,12 @@ uint64_t read_file(char *filename, struct era_t *era)
 		case(0):
 		{
 			status = read_v0_file(era, executable);
+			break;
 		}
 		case 1:
 		{
 			status = read_v1_file(era, executable);
+			break;
 		}
 		default:
 			status = READ_ERROR_VERSION;
