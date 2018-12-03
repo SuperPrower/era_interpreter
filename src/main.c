@@ -6,11 +6,13 @@
 int main(int argc, char *argv[])
 {
 	struct era_t * era = (struct era_t *) malloc(sizeof(struct era_t));
-
 	init_era(era);
-	read_file("test_binaries/v0Test.bin", era);
-	// 6 is not a mistake here. Word 5 should be zero, so we check it just in case
-	for(int c = 0; c < 6; c++)
+	read_file("test_binaries/v0_simple_ops.bin", era);
+	sword_t status = execute(era);
+	// 7 is not a mistake here.
+	// Word 4 should be 0, Word 5 should be 7 since ST is 32-bit.
+	// Word 6 should be zero, so we check it just in case
+	for(int c = 0; c < 7; c++)
 	{
 		printf("Word %u : %u\n", c, read_word(era, c));
 	}
@@ -18,22 +20,7 @@ int main(int argc, char *argv[])
 	{
 		printf("R%u : %u\n", c, era->registers[c]);
 	}
-	free_era(era);
-
-	// Both parts of the output should be equal
-	printf("\n");
-
-	init_era(era);
-	read_file("test_binaries/v1Test.bin", era);
-	// 6 is not a mistake here. Word 5 should be zero, so we check it just in case
-	for(int c = 0; c < 6; c++)
-	{
-		printf("Word %u : %u\n", c, read_word(era, c));
-	}
-	for(int c = 0; c < 32; c++)
-	{
-		printf("R%u : %u\n", c, era->registers[c]);
-	}
+	printf("Final status: %u\n", status);
 	free_era(era);
 
 	return 0;
