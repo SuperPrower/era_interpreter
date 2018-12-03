@@ -7,7 +7,6 @@
 
 #include "era_interpreter.h"
 #include "math_operators.h"
-#include "era_util.h"
 
 /*
  * Bunch of tests on math operators
