@@ -5,8 +5,7 @@
 
 int main(int argc, char *argv[])
 {
-	struct era_t * era = (struct era_t *) malloc(sizeof(struct era_t));
-	init_era(era);
+	struct era_t * era = init_era();
 	read_file("test_binaries/v0_simple_ops.bin", era);
 	sword_t status = execute(era);
 	// 7 is not a mistake here.
