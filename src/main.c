@@ -20,6 +20,7 @@ int main(int argc, char *argv[])
 	}
 	free_era(era);
 
+	// Both parts of the output should be equal
 	printf("\n");
 
 	init_era(era);
