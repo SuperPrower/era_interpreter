@@ -66,7 +66,7 @@ sword_t nop(struct era_t * era, sword_t i, sword_t j, enum format_t format)
 
 sword_t stop(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 {
-	if (format != F_16_BIT)
+	if (format != F_8_BIT)
 	{
 		return ERA_STATUS_WRONG_FORMAT;
 	}

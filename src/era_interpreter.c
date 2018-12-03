@@ -84,11 +84,24 @@ uint64_t read_file(char *filename, struct era_t *era)
 sword_t step(struct era_t *era)
 {
 	word_t command = read_word(era, era->registers[PC]);
-	sword_t format = (sword_t) (command >> 14 & 0x3);
+	sword_t format_code = (sword_t) (command >> 14 & 0x3);
+	enum format_t format;
 	sword_t code = (sword_t)(command >> 10 & 0xF);
 	sword_t i = (sword_t)(command >> 5 & 0x1F);
 	sword_t j = (sword_t)(command & 0x1F);
 	++(era->registers[PC]);
+	switch(format_code)
+	{
+		case 0:
+			format = F_8_BIT;
+			break;
+		case 1:
+			format = F_16_BIT;
+			break;
+		case 3:
+			format = F_32_BIT;
+			break;
+	}
 	return commands[code](era, i, j, format);
 }
 
