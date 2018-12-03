@@ -6,6 +6,11 @@ project(era_tests)
 
 find_package(CMocka REQUIRED)
 
+# Needed in case CMocka is run in config mode instead of module mode
+if(${CMOCKA_FOUND})
+    include_directories(${CMOCKA_INCLUDE_DIR})
+endif()
+
 set(TEST_SOURCES
 	base_tests.c
 	math_tests.c
