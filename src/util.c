@@ -32,7 +32,7 @@ uint64_t read_v0_file(struct era_t *era, FILE *executable)
 		return ERA_STATUS_FILE_READ_ERROR;
 	}
 
-	// Deal with little-endianess
+	// Deal with little-endianness
 	if(little_endian() == 1)
 	{
 		length = swap_lword(length);
@@ -42,11 +42,13 @@ uint64_t read_v0_file(struct era_t *era, FILE *executable)
 		}
 	}
 
-	// Populate PC
+	// Populate The needed registers
 	// I was a bit dumb at first.
 	// length relates to the length of data in the global data + code, NOT in the file.
 	// We don't need to modify it
 	era->registers[PC] = length;
+	era->registers[SP] = read;
+	// Other registers are already zero
 
 	return ERA_STATUS_NONE;
 }
@@ -62,9 +64,6 @@ uint64_t read_v1_file(struct era_t *era, FILE *executable)
 	// Data length in words
 	uint32_t code_length;
 
-	// Temporary buffers to store the data from file
-	word_t *code;
-	word_t *data;
 	// Number of words read
 	size_t read;
 
@@ -99,7 +98,7 @@ uint64_t read_v1_file(struct era_t *era, FILE *executable)
 		return ERA_STATUS_FILE_READ_ERROR;
 	}
 
-	// Deal with little-endianess
+	// Deal with little-endianness
 	if(little_endian() == 1)
 	{
 		code_start = swap_lword(code_start);
@@ -108,13 +107,11 @@ uint64_t read_v1_file(struct era_t *era, FILE *executable)
 		data_length = swap_lword(data_length);
 	}
 
-	code = (word_t*)malloc(code_length * sizeof(word_t));
-	data = (word_t*)malloc(data_length * sizeof(word_t));
-
 	// TODO: Make sure this always works
 	// TODO: Could get the length of a file and additionally check against it
 	fseek(executable, data_start, SEEK_SET);
-	read = fread(data, sizeof(word_t), data_length, executable);
+	// Read data into the beginning of the memory
+	read = fread(era->memory, sizeof(word_t), data_length, executable);
 	if(ferror(executable) != 0 || feof(executable) != 0 || read != data_length)
 	{
 		return ERA_STATUS_FILE_READ_ERROR;
@@ -122,20 +119,19 @@ uint64_t read_v1_file(struct era_t *era, FILE *executable)
 
 
 	fseek(executable, code_start, SEEK_SET);
-	read = fread(code, sizeof(word_t), code_length, executable);
+	// Read code right after data into the memory
+	read = fread(era->memory + data_length, sizeof(word_t), code_length, executable);
 	if(ferror(executable) != 0 || feof(executable) != 0 || read != code_length)
 	{
 		return ERA_STATUS_FILE_READ_ERROR;
 	}
 
-	// Copy the data into the ERA memory
-	memcpy(era->memory, data, data_length * sizeof(word_t));
-	// TODO: Not sure about this one. Makes sense, but looks dangerous
-	memcpy(era->memory + data_length, code, code_length * sizeof(word_t));
-
+	// Set the registers to needed values
 	era->registers[PC] = data_length;
+	era->registers[SP] = data_length + code_length;
+	// Other registers are already zero
 
-	// Deal with little-endianess
+	// Deal with little-endianness
 	if(little_endian() == 1)
 	{
 		for(size_t c = 0; c < data_length + code_length; ++c)
@@ -143,9 +139,6 @@ uint64_t read_v1_file(struct era_t *era, FILE *executable)
 			era->memory[c] = swap_word(era->memory[c]);
 		}
 	}
-
-	free(data);
-	free(code);
 
 	return ERA_STATUS_NONE;
 }

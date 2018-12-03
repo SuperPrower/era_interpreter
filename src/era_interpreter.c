@@ -19,8 +19,9 @@ era_command commands[] = {&nopstop, &ld, &ldaldc, &st, &mov, &add, &sub, &asr, &
 
 int init_era(struct era_t *era)
 {
-	era->memory = (word_t*) malloc(sizeof(word_t) * MEM_SIZE);
-	era->registers = (lword_t*) malloc(sizeof(lword_t) * N_REGISTERS);
+	// Calloc clears everything to zero, which should be good for us
+	era->memory = (word_t*) calloc(MEM_SIZE, sizeof(word_t));
+	era->registers = (lword_t*) calloc(N_REGISTERS, sizeof(lword_t));
 	era->status_code = ERA_STATUS_NONE;
 
 	return 0;
@@ -74,9 +75,6 @@ uint64_t read_file(char *filename, struct era_t *era)
 			status = ERA_STATUS_FILE_VERSION_ERROR;
 			goto cleanup;
 	}
-
-	// We always have static data at the beginning of memory
-	era->registers[SB] = 0;
 
 	cleanup:
 	fclose(executable);
