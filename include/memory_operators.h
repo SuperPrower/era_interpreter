@@ -1,5 +1,5 @@
-#ifndef ERA_MEMORY_H
-#define ERA_MEMORY_H
+#ifndef ERA_MEMORY_OPERATORS_H
+#define ERA_MEMORY_OPERATORS_H
 
 #include "era_interpreter.h"
 
@@ -73,4 +73,4 @@ sword_t mov(struct era_t *era, sword_t i, sword_t j, enum format_t format);
 // Utility function for the execution table
 sword_t ldaldc(struct era_t *era, sword_t i, sword_t j, enum format_t format);
 
-#endif //ERA_MEMORY_H
+#endif //ERA_MEMORY_OPERATORS_H

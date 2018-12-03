@@ -1,5 +1,5 @@
-#ifndef ERA_BRANCHING_H
-#define ERA_BRANCHING_H
+#ifndef ERA_BRANCH_OPERATORS_H
+#define ERA_BRANCH_OPERATORS_H
 
 #include "era_interpreter.h"
 
@@ -56,4 +56,4 @@ sword_t stop(struct era_t *era, sword_t i, sword_t j, enum format_t format);
 // Utility function for the execution table
 sword_t nopstop(struct era_t *era, sword_t i, sword_t j, enum format_t format);
 
-#endif //ERA_BRANCHING_H
+#endif //ERA_BRANCH_OPERATORS_H

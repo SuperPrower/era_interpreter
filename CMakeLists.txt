@@ -23,11 +23,12 @@ include_directories(include)
 # Build all files as library so that they can be re-used for tests
 add_library(lib_era
 		src/era_interpreter.c
-		src/util.c
-		src/branching.c
+		src/era_util.c
+        src/branch_operators.c
 		src/math_operators.c
-		src/memory.c
-		src/logic.c
+		src/memory_operators.c
+		src/logic_operators.c
+		src/file_reading.c
 		)
 
 add_executable(${PROJECT_NAME} src/main.c)

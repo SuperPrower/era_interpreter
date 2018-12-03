@@ -1,7 +1,4 @@
-#include "logic.h"
-
-#include "util.h"
-#include "era_status.h"
+#include "logic_operators.h"
 
 enum logic_op_t {
 	LOGIC_OR,
