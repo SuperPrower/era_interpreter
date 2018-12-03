@@ -1,5 +1,5 @@
-#ifndef ERA_ERA_ERRORS_H
-#define ERA_ERA_ERRORS_H
+#ifndef ERA_STATUS_H
+#define ERA_STATUS_H
 
 // TODO : put all errors that result in halting here
 
@@ -29,4 +29,4 @@
 // Memory errors
 #define ERA_STATUS_MEMORY_OUT_OF_BOUNDS 69
 
-#endif //ERA_ERA_ERRORS_H
+#endif //ERA_STATUS_H

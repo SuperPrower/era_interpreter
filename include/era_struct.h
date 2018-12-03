@@ -1,5 +1,5 @@
-#ifndef ERA_ERA_STRUCT_H
-#define ERA_ERA_STRUCT_H
+#ifndef ERA_STRUCT_H
+#define ERA_STRUCT_H
 
 #include "era_types.h"
 
@@ -11,4 +11,4 @@ struct era_t {
 	sword_t status_code;/// Status code field, checked after every insturction, see era_status.h
 };
 
-#endif //ERA_ERA_STRUCT_H
+#endif //ERA_STRUCT_H

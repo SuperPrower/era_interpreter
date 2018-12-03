@@ -1,5 +1,5 @@
-#ifndef ERA_ERA_TYPES_H
-#define ERA_ERA_TYPES_H
+#ifndef ERA_TYPES_H
+#define ERA_TYPES_H
 
 #include <stdint.h>
 
@@ -18,4 +18,4 @@ enum format_t
 	F_32_BIT,
 };
 
-#endif //ERA_ERA_TYPES_H
+#endif //ERA_TYPES_H

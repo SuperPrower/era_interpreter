@@ -1,5 +1,5 @@
-#ifndef ERA_LOGIC_H
-#define ERA_LOGIC_H
+#ifndef ERA_LOGIC_OPERATORS_H
+#define ERA_LOGIC_OPERATORS_H
 
 #include "era_interpreter.h"
 
@@ -70,4 +70,4 @@ sword_t lsl(struct era_t *era, sword_t i, sword_t j, enum format_t format);
  */
 sword_t lsr(struct era_t *era, sword_t i, sword_t j, enum format_t format);
 
-#endif //ERA_LOGIC_H
+#endif //ERA_LOGIC_OPERATORS_H
