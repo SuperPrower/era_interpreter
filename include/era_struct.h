@@ -3,7 +3,6 @@
 
 #include "era_types.h"
 
-// This file is needed just to remove a huge number of warnings related
 struct era_t {
 	lword_t *registers;	/// common registers
 	word_t *memory;		/// machine memory
