@@ -1,21 +1,19 @@
 #include "era_interpreter.h"
 
-#include <stdio.h>
 #include <stdlib.h>
+#include "file_reading.h"
 
-#include "util.h"
-#include "era_status.h"
-
-// Operations for the step function
-#include "branching.h"
-#include "logic.h"
-#include "memory.h"
+// Include the operations for the step function
+#include "branch_operators.h"
+#include "logic_operators.h"
+#include "memory_operators.h"
 #include "math_operators.h"
 
-typedef sword_t (*era_command)(struct era_t*, sword_t, sword_t, enum format_t);
+// Type of the instruction function pointer
+typedef sword_t (*era_instruction)(struct era_t*, sword_t, sword_t, enum format_t);
 
 // The execution array is indexed by the command code. The format is parsed separately.
-era_command commands[] = {&nopstop, &ld, &ldaldc, &st, &mov, &add, &sub, &asr, &asl, &or, &and, &xor, &lsl, &lsr, &cnd, &cbr};
+era_instruction instructions[] = {&nopstop, &ld, &ldaldc, &st, &mov, &add, &sub, &asr, &asl, &or, &and, &xor, &lsl, &lsr, &cnd, &cbr};
 
 int init_era(struct era_t *era)
 {
@@ -35,14 +33,14 @@ int free_era(struct era_t *era)
 	return 0;
 }
 
-//GOTOs in here are responsible and sensible, don't worry about it
+//GOTOs in here are responsible and sensible, so no need to worry about it
 uint64_t read_file(char *filename, struct era_t *era)
 {
+	uint64_t status = 0;
 	FILE * executable;
 	// NOTE : header fields are independent from words and stuff and have fixed bit size
 	// 255 is used to make sure invalid reads are detected
 	uint8_t version = 255;
-	uint64_t status = 0;
 
 	executable = fopen(filename, "rb");
 
@@ -84,11 +82,13 @@ uint64_t read_file(char *filename, struct era_t *era)
 sword_t step(struct era_t *era)
 {
 	word_t command = read_word(era, era->registers[PC]);
-	sword_t format_code = (sword_t) (command >> 14 & 0x3);
 	enum format_t format;
+
+	sword_t format_code = (sword_t) (command >> 14 & 0x3);
 	sword_t code = (sword_t)(command >> 10 & 0xF);
 	sword_t i = (sword_t)(command >> 5 & 0x1F);
 	sword_t j = (sword_t)(command & 0x1F);
+
 	++(era->registers[PC]);
 	switch(format_code)
 	{
@@ -101,16 +101,17 @@ sword_t step(struct era_t *era)
 		case 3:
 			format = F_32_BIT;
 			break;
+		default:
+			return ERA_STATUS_WRONG_FORMAT;
 	}
-	return commands[code](era, i, j, format);
+	return instructions[code](era, i, j, format);
 }
 
 sword_t execute(struct era_t *era)
 {
-	sword_t status = ERA_STATUS_NONE;
-	while (status == ERA_STATUS_NONE)
+	while (era->status_code == ERA_STATUS_NONE)
 	{
-		status = step(era);
+		era->status_code = step(era);
 	}
-	return status;
+	return era->status_code;
 }

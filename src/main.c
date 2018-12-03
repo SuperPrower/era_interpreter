@@ -1,7 +1,7 @@
-#include "era_interpreter.h"
-#include <stdlib.h>
 #include <stdio.h>
-#include "util.h"
+#include <stdlib.h>
+
+#include "era_interpreter.h"
 
 int main(int argc, char *argv[])
 {

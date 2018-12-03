@@ -1,8 +1,10 @@
 #ifndef ERA_INTERPRETER_H
 #define ERA_INTERPRETER_H
 
-#include <stdio.h>
+// All files needed either by the interpreter or any potential user of the interpreter
 #include "era_types.h"
+#include "era_status.h"
+#include "era_util.h"
 
 #define MEM_SIZE (64 * 1024) /// memory size in words
 #define N_REGISTERS (32)

@@ -1,7 +1,4 @@
-#include "memory.h"
-
-#include "util.h"
-#include "era_status.h"
+#include "memory_operators.h"
 
 sword_t ld(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 {
