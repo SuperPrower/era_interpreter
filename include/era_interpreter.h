@@ -2,7 +2,7 @@
 #define ERA_INTERPRETER_H
 
 // All files needed either by the interpreter or any potential user of the interpreter
-#include "era_types.h"
+#include "era_struct.h"
 #include "era_status.h"
 #include "era_util.h"
 
@@ -18,17 +18,6 @@
 // Sizes are in words
 #define HEAP_SIZE 100
 #define STACK_SIZE 100
-
-struct era_t {
-	lword_t *registers;	/// common registers
-	word_t *memory;		/// machine memory
-	word_t IR;			/// instruction register
-	// Status code field, checked every iteration of running a program
-	// 0 - normal execution, no error
-	// 1 - normal exit, caused by STOP
-	// Other codes will probably be divided among different classes of errors
-	sword_t status_code;
-};
 
 /**
  * Initialize ERA interpreter: allocate memory and registers
