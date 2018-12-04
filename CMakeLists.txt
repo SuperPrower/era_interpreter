@@ -30,6 +30,7 @@ add_library(lib_era
 		src/logic_operators.c
 		src/file_reading.c
 		)
+SET_TARGET_PROPERTIES(lib_era PROPERTIES PREFIX "")
 
 add_executable(${PROJECT_NAME} src/main.c)
 target_link_libraries(${PROJECT_NAME} lib_era)
