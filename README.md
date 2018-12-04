@@ -5,6 +5,8 @@ Read more about options at `./era --help`
 
 Test file available: `test_binaries/v0_simple_ops.bin`
 
+IMPORTANT: You will need to move the libera_interpreter.dll to the directory with the binaries, at least on Windows, after compilation.
+
 ## Building
 
 ### Dependencies
