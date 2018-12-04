@@ -3,8 +3,6 @@
 #include <setjmp.h>
 #include <cmocka.h>
 
-#include <stdlib.h>
-
 #include "era_interpreter.h"
 #include "math_operators.h"
 
@@ -18,9 +16,7 @@
 /* loads binary file for mathematical operations test */
 static int setup_math_tests(void **state)
 {
-	struct era_t * era = init_era();
-
-	*state = era;
+	*state = init_era();
 
 	return 0;
 }

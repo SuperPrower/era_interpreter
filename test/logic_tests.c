@@ -3,17 +3,12 @@
 #include <setjmp.h>
 #include <cmocka.h>
 
-#include <stdlib.h>
-
 #include "era_interpreter.h"
 #include "logic_operators.h"
 
 static int setup_logic_tests(void **state)
 {
-	struct era_t * era = (struct era_t *) malloc(sizeof(struct era_t));
-	init_era(era);
-
-	*state = era;
+	*state = init_era();
 
 	return 0;
 }
@@ -22,7 +17,6 @@ static int teardown_logic_tests(void **state)
 {
 	struct era_t * era = (struct era_t *) *state;
 	free_era(era);
-	free(era);
 
 	return 0;
 }
