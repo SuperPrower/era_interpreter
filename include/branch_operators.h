@@ -18,7 +18,7 @@ sword_t cnd(struct era_t *era, sword_t i, sword_t j, enum format_t format);
 
 /**
  * @brief if Ri goto Rj
- * Checks Ri and if it is non-zero, then the current PC is stored into Pi and sets PC to Rj
+ * Checks Ri and if it is non-zero, then the current PC is stored into Ri and sets PC to Rj
  *
  * @param[in] era - pointer to era structure
  * @param[in] i	- no. of register
