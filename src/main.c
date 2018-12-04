@@ -17,6 +17,39 @@ const char* help =
 	"Alex Gospodchikov\n"
 	"Danila Romanov\n";
 
+void simple_mem_dump(struct era_t *era)
+{
+	FILE *dump = fopen("memdump", "w");
+
+	fprintf(dump, "ERA status: %u\n", era->status_code);
+
+	fprintf(dump, "Registers:\n");
+	for(int c = 0; c < 32; ++c)
+	{
+		if(c == FP)
+			fprintf(dump, "R%u (FP): %u\n", c, era->registers[c]);
+		else if(c == SP)
+			fprintf(dump, "R%u (SP): %u\n", c, era->registers[c]);
+		else if(c == SB)
+			fprintf(dump, "R%u (SB): %u\n", c, era->registers[c]);
+		else if(c == PC)
+			fprintf(dump, "R%u (PC): %u\n", c, era->registers[c]);
+		else
+			fprintf(dump, "R%u: %u\n", c, era->registers[c]);
+	}
+
+	fprintf(dump, "Raw memory:\n");
+
+	for(uint32_t c = 0; c < era->memory_size; ++c)
+	{
+		if(c % 8 == 0)
+			fprintf(dump, "\n");
+		fprintf(dump, "%X\t", era->memory[c]);
+	}
+
+	fclose(dump);
+}
+
 int main(int argc, char *argv[])
 {
 	// parse arguments
@@ -41,17 +74,14 @@ int main(int argc, char *argv[])
 	}
 
 	struct era_t * era = init_era_m(memory_size);
-	if (read_file(filename, era) != 0) {
+	if (read_file(filename, era) != ERA_STATUS_NONE) {
 		return 1;
 	}
 
-	sword_t status = execute(era);
+	execute(era);
 
-	for(int c = 0; c < 32; c++)
-	{
-		printf("R%u : %u\n", c, era->registers[c]);
-	}
-	printf("Final status: %u\n", status);
+	simple_mem_dump(era);
+
 	free_era(era);
 
 	return 0;
