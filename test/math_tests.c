@@ -35,169 +35,114 @@ static int teardown_math_tests(void **state)
 	return 0;
 }
 
-static void format_8_tests(void **state)
+static void add_tests(void **state)
 {
 	struct era_t * era = (struct era_t *) *state;
+	// 10101010 11001110 11100101 00001011
+	era->registers[0] = 2865685771;
 
-	// ADD test
-	era->registers[0] = 5;
-	era->registers[1] = 3;
-	add(era, 1, 0, F_8_BIT);
-	assert_int_equal(era->registers[0], 8);
+	// 00010100 01010010 01011101 10110011
+	era->registers[1] = 340942259;
+	add(era, 0, 1, F_8_BIT);
+	// ADDed = 00000000 00000000 00000000 10111110
+	assert_int_equal(era->registers[1], 190);
 
-	// ADD test with negative numbers
-	era->registers[0] = 5;
-	era->registers[1] = reg_put(F_8_BIT, -4);
-	add(era, 1, 0, F_8_BIT);
-	assert_int_equal(era->registers[0], 1);
+	// 00010100 01010010 01011101 10110011
+	era->registers[1] = 340942259;
+	add(era, 0, 1, F_16_BIT);
+	// ADDed = 00000000 00000000 01000010 10111110
+	assert_int_equal(era->registers[1], 17086);
 
-	// SUB test
-	era->registers[0] = 9;
-	era->registers[1] = 2;
-	sub(era, 1, 0, F_8_BIT);
-	assert_int_equal(era->registers[0], 7);
-
-	// SUB test with negative numbers and result
-	era->registers[0] = reg_put(F_8_BIT, -6);
-	era->registers[1] = reg_put(F_8_BIT, -4);
-	sub(era, 1, 0, F_8_BIT);
-	assert_int_equal(reg_get(F_8_BIT, era->registers[0]), -2);
-
-	// ASR test
-	era->registers[0] = 5;
-	asr(era, 0, 0, F_8_BIT);
-	// don't forget proper retrieval to avoid incorrect type conversion
-	assert_int_equal(reg_get(F_8_BIT, era->registers[0]), 2);
-
-	// ASR test with negative numbers
-	// put -3 in there, but as a 8-bit 2th complement, not 32-bit
-	era->registers[0] = reg_put(F_8_BIT, -3);
-	asr(era, 0, 0, F_8_BIT);
-	// don't forget proper retrieval to avoid incorrect type conversion
-	assert_int_equal(reg_get(F_8_BIT, era->registers[0]), -66);
-
-	// ASL test
-	era->registers[0] = reg_put(F_8_BIT, 5);
-	asl(era, 0, 0, F_8_BIT);
-	assert_int_equal(reg_get(F_8_BIT, era->registers[0]), 10);
-
-	// ASL test with negative numbers
-	era->registers[0] = reg_put(F_8_BIT, -5);
-	asl(era, 0, 0, F_8_BIT);
-	assert_int_equal(reg_get(F_8_BIT, era->registers[0]), -10);
+	// 00010100 01010010 01011101 10110011
+	era->registers[1] = 340942259;
+	add(era, 0, 1, F_32_BIT);
+	// ADDed = 10111111 00100001 01000010 10111110
+	assert_int_equal(era->registers[1], 3206628030);
 }
 
-static void format_16_tests(void **state)
+static void sub_tests(void **state)
 {
 	struct era_t * era = (struct era_t *) *state;
+	// 10101010 11001110 11100101 00001011
+	era->registers[0] = 2865685771;
 
-	// ADD test
-	era->registers[0] = 5;
-	era->registers[1] = 3;
-	add(era, 1, 0, F_16_BIT);
-	assert_int_equal(era->registers[0], 8);
+	// 00010100 01010010 01011101 10110011
+	era->registers[1] = 340942259;
+	sub(era, 0, 1, F_8_BIT);
+	// SUBed = 00000000 00000000 00000000 10101000
+	assert_int_equal(era->registers[1], 168);
 
-	// ADD test with negative numbers
-	era->registers[0] = 5;
-	era->registers[1] = reg_put(F_16_BIT, -4);
-	add(era, 1, 0, F_16_BIT);
-	assert_int_equal(era->registers[0], 1);
+	// 00010100 01010010 01011101 10110011
+	era->registers[1] = 340942259;
+	sub(era, 0, 1, F_16_BIT);
+	// SUBed = 00000000 00000000 01111000 10101000
+	assert_int_equal(era->registers[1], 30888);
 
-	// SUB test
-	era->registers[0] = 9;
-	era->registers[1] = 2;
-	sub(era, 1, 0, F_16_BIT);
-	assert_int_equal(era->registers[0], 7);
-
-	// SUB test with negative numbers and result
-	era->registers[0] = -6;
-	era->registers[1] = reg_put(F_16_BIT, -4);
-	sub(era, 1, 0, F_16_BIT);
-	assert_int_equal(reg_get(F_16_BIT, era->registers[0]), -2);
-
-	// ASR test
-	era->registers[0] = 513;
-	asr(era, 0, 0, F_16_BIT);
-	// don't forget proper retrieval to avoid incorrect type conversion
-	assert_int_equal(reg_get(F_16_BIT, era->registers[0]), 256);
-
-	// ASR test with negative numbers
-	era->registers[0] = reg_put(F_16_BIT, -513);
-	asr(era, 0, 0, F_16_BIT);
-	// don't forget proper retrieval to avoid incorrect type conversion
-	assert_int_equal(reg_get(F_16_BIT, era->registers[0]), -16641);
-
-	// ASL test
-	era->registers[0] = reg_put(F_16_BIT, 5);
-	asl(era, 0, 0, F_16_BIT);
-	assert_int_equal(reg_get(F_16_BIT, era->registers[0]), 10);
-
-	// ASL test with negative numbers
-	era->registers[0] = reg_put(F_16_BIT, -5);
-	asl(era, 0, 0, F_16_BIT);
-	assert_int_equal(reg_get(F_16_BIT, era->registers[0]), -10);
-
+	// 00010100 01010010 01011101 10110011
+	era->registers[1] = 340942259;
+	sub(era, 0, 1, F_32_BIT);
+	// SUBed = 01101001 10000011 01111000 10101000
+	assert_int_equal(era->registers[1], 1770223784);
 }
 
-static void format_32_tests(void **state)
+static void asr_tests(void **state)
 {
 	struct era_t * era = (struct era_t *) *state;
+	// 10101010 11001110 11100101 00001011
+	era->registers[0] = 2865685771;
 
-	// ADD test
-	era->registers[0] = 70420;
-	era->registers[1] = 80310;
-	add(era, 1, 0, F_32_BIT);
-	assert_int_equal(era->registers[0], 150730);
+	// 00000000 00000000 00000000 00000000
+	era->registers[1] = 0;
+	asr(era, 0, 1, F_8_BIT);
+	// ASRed = 00000000 00000000 00000000 00000101
+	assert_int_equal(era->registers[1], 5);
 
-	// ADD test with negative numbers
-	era->registers[0] = 5;
-	era->registers[1] = reg_put(F_32_BIT, -4);
-	add(era, 1, 0, F_32_BIT);
-	assert_int_equal(era->registers[0], 1);
+	// 00000000 00000000 00000000 00000000
+	era->registers[1] = 0;
+	asr(era, 0, 1, F_16_BIT);
+	// ASRed = 00000000 00000000 10110010 10000101
+	assert_int_equal(era->registers[1], 45701);
 
-	// SUB test
-	era->registers[0] = 9;
-	era->registers[1] = 2;
-	sub(era, 1, 0, F_32_BIT);
-	assert_int_equal(era->registers[0], 7);
+	// 00000000 00000000 00000000 00000000
+	era->registers[1] = 0;
+	asr(era, 0, 1, F_32_BIT);
+	// ASRed = 10010101 01100111 01110010 10000101
+	assert_int_equal(era->registers[1], 2506584709);
+}
 
-	// SUB test with negative numbers and result
-	era->registers[0] = -6;
-	era->registers[1] = reg_put(F_32_BIT, -4);
-	sub(era, 1, 0, F_32_BIT);
-	assert_int_equal(reg_get(F_32_BIT, era->registers[0]), -2);
+static void asl_tests(void **state)
+{
+	struct era_t * era = (struct era_t *) *state;
+	// 10101010 11001110 11100101 00001011
+	era->registers[0] = 2865685771;
 
-	// ASR test
-	era->registers[0] = 3221337;
-	asr(era, 0, 0, F_32_BIT);
-	// don't forget proper retrieval to avoid incorrect type conversion
-	assert_int_equal(reg_get(F_32_BIT, era->registers[0]), 1610668);
+	// 00000000 00000000 00000000 00000000
+	era->registers[1] = 0;
+	asl(era, 0, 1, F_8_BIT);
+	// ASLed = 00000000 00000000 00000000 00010110
+	assert_int_equal(era->registers[1], 22);
 
-	// ASR test with negative numbers
-	era->registers[0] = reg_put(F_32_BIT, -3221337);
-	asr(era, 0, 0, F_32_BIT);
-	// don't forget proper retrieval to avoid incorrect type conversion
-	assert_int_equal(reg_get(F_32_BIT, era->registers[0]), (int32_t)(-1075352493));
+	// 00000000 00000000 00000000 00000000
+	era->registers[1] = 0;
+	asl(era, 0, 1, F_16_BIT);
+	// ASLed = 00000000 00000000 11001010 00010110
+	assert_int_equal(era->registers[1], 51734);
 
-	// ASL test
-	era->registers[0] = reg_put(F_32_BIT, 3221337);
-	asl(era, 0, 0, F_32_BIT);
-	assert_int_equal(reg_get(F_32_BIT, era->registers[0]), 6442674);
-
-	// ASL test with negative numbers
-	era->registers[0] = reg_put(F_32_BIT, -3221337);
-	asl(era, 0, 0, F_32_BIT);
-	assert_int_equal(reg_get(F_32_BIT, era->registers[0]), -6442674);
-
+	// 00000000 00000000 00000000 00000000
+	era->registers[1] = 0;
+	asl(era, 0, 1, F_32_BIT);
+	// ASLed = 11010101 10011101 11001010 00010110
+	assert_int_equal(era->registers[1], 3583887894);
 }
 
 int main(void)
 {
 
 	const struct CMUnitTest math_tests[] = {
-		cmocka_unit_test(format_8_tests),
-		cmocka_unit_test(format_16_tests),
-		cmocka_unit_test(format_32_tests),
+		cmocka_unit_test(add_tests),
+		cmocka_unit_test(sub_tests),
+		cmocka_unit_test(asr_tests),
+		cmocka_unit_test(asl_tests)
 	};
 
 	return cmocka_run_group_tests_name(
