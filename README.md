@@ -1,3 +1,8 @@
+## Running
+`./era [--filename filename] [--memory_size words] [--help]`
+
+Read more about options at `./era --help`
+
 ## Building
 
 ### Dependencies
