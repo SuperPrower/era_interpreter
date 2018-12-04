@@ -16,8 +16,8 @@ include_directories(${CMAKE_SOURCE_DIR}/include)
 add_executable(era_base_tests base_tests.c)
 add_executable(era_math_tests math_tests.c)
 
-target_link_libraries(era_base_tests lib_era cmocka)
-target_link_libraries(era_math_tests lib_era cmocka)
+target_link_libraries(era_base_tests era_interpreter cmocka)
+target_link_libraries(era_math_tests era_interpreter cmocka)
 
 add_test(base_tests ${EXECUTABLE_OUTPUT_PATH}/era_base_tests)
 add_test(math_tests ${EXECUTABLE_OUTPUT_PATH}/era_math_tests)
