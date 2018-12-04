@@ -17,16 +17,7 @@ era_instruction instructions[] = {&nopstop, &ld, &ldaldc, &st, &mov, &add, &sub,
 
 struct era_t* init_era()
 {
-	struct era_t * era = (struct era_t *) malloc(sizeof(struct era_t));
-
-	era->memory_size = (64 * 1024);
-
-	// Calloc clears everything to zero, which should be good for us
-	era->memory = (word_t*) calloc(era->memory_size, sizeof(word_t));
-	era->registers = (lword_t*) calloc(N_REGISTERS, sizeof(lword_t));
-	era->status_code = ERA_STATUS_NONE;
-
-	return era;
+	return init_era_m(64 * 1024);
 }
 
 struct era_t* init_era_m(uint32_t _mem_size)

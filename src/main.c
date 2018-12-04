@@ -41,7 +41,10 @@ int main(int argc, char *argv[])
 	}
 
 	struct era_t * era = init_era_m(memory_size);
-	read_file(filename, era);
+	if (read_file(filename, era) != 0) {
+		return 1;
+	}
+
 	sword_t status = execute(era);
 
 	for(int c = 0; c < 32; c++)

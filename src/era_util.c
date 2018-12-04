@@ -39,7 +39,6 @@ lword_t get_mask(enum format_t format)
 
 int write_lword(struct era_t *era, lword_t address, lword_t word)
 {
-	// TODO: Add dynamic memory sizing
 	if(address > era->memory_size || address + 1 > era->memory_size)
 		return 1;
 
