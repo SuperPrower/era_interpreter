@@ -10,7 +10,7 @@ sword_t ld(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 
 	lword_t address = era->registers[i];
 	// TODO: Add something like a era->mem_size field to check such situations
-	if(address > MEM_SIZE)
+	if(address > era->memory_size)
 		return ERA_STATUS_MEMORY_OUT_OF_BOUNDS;
 
 	era->registers[j] = read_lword(era, address);

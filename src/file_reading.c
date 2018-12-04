@@ -46,7 +46,7 @@ uint64_t read_v0_file(struct era_t *era, FILE *executable)
 	}
 
 	// Load the static data and the code
-	read = fread((void*) era->memory, sizeof(word_t), MEM_SIZE, executable);
+	read = fread((void*) era->memory, sizeof(word_t), era->memory_size, executable);
 	// We CAN get EOF here, but errors are still possible
 	if(ferror(executable) != 0)
 	{
