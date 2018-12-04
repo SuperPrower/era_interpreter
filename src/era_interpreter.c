@@ -34,10 +34,10 @@ int free_era(struct era_t *era)
 }
 
 //GOTOs in here are responsible and sensible, so no need to worry about it
-uint64_t read_file(char *filename, struct era_t *era)
+sword_t read_file(char *filename, struct era_t *era)
 {
-	uint64_t status = 0;
 	FILE * executable;
+	sword_t status = ERA_STATUS_NONE;
 	// NOTE : header fields are independent from words and stuff and have fixed bit size
 	// 255 is used to make sure invalid reads are detected
 	uint8_t version = 255;

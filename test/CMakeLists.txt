@@ -15,6 +15,7 @@ set(TEST_SOURCES
 	base_tests.c
 	math_tests.c
 	logic_tests.c
+	file_reading_tests.c
 	)
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
@@ -22,13 +23,16 @@ include_directories(${CMAKE_SOURCE_DIR}/include)
 add_executable(era_base_tests base_tests.c)
 add_executable(era_math_tests math_tests.c)
 add_executable(era_logic_tests logic_tests.c)
+add_executable(era_file_reading_tests file_reading_tests.c)
 
 target_link_libraries(era_base_tests lib_era cmocka)
 target_link_libraries(era_math_tests lib_era cmocka)
 target_link_libraries(era_logic_tests lib_era cmocka)
+target_link_libraries(era_file_reading_tests lib_era cmocka)
 
-add_test(base_tests ${EXECUTABLE_OUTPUT_PATH}/era_base_tests)
-add_test(math_tests ${EXECUTABLE_OUTPUT_PATH}/era_math_tests)
-add_test(logic_tests ${EXECUTABLE_OUTPUT_PATH}/era_logic_tests)
+add_test(NAME base_tests COMMAND ${EXECUTABLE_OUTPUT_PATH}/era_base_tests WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/test")
+add_test(NAME math_tests COMMAND ${EXECUTABLE_OUTPUT_PATH}/era_math_tests WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/test")
+add_test(NAME logic_tests COMMAND ${EXECUTABLE_OUTPUT_PATH}/era_logic_tests WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/test")
+add_test(NAME file_reading_tests COMMAND ${EXECUTABLE_OUTPUT_PATH}/era_file_reading_tests WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/test")
 
 # add more test in similar manner

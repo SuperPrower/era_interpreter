@@ -44,7 +44,7 @@ int free_era(struct era_t *era);
  *
  * @returns	0 on success, error code on failure
  */
-uint64_t read_file(char *filename, struct era_t *era);
+sword_t read_file(char *filename, struct era_t *era);
 
 /**
  * Make one step in execution
