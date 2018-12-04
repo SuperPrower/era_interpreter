@@ -27,10 +27,8 @@ add_executable(era_file_reading_tests file_reading_tests.c)
 
 target_link_libraries(era_base_tests era_interpreter cmocka)
 target_link_libraries(era_math_tests era_interpreter cmocka)
-target_link_libraries(era_base_tests lib_era cmocka)
-target_link_libraries(era_math_tests lib_era cmocka)
-target_link_libraries(era_logic_tests lib_era cmocka)
-target_link_libraries(era_file_reading_tests lib_era cmocka)
+target_link_libraries(era_logic_tests era_interpreter cmocka)
+target_link_libraries(era_file_reading_tests era_interpreter cmocka)
 
 add_test(NAME base_tests COMMAND ${EXECUTABLE_OUTPUT_PATH}/era_base_tests WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/test")
 add_test(NAME math_tests COMMAND ${EXECUTABLE_OUTPUT_PATH}/era_math_tests WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/test")
