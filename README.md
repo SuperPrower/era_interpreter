@@ -3,6 +3,8 @@
 
 Read more about options at `./era --help`
 
+Test file available: `test_binaries/v0_simple_ops.bin`
+
 ## Building
 
 ### Dependencies
