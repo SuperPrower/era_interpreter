@@ -15,20 +15,23 @@ typedef sword_t (*era_instruction)(struct era_t*, sword_t, sword_t, enum format_
 // The execution array is indexed by the command code. The format is parsed separately.
 era_instruction instructions[] = {&nopstop, &ld, &ldaldc, &st, &mov, &add, &sub, &asr, &asl, &or, &and, &xor, &lsl, &lsr, &cnd, &cbr};
 
-int init_era(struct era_t *era)
+struct era_t* init_era()
 {
+	struct era_t * era = (struct era_t *) malloc(sizeof(struct era_t));
+
 	// Calloc clears everything to zero, which should be good for us
 	era->memory = (word_t*) calloc(MEM_SIZE, sizeof(word_t));
 	era->registers = (lword_t*) calloc(N_REGISTERS, sizeof(lword_t));
 	era->status_code = ERA_STATUS_NONE;
 
-	return 0;
+	return era;
 }
 
 int free_era(struct era_t *era)
 {
 	free(era->memory);
 	free(era->registers);
+	free(era);
 
 	return 0;
 }

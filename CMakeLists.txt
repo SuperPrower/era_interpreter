@@ -24,7 +24,7 @@ include_directories(include)
 add_library(lib_era
 		src/era_interpreter.c
 		src/era_util.c
-        src/branch_operators.c
+        	src/branch_operators.c
 		src/math_operators.c
 		src/memory_operators.c
 		src/logic_operators.c

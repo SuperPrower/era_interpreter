@@ -21,11 +21,11 @@
 
 /**
  * Initialize ERA interpreter: allocate memory and registers
- * @param[out]	era	pointer to era structure
  *
- * @returns 0 on success
+ * @returns initialized era_t struct pointer
  */
-int init_era(struct era_t *era);
+struct era_t* init_era();
+
 
 /**
  * Deallocate ERA struct

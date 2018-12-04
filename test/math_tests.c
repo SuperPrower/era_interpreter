@@ -19,8 +19,7 @@
 /* loads binary file for mathematical operations test */
 static int setup_math_tests(void **state)
 {
-	struct era_t * era = (struct era_t *) malloc(sizeof(struct era_t));
-	init_era(era);
+	struct era_t * era = init_era();
 
 	*state = era;
 
@@ -31,7 +30,6 @@ static int teardown_math_tests(void **state)
 {
 	struct era_t * era = (struct era_t *) *state;
 	free_era(era);
-	free(era);
 
 	return 0;
 }
