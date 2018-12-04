@@ -26,7 +26,7 @@ lword_t swap_lword(lword_t word)
 	return (lword_t)((p1 << 24) + (p2 << 16) + (p3 << 8) + p4);
 }
 
-uint64_t read_v0_file(struct era_t *era, FILE *executable)
+sword_t read_v0_file(struct era_t *era, FILE *executable)
 {
 	uint32_t length = 0;
 	size_t read = 0;
@@ -74,7 +74,7 @@ uint64_t read_v0_file(struct era_t *era, FILE *executable)
 	return ERA_STATUS_NONE;
 }
 
-uint64_t read_v1_file(struct era_t *era, FILE *executable)
+sword_t read_v1_file(struct era_t *era, FILE *executable)
 {
 	// Data start offset from the start in bytes
 	uint32_t data_start;

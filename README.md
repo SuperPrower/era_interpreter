@@ -21,3 +21,4 @@ cmake --build build
 
 ### Tests
 If you have enabled tests (as described above), you can run set of tests by changing directory to `build` and running `ctest`. You can add `-V` flag for verbose output.
+Under Windows, you will also need to move the libera_interpreter.dll to the binary directory

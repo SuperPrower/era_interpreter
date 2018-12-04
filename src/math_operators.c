@@ -9,7 +9,7 @@ sword_t add8(struct era_t *era, sword_t i, sword_t j)
 	int8_t v2 = era->registers[j] & 0xFF;
 
 	// avoid implicit casting by inserting bits with AND
-	lword_t res = 0XFFFFFFFF & (v1 + v2);
+	lword_t res = 0XFFFFFFFF & ((v1 + v2) & get_mask(F_8_BIT));
 	era->registers[j] = res;
 
 	return ERA_STATUS_NONE;
@@ -22,7 +22,7 @@ sword_t add16(struct era_t *era, sword_t i, sword_t j)
 	int16_t v2 = era->registers[j] & 0xFFFF;
 
 	// avoid implicit casting by inserting bits with AND
-	lword_t res = 0XFFFFFFFF & (v1 + v2);
+	lword_t res = 0XFFFFFFFF & ((v1 + v2) & get_mask(F_16_BIT));
 	era->registers[j] = res;
 
 	return ERA_STATUS_NONE;
@@ -35,7 +35,7 @@ sword_t add32(struct era_t *era, sword_t i, sword_t j)
 	int32_t v2 = era->registers[j] & 0xFFFFFFFF;
 
 	// avoid implicit casting by inserting bits with AND
-	lword_t res = 0XFFFFFFFF & (v1 + v2);
+	lword_t res = 0XFFFFFFFF & ((v1 + v2) & get_mask(F_32_BIT));
 	era->registers[j] = res;
 
 	return ERA_STATUS_NONE;
@@ -66,7 +66,7 @@ sword_t sub8(struct era_t *era, sword_t i, sword_t j)
 	int8_t v2 = era->registers[j] & 0xFF;
 
 	// avoid implicit casting by inserting bits wit AND
-	lword_t res = 0XFFFFFFFF & (v2 - v1);
+	lword_t res = 0XFFFFFFFF & ((v2 - v1) & get_mask(F_8_BIT));
 	era->registers[j] = res;
 
 	return ERA_STATUS_NONE;
@@ -79,7 +79,7 @@ sword_t sub16(struct era_t *era, sword_t i, sword_t j)
 	int16_t v2 = era->registers[j] & 0xFFFF;
 
 	// avoid implicit casting by inserting bits wit AND
-	lword_t res = 0XFFFFFFFF & (v2 - v1);
+	lword_t res = 0XFFFFFFFF & ((v2 - v1) & get_mask(F_16_BIT));
 	era->registers[j] = res;
 
 	return ERA_STATUS_NONE;
@@ -92,7 +92,7 @@ sword_t sub32(struct era_t *era, sword_t i, sword_t j)
 	int32_t v2 = era->registers[j] & 0xFFFFFFFF;
 
 	// avoid implicit casting by inserting bits wit AND
-	lword_t res = 0XFFFFFFFF & (v2 - v1);
+	lword_t res = 0XFFFFFFFF & ((v2 - v1) & get_mask(F_32_BIT));
 	era->registers[j] = res;
 
 	return ERA_STATUS_NONE;
@@ -128,7 +128,7 @@ sword_t asr8(struct era_t *era, sword_t i, sword_t j)
 	v1 = v1 | (era->registers[i] & 0x80);
 
 	// avoid implicit casting by inserting bits wit AND
-	lword_t res = 0XFFFFFFFF & v1;
+	lword_t res = 0XFFFFFFFF & v1 & get_mask(F_8_BIT);
 	era->registers[j] = res;
 
 	return ERA_STATUS_NONE;
@@ -145,7 +145,7 @@ sword_t asr16(struct era_t *era, sword_t i, sword_t j)
 	v1 = v1 | (era->registers[i] & 0x8000);
 
 	// avoid implicit casting by inserting bits wit AND
-	lword_t res = 0XFFFFFFFF & v1;
+	lword_t res = 0XFFFFFFFF & v1 & get_mask(F_16_BIT);
 	era->registers[j] = res;
 
 	return ERA_STATUS_NONE;
@@ -163,7 +163,7 @@ sword_t asr32(struct era_t *era, sword_t i, sword_t j)
 
 
 	// avoid implicit casting by inserting bits wit AND
-	lword_t res = 0XFFFFFFFF & v1;
+	lword_t res = 0XFFFFFFFF & v1 & get_mask(F_32_BIT);
 	era->registers[j] = res;
 
 	return ERA_STATUS_NONE;
@@ -199,7 +199,7 @@ sword_t asl8(struct era_t *era, sword_t i, sword_t j)
 	v1 = (v1 & 0x7F) | (era->registers[i] & 0x80);
 
 	// avoid implicit casting by inserting bits wit AND
-	lword_t res = 0XFFFFFFFF & v1;
+	lword_t res = 0XFFFFFFFF & v1 & get_mask(F_8_BIT);
 	era->registers[j] = res;
 
 	return ERA_STATUS_NONE;
@@ -216,7 +216,7 @@ sword_t asl16(struct era_t *era, sword_t i, sword_t j)
 	v1 = (v1 & 0x7FFF) | (era->registers[i] & 0x8000);
 
 	// avoid implicit casting by inserting bits wit AND
-	lword_t res = 0XFFFFFFFF & v1;
+	lword_t res = 0XFFFFFFFF & v1 & get_mask(F_16_BIT);
 	era->registers[j] = res;
 
 	return ERA_STATUS_NONE;
@@ -233,7 +233,7 @@ sword_t asl32(struct era_t *era, sword_t i, sword_t j)
 	v1 = (v1 & 0x7FFFFFFF) | (era->registers[i] & 0x80000000);
 
 	// avoid implicit casting by inserting bits wit AND
-	lword_t res = 0XFFFFFFFF & v1;
+	lword_t res = 0XFFFFFFFF & v1 & get_mask(F_32_BIT);
 	era->registers[j] = res;
 
 	return ERA_STATUS_NONE;

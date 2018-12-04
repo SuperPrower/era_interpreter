@@ -43,9 +43,9 @@ sword_t cbr(struct era_t * era, sword_t i, sword_t j, enum format_t format)
 	if (era->registers[i] != 0)
 	{
 		era->registers[i] = era->registers[PC];
+		// TODO : Sanity checking
+		era->registers[PC] = era->registers[j];
 	}
-	// TODO : Sanity checking
-	era->registers[PC] = era->registers[j];
 
 	return ERA_STATUS_NONE;
 }
