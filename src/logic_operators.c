@@ -41,13 +41,10 @@ sword_t logic_operation(struct era_t *era, sword_t i, sword_t j, enum format_t f
 			era->registers[j] |= (era->registers[i] & mask) << 1;
 			// Remove the overflow - only  take the needed bits
 			era->registers[j] &= mask;
-			// Put the rest of the register in
-			era->registers[j] |= era->registers[i] & ~mask;
 			break;
 		case LOGIC_LSR:
 			// No need to deal with overflow here
-			era->registers[j] = era->registers[i] & ~mask;
-			era->registers[j] |= (era->registers[i] & mask) >> 1;
+			era->registers[j] = (era->registers[i] & mask) >> 1;
 			break;
 		default:
 			return ERA_STATUS_WRONG_OPERATOR;

@@ -123,16 +123,16 @@ static void lsl_tests(void **state)
 	// 00000000 00000000 00000000 00000000
 	era->registers[1] = 0;
 	lsl(era, 0, 1, F_8_BIT);
-	// LSLed = 10101010 11001110 11100101 00010110
-	assert_int_equal(era->registers[1], 2865685782);
+	// LSLed = 00000000 00000000 00000000 00010110
+	assert_int_equal(era->registers[1], 22);
 
 	// 10101010 11001110 11100101 00001011
 	era->registers[0] = 2865685771;
 	// 00000000 00000000 00000000 00000000
 	era->registers[1] = 0;
 	lsl(era, 0, 1, F_16_BIT);
-	// LSLed = 10101010 11001110 11001010 00010110
-	assert_int_equal(era->registers[1], 2865678870);
+	// LSLed = 00000000 00000000 11001010 00010110
+	assert_int_equal(era->registers[1], 51734);
 
 	// 10101010 11001110 11100101 00001011
 	era->registers[0] = 2865685771;
@@ -152,16 +152,16 @@ static void lsr_tests(void **state)
 	// 00000000 00000000 00000000 00000000
 	era->registers[1] = 0;
 	lsr(era, 0, 1, F_8_BIT);
-	// LSRed = 10101010 11001110 11100101 00000101
-	assert_int_equal(era->registers[1], 2865685765);
+	// LSRed = 00000000 00000000 00000000 00000101
+	assert_int_equal(era->registers[1], 5);
 
 	// 10101010 11001110 11100101 00001011
 	era->registers[0] = 2865685771;
 	// 00000000 00000000 00000000 00000000
 	era->registers[1] = 0;
 	lsr(era, 0, 1, F_16_BIT);
-	// LSRed = 10101010 11001110 01110010 10000101
-	assert_int_equal(era->registers[1], 2865656453);
+	// LSRed = 00000000 00000000 01110010 10000101
+	assert_int_equal(era->registers[1], 29317);
 
 	// 10101010 11001110 11100101 00001011
 	era->registers[0] = 2865685771;
