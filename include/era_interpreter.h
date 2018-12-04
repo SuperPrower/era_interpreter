@@ -6,7 +6,6 @@
 #include "era_status.h"
 #include "era_util.h"
 
-#define MEM_SIZE (64 * 1024) /// memory size in words
 #define N_REGISTERS (32)
 #define PC 31
 #define SB 30
@@ -25,6 +24,14 @@
  * @returns initialized era_t struct pointer
  */
 struct era_t* init_era();
+
+/**
+ * Initialize ERA interpreter with given memory size
+ *
+ * @param[in] _mem_size: memory size in words
+ * @returns initialized era_t struct pointer
+ */
+struct era_t* init_era_m(uint32_t _mem_size);
 
 
 /**
