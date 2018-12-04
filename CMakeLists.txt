@@ -21,10 +21,10 @@ endif()
 include_directories(include)
 
 # Build all files as library so that they can be re-used for tests
-add_library(lib_era
+add_library(era_interpreter SHARED
 		src/era_interpreter.c
 		src/era_util.c
-        src/branch_operators.c
+        	src/branch_operators.c
 		src/math_operators.c
 		src/memory_operators.c
 		src/logic_operators.c
@@ -32,4 +32,4 @@ add_library(lib_era
 		)
 
 add_executable(${PROJECT_NAME} src/main.c)
-target_link_libraries(${PROJECT_NAME} lib_era)
+target_link_libraries(${PROJECT_NAME} era_interpreter)

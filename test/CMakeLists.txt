@@ -25,6 +25,8 @@ add_executable(era_math_tests math_tests.c)
 add_executable(era_logic_tests logic_tests.c)
 add_executable(era_file_reading_tests file_reading_tests.c)
 
+target_link_libraries(era_base_tests era_interpreter cmocka)
+target_link_libraries(era_math_tests era_interpreter cmocka)
 target_link_libraries(era_base_tests lib_era cmocka)
 target_link_libraries(era_math_tests lib_era cmocka)
 target_link_libraries(era_logic_tests lib_era cmocka)
