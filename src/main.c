@@ -21,7 +21,7 @@ void simple_mem_dump(struct era_t *era)
 {
 	FILE *dump = fopen("memdump", "w");
 
-	fprintf(dump, "ERA status: %u\n", era->status_code);
+	fprintf(dump, "ERA status: %u, %s\n", era->status_code, status_what(era->status_code));
 
 	fprintf(dump, "Registers:\n");
 	for(int c = 0; c < 32; ++c)
