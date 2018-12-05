@@ -42,9 +42,13 @@ void simple_mem_dump(struct era_t *era)
 
 	for(uint32_t c = 0; c < era->memory_size; ++c)
 	{
+		fprintf(dump, "%04X", era->memory[c]);
 		if(c % 8 == 0)
 			fprintf(dump, "\n");
-		fprintf(dump, "%X\t", era->memory[c]);
+		else
+			// nobody likes trailing whitespaces!
+			// avoid printing tabs at the end of the line.
+			fprintf(dump, "\t");
 	}
 
 	fclose(dump);
