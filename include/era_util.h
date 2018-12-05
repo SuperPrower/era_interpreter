@@ -36,4 +36,13 @@ int32_t reg_put(enum format_t format, int32_t number);
  */
 int32_t reg_get(enum format_t format, int32_t number);
 
+/**
+ * Returns brief explanation for a given status code
+ *
+ * @param[in] status: era status code
+ *
+ * @returns: status text
+ */
+const char* status_what(uint8_t status);
+
 #endif //ERA_UTIL_H

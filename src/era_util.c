@@ -77,3 +77,34 @@ int32_t reg_get(enum format_t format, int32_t number)
 
 	}
 }
+
+
+const char* status_texts[] = {
+	[0] = "No error",
+	[1] = "Exit normal",
+
+	[6] = "Invalid register",
+	[7] = "Invalid instruction format",
+
+	[65] = "File error",
+	[66] = "Invalid file version",
+	[67] = "File read error",
+
+	[68] = "Invalid operator",
+	[69] = "Memory out of bounds access"
+};
+
+const char* status_what(uint8_t status)
+{
+	if (status >= sizeof(status_texts)) {
+		return "Invalid status code";
+	}
+
+	const char * text = status_texts[status];
+
+	if (text == 0) {
+		return "Unknown status code";
+	}
+
+	return text;
+}
