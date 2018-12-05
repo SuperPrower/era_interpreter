@@ -3,8 +3,8 @@
 // NOTE : Not sure if it's better to put them here or as variables into the function
 #define CND_RESULT 0x0000000f
 #define CND_EQUAL  0x00000004
-#define CND_MORE   0x00000001
 #define CND_LESS   0x00000002
+#define CND_MORE   0x00000001
 
 sword_t cnd(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 {
@@ -25,11 +25,11 @@ sword_t cnd(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 	}
 	else if (rj > ri)
 	{
-		era->registers[j] |= CND_MORE;
+		era->registers[j] |= CND_LESS;
 	}
 	else if (rj < ri)
 	{
-		era->registers[j] |= CND_LESS;
+		era->registers[j] |= CND_MORE;
 	}
 
 	return ERA_STATUS_NONE;

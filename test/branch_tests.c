@@ -32,20 +32,20 @@ static void cnd_tests(void **state)
 	// 00010100 01010010 01011101 10110011
 	era->registers[1] = 340942259;
 	cnd(era, 0, 1, F_8_BIT);
-	// CNDed = 00010100 01010010 01011101 10110001
-	assert_int_equal(era->registers[1], 340942257);
+	// CNDed = 00010100 01010010 01011101 10110010
+	assert_int_equal(era->registers[1], 340942258);
 
 	// 00010100 01010010 01011101 10110011 = 23987
 	era->registers[1] = 340942259;
 	cnd(era, 0, 1, F_16_BIT);
-	// CNDed = 00010100 01010010 01011101 10110010
-	assert_int_equal(era->registers[1], 340942258);
+	// CNDed = 00010100 01010010 01011101 10110001
+	assert_int_equal(era->registers[1], 340942257);
 
 	// 00010100 01010010 01011101 10110011
 	era->registers[1] = 340942259;
 	cnd(era, 0, 1, F_32_BIT);
-	// CNDed = 00010100 01010010 01011101 10110010
-	assert_int_equal(era->registers[1], 340942258);
+	// CNDed = 00010100 01010010 01011101 10110001
+	assert_int_equal(era->registers[1], 340942257);
 
 	// Simple comparison tests
 	era->registers[0] = 10;
@@ -56,11 +56,11 @@ static void cnd_tests(void **state)
 
 	era->registers[1] = 5;
 	cnd(era, 0, 1, F_32_BIT);
-	assert_int_equal(era->registers[1], 2);
+	assert_int_equal(era->registers[1], 1);
 
 	era->registers[1] = 15;
 	cnd(era, 0, 1, F_32_BIT);
-	assert_int_equal(era->registers[1], 1);
+	assert_int_equal(era->registers[1], 2);
 }
 
 static void cbr_tests(void **state)
