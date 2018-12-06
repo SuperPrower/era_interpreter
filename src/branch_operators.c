@@ -35,7 +35,10 @@ sword_t cnd(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 
 sword_t cbr(struct era_t * era, sword_t i, sword_t j, enum format_t format)
 {
-	if (i >= N_REGISTERS || j >= N_REGISTERS) {
+	// we don't want i to be PC since we store old PC value in i.
+	// Even though we do it before actual jump, this may possibly introduce
+	// some bad behaviour.
+	if (i == PC || i >= N_REGISTERS || j >= N_REGISTERS) {
 		return ERA_STATUS_WRONG_REGISTER;
 	}
 
