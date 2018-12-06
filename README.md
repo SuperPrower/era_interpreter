@@ -27,6 +27,8 @@ Finally, build binaries:
 cmake --build build
 ```
 
+Under Windows, you will still need to move the dll into executable's path if you want to use the library in some other project.
+
 ### Tests
 If you have enabled tests (as described above), you can run set of tests by changing directory to `build` and running `ctest`. You can add `-V` flag for verbose output.
 Under Windows, you will also need to move the libera_interpreter.dll to the binary directory
