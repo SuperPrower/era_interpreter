@@ -29,6 +29,7 @@ add_library(era_interpreter SHARED
 		src/memory_operators.c
 		src/logic_operators.c
 		src/file_reading.c
+		src/reverse_translation.c
 		)
 
 add_executable(${PROJECT_NAME} src/main.c)
