@@ -6,6 +6,7 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
 project(era)
 
 set (CMAKE_C_STANDART 11) # Use C11
+option(Coverage "Enable Coverage" OFF)
 
 if (CMAKE_BUILD_TYPE MATCHES Debug)
 	message("===============================")
@@ -15,6 +16,25 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
 	# enable testing and add test target
 	enable_testing()
 	add_subdirectory(test)
+
+	# if ("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
+	if (Coverage)
+		message("Will generate code coverage report")
+
+		include(CodeCoverage)
+		APPEND_COVERAGE_COMPILER_FLAGS()
+
+		set (COVERAGE_LCOV_EXCLUDES
+			"src/main.c"
+		)
+
+		SETUP_TARGET_FOR_COVERAGE_LCOV(
+			NAME era_coverage
+			EXECUTABLE ctest
+			DEPENDENCIES era
+		)
+
+	endif()
 
 endif()
 

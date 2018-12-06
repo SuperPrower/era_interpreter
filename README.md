@@ -21,6 +21,7 @@ cmake -H. -Bbuild
 
 You can add following options to this command:
 - `-DCMAKE_BUILD_TYPE=Debug` - will enable debug symbols and tests
+- `-DCoverage` - will enable coverage report with LCOV. Note that this requires LCOV installed and supported compiler (i.e. GCC, Clang, or AppleClang)
 - `-DCMAKE_EXPORT_COMPILE_COMMANDS=ON` - will generate `compile_commands.json` (This is standard CMake practice. It may be useful to anyone who uses cquery language server or vim autocomplete plugin from wide variety of choices)
 
 In case of compilation under Microsoft Visual Studio Compiler, an additional flag is needed to completely build the library:
