@@ -62,7 +62,7 @@ target_link_libraries(${PROJECT_NAME} era_interpreter)
 
 if(${CMAKE_HOST_WIN32})
 	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different
-			"$<TARGET_FILE_DIR:era_interpreter>/libera_interpreter.dll"
-			"$<TARGET_FILE_DIR:${PROJECT_NAME}>/libera_interpreter.dll")
+			COMMAND ${CMAKE_COMMAND} -E copy
+			"$<TARGET_FILE_DIR:era_interpreter>/${CMAKE_SHARED_LIBRARY_PREFIX}era_interpreter.dll"
+			"$<TARGET_FILE_DIR:${PROJECT_NAME}>/${CMAKE_SHARED_LIBRARY_PREFIX}era_interpreter.dll")
 endif()
