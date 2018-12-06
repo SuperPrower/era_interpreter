@@ -6,23 +6,23 @@ uint8_t little_endian()
 	// 01 00
 	// Big endian:
 	// 00 01
-	// Therfore, 1 will be read on little-endian and 0 on big-endian
+	// Therefore, 1 will be read on little-endian and 0 on big-endian
 	uint16_t x = 1;
 	return *(uint8_t *) &x;
 }
 
 word_t swap_word(word_t word)
 {
-	return (word_t)(((word & 255) << 8) + ((word >> 8) & 255));
+	return (word_t)(((word & get_mask(F_8_BIT)) << 8) + ((word >> 8) & get_mask(F_8_BIT)));
 }
 
 lword_t swap_lword(lword_t word)
 {
 	sword_t p1, p2, p3, p4;
-	p1 = word & 255;
-	p2 = (word >> 8) & 255;
-	p3 = (word >> 16) & 255;
-	p4 = (word >> 24) & 255;
+	p1 = word & get_mask(F_8_BIT);
+	p2 = (word >> 8) & get_mask(F_8_BIT);
+	p3 = (word >> 16) & get_mask(F_8_BIT);
+	p4 = (word >> 24) & get_mask(F_8_BIT);
 	return (lword_t)((p1 << 24) + (p2 << 16) + (p3 << 8) + p4);
 }
 

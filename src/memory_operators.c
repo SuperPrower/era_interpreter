@@ -34,9 +34,8 @@ sword_t lda(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 
 	era->registers[j] = era->registers[i] + constant;
 
-	// Depending on correctness of our understanding of LDA instruction,
-	// this may or may not be correct
-	era->registers[PC] += 2;
+	// sizeof are in bytes, therefore we divide by word size to get the amount of words skipped
+	era->registers[PC] += sizeof(lword_t) / sizeof(word_t);
 
 	return ERA_STATUS_NONE;
 }
@@ -99,5 +98,4 @@ sword_t ldaldc(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 		default:
 			return ERA_STATUS_WRONG_FORMAT;
 	}
-	return ERA_STATUS_NONE;
 }

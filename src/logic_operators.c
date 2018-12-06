@@ -16,7 +16,6 @@ sword_t logic_operation(struct era_t *era, sword_t i, sword_t j, enum format_t f
 	}
 
 	lword_t mask = get_mask(format);
-
 	// Save the Rj since the original will be modified
 	lword_t rj = era->registers[j];
 
