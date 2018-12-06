@@ -1,8 +1,6 @@
 #ifndef ERA_STATUS_H
 #define ERA_STATUS_H
 
-// TODO : put all errors that result in halting here
-
 /*
  * Status codes 0-5 are reserved for execution control, such as normal state, stopped state etc.
  * Status codes 6-64 are reserved for general errors
@@ -14,7 +12,7 @@
 // Normal exit caused by STOP
 #define ERA_STATUS_STOP 1
 
-// Command errors
+// Generic instruction errors
 #define ERA_STATUS_WRONG_REGISTER 6
 #define ERA_STATUS_WRONG_FORMAT 7
 

@@ -9,15 +9,22 @@
 #include "memory_operators.h"
 #include "math_operators.h"
 
+#define ERA_DEFAULT_MEM_SIZE 64 * 1024
+
+#define LAST_2_BITS 0x3
+#define LAST_4_BITS 0xF
+#define LAST_5_BITS 0x1F
+
 // Type of the instruction function pointer
 typedef sword_t (*era_instruction)(struct era_t*, sword_t, sword_t, enum format_t);
 
 // The execution array is indexed by the command code. The format is parsed separately.
 era_instruction instructions[] = {&nopstop, &ld, &ldaldc, &st, &mov, &add, &sub, &asr, &asl, &or, &and, &xor, &lsl, &lsr, &cnd, &cbr};
 
+
 struct era_t* init_era()
 {
-	return init_era_m(64 * 1024);
+	return init_era_m(ERA_DEFAULT_MEM_SIZE);
 }
 
 struct era_t* init_era_m(uint32_t _mem_size)
@@ -92,11 +99,11 @@ sword_t read_file(char *filename, struct era_t *era)
 struct instruction_t parse_instruction(word_t instruction)
 {
 	struct instruction_t out;
-	sword_t format_code = (sword_t) (instruction >> 14 & 0x3);
+	sword_t format_code = (sword_t) (instruction >> 14 & LAST_2_BITS);
 
-	out.code = (sword_t)(instruction >> 10 & 0xF);
-	out.i = (sword_t)(instruction >> 5 & 0x1F);
-	out.j = (sword_t)(instruction & 0x1F);
+	out.code = (sword_t)(instruction >> 10 & LAST_4_BITS);
+	out.i = (sword_t)(instruction >> 5 & LAST_5_BITS);
+	out.j = (sword_t)(instruction & LAST_5_BITS);
 
 	switch(format_code)
 	{

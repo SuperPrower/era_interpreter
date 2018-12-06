@@ -24,7 +24,7 @@ void simple_mem_dump(struct era_t *era)
 	fprintf(dump, "ERA status: %u, %s\n", era->status_code, status_what(era->status_code));
 
 	fprintf(dump, "Registers:\n");
-	for(int c = 0; c < 32; ++c)
+	for(int c = 0; c < N_REGISTERS; ++c)
 	{
 		if(c == FP)
 			fprintf(dump, "R%u (FP): %u\n", c, era->registers[c]);
@@ -67,6 +67,10 @@ int main(int argc, char *argv[])
 			} else if (strcmp(argv[i], "--memory_size") == 0) {
 				char * size = argv[++i];
 				memory_size = strtoul(size, NULL, 10);
+				if(memory_size == 0){
+					printf("Memory size must be greater than 0");
+					return ERA_STATUS_MEMORY_OUT_OF_BOUNDS;
+				}
 			}
 
 		}
@@ -75,7 +79,7 @@ int main(int argc, char *argv[])
 
 	struct era_t * era = init_era_m(memory_size);
 	if (read_file(filename, era) != ERA_STATUS_NONE) {
-		return 1;
+		return ERA_STATUS_FILE_ERROR;
 	}
 
 	execute(era);
@@ -84,18 +88,5 @@ int main(int argc, char *argv[])
 
 	free_era(era);
 
-	return 0;
-
-	/*
-	read_file("test_binaries/v0_simple_ops.bin", era);
-	sword_t status = execute(era);
-	// 7 is not a mistake here.
-	// Word 4 should be 0, Word 5 should be 7 since ST is 32-bit.
-	// Word 6 should be zero, so we check it just in case
-	for(int c = 0; c < 7; c++)
-	{
-		printf("Word %u : %u\n", c, read_word(era, c));
-	}
-
-	*/
+	return ERA_STATUS_NONE;
 }

@@ -43,11 +43,11 @@ sword_t cbr(struct era_t * era, sword_t i, sword_t j, enum format_t format)
 	}
 
 	if (era->registers[i] != 0) {
-		era->registers[i] = era->registers[PC];
 		if (era->registers[j] >= era->memory_size) {
 			return ERA_STATUS_MEMORY_OUT_OF_BOUNDS;
 		}
 
+		era->registers[i] = era->registers[PC];
 		era->registers[PC] = era->registers[j];
 	}
 
@@ -83,6 +83,4 @@ sword_t nopstop(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 		default:
 			return ERA_STATUS_WRONG_FORMAT;
 	}
-
-	return ERA_STATUS_NONE;
 }

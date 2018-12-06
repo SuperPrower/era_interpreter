@@ -3,16 +3,56 @@
 
 #include "era_interpreter.h"
 
+/**
+ * Reads a short word from memory
+ *
+ * @param[in]	era 	pointer to era structure
+ * @param[in]	address address to read the word from
+ *
+ * @return word read or 0 on unsuccessful read
+ */
 sword_t read_sword(struct era_t *era, lword_t address);
 
+/**
+ * Reads a word from memory
+ * IMPORTANT : be mindful of memory overlapping
+ *
+ * @param[in]	era 	pointer to era structure
+ * @param[in]	address address to read the word from
+ *
+ * @return word read or 0 on unsuccessful read
+ */
 word_t read_word(struct era_t *era, lword_t address);
 
+/**
+ * Reads a long word from memory
+ * IMPORTANT : be mindful of memory overlapping
+ *
+ * @param[in]	era 	pointer to era structure
+ * @param[in]	address address to read the word from
+ *
+ * @return word read or 0 on unsuccessful read
+ */
 lword_t read_lword(struct era_t *era, lword_t address);
 
-// Get the mask for bit extraction based on the given format
+/**
+ * Get the mask for bit extraction based on the given format
+ *
+ * @param[in]	format format to get the mask for
+ *
+ * @return mask to extract the bytes corresponding to the given format
+ */
 lword_t get_mask(enum format_t format);
 
-// Returns 0 on success, 1 on failure
+/**
+ * Writes an lword into the memory
+ *
+ * @param[in]	era		pointer to era structure
+ * @param[in]	address	address to read the word from
+ * @param[in]	word	lword to write to the memory address
+ *
+ * @return 0 on success, 1 on failure
+ */
 // XXX: type-dependent, VERY bad
 int write_lword(struct era_t *era, lword_t address, lword_t word);
 

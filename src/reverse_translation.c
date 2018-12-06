@@ -11,7 +11,7 @@ char *era_instruction_text[] = {
 	"CBR"
 };
 
-char *get_instruction(enum format_t format, sword_t code)
+char *get_instruction_name(enum format_t format, sword_t code)
 {
 	// Not quite good, but this part shouldn't change, so no problem here?
 	if (code == 0) {
