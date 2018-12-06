@@ -33,38 +33,32 @@ sword_t read_v0_file(struct era_t *era, FILE *executable)
 
 	// Skip the padding
 	fseek(executable, 1, SEEK_CUR);
-	if(ferror(executable) != 0 || feof(executable) != 0)
-	{
+	if (ferror(executable) != 0 || feof(executable) != 0) {
 		return ERA_STATUS_FILE_READ_ERROR;
 	}
 
 	// Load the length
 	fread((void*)&length, sizeof(uint32_t), 1, executable);
-	if(ferror(executable) != 0 || feof(executable) != 0)
-	{
+	if (ferror(executable) != 0 || feof(executable) != 0) {
 		return ERA_STATUS_FILE_READ_ERROR;
 	}
 
 	// Load the static data and the code
 	read = fread((void*) era->memory, sizeof(word_t), era->memory_size, executable);
 	// We CAN get EOF here, but errors are still possible
-	if(ferror(executable) != 0)
-	{
+	if (ferror(executable) != 0) {
 		return ERA_STATUS_FILE_READ_ERROR;
 	}
 
 	// Deal with little-endianness
-	if(little_endian() == 1)
-	{
+	if (little_endian() == 1) {
 		length = swap_lword(length);
-		for(size_t c = 0; c < read; ++c)
-		{
+		for (size_t c = 0; c < read; ++c) {
 			era->memory[c] = swap_word(era->memory[c]);
 		}
 	}
 
 	// Populate The needed registers
-	// I was a bit dumb at first.
 	// length relates to the length of data in the global data + code, NOT in the file.
 	// We don't need to modify it
 	era->registers[PC] = length;
@@ -90,51 +84,44 @@ sword_t read_v1_file(struct era_t *era, FILE *executable)
 
 	// Skip the padding
 	fseek(executable, 1, SEEK_CUR);
-	if(ferror(executable) != 0 || feof(executable) != 0)
-	{
+	if (ferror(executable) != 0 || feof(executable) != 0) {
 		return ERA_STATUS_FILE_READ_ERROR;
 	}
 
 	// Read info about static data
 	fread((void*)&data_start, sizeof(uint32_t), 1, executable);
-	if(ferror(executable) != 0 || feof(executable) != 0 || data_start == 0)
-	{
+	if (ferror(executable) != 0 || feof(executable) != 0 || data_start == 0) {
 		return ERA_STATUS_FILE_READ_ERROR;
 	}
+
 	fread((void*)&data_length, sizeof(uint32_t), 1, executable);
-	if(ferror(executable) != 0 || feof(executable) != 0 || data_length == 0)
-	{
+	if (ferror(executable) != 0 || feof(executable) != 0 || data_length == 0) {
 		return ERA_STATUS_FILE_READ_ERROR;
 	}
 
 	// Read info about code
 	fread((void*)&code_start, sizeof(uint32_t), 1, executable);
-	if(ferror(executable) != 0 || feof(executable) != 0 || code_start == 0)
-	{
+	if (ferror(executable) != 0 || feof(executable) != 0 || code_start == 0) {
 		return ERA_STATUS_FILE_READ_ERROR;
 	}
+
 	fread((void*)&code_length, sizeof(uint32_t), 1, executable);
-	if(ferror(executable) != 0 || feof(executable) != 0 || code_length == 0)
-	{
+	if (ferror(executable) != 0 || feof(executable) != 0 || code_length == 0) {
 		return ERA_STATUS_FILE_READ_ERROR;
 	}
 
 	// Deal with little-endianness
-	if(little_endian() == 1)
-	{
+	if (little_endian() == 1) {
 		code_start = swap_lword(code_start);
 		code_length = swap_lword(code_length);
 		data_start = swap_lword(data_start);
 		data_length = swap_lword(data_length);
 	}
 
-	// TODO: Make sure this always works
-	// TODO: Could get the length of a file and additionally check against it
 	fseek(executable, data_start, SEEK_SET);
 	// Read data into the beginning of the memory
 	read = fread(era->memory, sizeof(word_t), data_length, executable);
-	if(ferror(executable) != 0 || feof(executable) != 0 || read != data_length)
-	{
+	if (ferror(executable) != 0 || feof(executable) != 0 || read != data_length) {
 		return ERA_STATUS_FILE_READ_ERROR;
 	}
 
@@ -142,8 +129,7 @@ sword_t read_v1_file(struct era_t *era, FILE *executable)
 	fseek(executable, code_start, SEEK_SET);
 	// Read code right after data into the memory
 	read = fread(era->memory + data_length, sizeof(word_t), code_length, executable);
-	if(ferror(executable) != 0 || feof(executable) != 0 || read != code_length)
-	{
+	if (ferror(executable) != 0 || feof(executable) != 0 || read != code_length) {
 		return ERA_STATUS_FILE_READ_ERROR;
 	}
 
@@ -153,10 +139,8 @@ sword_t read_v1_file(struct era_t *era, FILE *executable)
 	// Other registers are already zero
 
 	// Deal with little-endianness
-	if(little_endian() == 1)
-	{
-		for(size_t c = 0; c < data_length + code_length; ++c)
-		{
+	if (little_endian() == 1) {
+		for(size_t c = 0; c < data_length + code_length; ++c) {
 			era->memory[c] = swap_word(era->memory[c]);
 		}
 	}

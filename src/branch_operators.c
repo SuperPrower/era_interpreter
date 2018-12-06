@@ -8,8 +8,9 @@
 
 sword_t cnd(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 {
-	if (i >= N_REGISTERS || j >= N_REGISTERS)
+	if (i >= N_REGISTERS || j >= N_REGISTERS || j == PC) {
 		return ERA_STATUS_WRONG_REGISTER;
+	}
 
 	lword_t mask = get_mask(format);
 
@@ -19,16 +20,13 @@ sword_t cnd(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 	// Clear the space used by the result bits
 	era->registers[j] &= ~CND_RESULT;
 
-	if (rj == ri)
-	{
+	if (rj == ri) {
 		era->registers[j] |= CND_EQUAL;
-	}
-	else if (rj > ri)
-	{
+
+	} else if (rj > ri) {
 		era->registers[j] |= CND_LESS;
-	}
-	else if (rj < ri)
-	{
+
+	} else if (rj < ri) {
 		era->registers[j] |= CND_MORE;
 	}
 
@@ -37,13 +35,16 @@ sword_t cnd(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 
 sword_t cbr(struct era_t * era, sword_t i, sword_t j, enum format_t format)
 {
-	if (i >= N_REGISTERS || j >= N_REGISTERS)
+	if (i >= N_REGISTERS || j >= N_REGISTERS) {
 		return ERA_STATUS_WRONG_REGISTER;
+	}
 
-	if (era->registers[i] != 0)
-	{
+	if (era->registers[i] != 0) {
 		era->registers[i] = era->registers[PC];
-		// TODO : Sanity checking
+		if (era->registers[j] >= era->memory_size) {
+			return ERA_STATUS_MEMORY_OUT_OF_BOUNDS;
+		}
+
 		era->registers[PC] = era->registers[j];
 	}
 
@@ -52,8 +53,7 @@ sword_t cbr(struct era_t * era, sword_t i, sword_t j, enum format_t format)
 
 sword_t nop(struct era_t * era, sword_t i, sword_t j, enum format_t format)
 {
-	if (format != F_16_BIT)
-	{
+	if (format != F_16_BIT) {
 		// Congratulations, you messed up a NOP function somehow.
 		return ERA_STATUS_WRONG_FORMAT;
 	}
@@ -63,17 +63,16 @@ sword_t nop(struct era_t * era, sword_t i, sword_t j, enum format_t format)
 
 sword_t stop(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 {
-	if (format != F_8_BIT)
-	{
+	if (format != F_8_BIT) {
 		return ERA_STATUS_WRONG_FORMAT;
 	}
+
 	return ERA_STATUS_STOP;
 }
 
 sword_t nopstop(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 {
-	switch (format)
-	{
+	switch (format) {
 		case F_8_BIT:
 			return stop(era, i, j, format);
 		case F_16_BIT:
@@ -81,5 +80,6 @@ sword_t nopstop(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 		default:
 			return ERA_STATUS_WRONG_FORMAT;
 	}
+
 	return ERA_STATUS_NONE;
 }

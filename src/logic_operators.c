@@ -11,8 +11,9 @@ enum logic_op_t {
 // ALL of the functions just differed by 1 line. Decided to move it here for better modularity
 sword_t logic_operation(struct era_t *era, sword_t i, sword_t j, enum format_t format, enum logic_op_t operator)
 {
-	if (i >= N_REGISTERS || j >= N_REGISTERS)
+	if (i >= N_REGISTERS || j >= N_REGISTERS || j == PC) {
 		return ERA_STATUS_WRONG_REGISTER;
+	}
 
 	lword_t mask = get_mask(format);
 
@@ -25,8 +26,7 @@ sword_t logic_operation(struct era_t *era, sword_t i, sword_t j, enum format_t f
 	// rj & mask, ri & mask - get the needed bits
 	// use the needed C operation on the extracted bits
 	// put them back again with bitwise OR
-	switch(operator)
-	{
+	switch(operator) {
 		case LOGIC_OR:
 			era->registers[j] |= (rj & mask) | (era->registers[i] & mask);
 			break;
