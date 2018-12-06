@@ -92,7 +92,6 @@ sword_t read_file(char *filename, struct era_t *era)
 struct instruction_t parse_instruction(word_t instruction)
 {
 	struct instruction_t out;
-	enum format_t format;
 	sword_t format_code = (sword_t) (instruction >> 14 & 0x3);
 
 	out.code = (sword_t)(instruction >> 10 & 0xF);
