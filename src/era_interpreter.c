@@ -89,32 +89,42 @@ sword_t read_file(char *filename, struct era_t *era)
 	return status;
 }
 
-sword_t step(struct era_t *era)
+struct instruction_t parse_instruction(word_t instruction)
 {
-	word_t command = read_word(era, era->registers[PC]);
+	struct instruction_t out;
 	enum format_t format;
+	sword_t format_code = (sword_t) (instruction >> 14 & 0x3);
 
-	sword_t format_code = (sword_t) (command >> 14 & 0x3);
-	sword_t code = (sword_t)(command >> 10 & 0xF);
-	sword_t i = (sword_t)(command >> 5 & 0x1F);
-	sword_t j = (sword_t)(command & 0x1F);
+	out.code = (sword_t)(instruction >> 10 & 0xF);
+	out.i = (sword_t)(instruction >> 5 & 0x1F);
+	out.j = (sword_t)(instruction & 0x1F);
 
-	++(era->registers[PC]);
 	switch(format_code)
 	{
 		case 0:
-			format = F_8_BIT;
+			out.format = F_8_BIT;
 			break;
 		case 1:
-			format = F_16_BIT;
+			out.format = F_16_BIT;
 			break;
 		case 3:
-			format = F_32_BIT;
+			out.format = F_32_BIT;
 			break;
 		default:
-			return ERA_STATUS_WRONG_FORMAT;
+			break;
 	}
-	return instructions[code](era, i, j, format);
+
+	return out;
+}
+
+sword_t step(struct era_t *era)
+{
+	word_t command = read_word(era, era->registers[PC]);
+
+	struct instruction_t instruction = parse_instruction(command);
+
+	++(era->registers[PC]);
+	return instructions[instruction.code](era, instruction.i, instruction.j, instruction.format);
 }
 
 sword_t execute(struct era_t *era)

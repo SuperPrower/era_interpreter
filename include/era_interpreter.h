@@ -18,6 +18,13 @@
 #define HEAP_SIZE 100
 #define STACK_SIZE 100
 
+struct instruction_t {
+	enum format_t format;
+	sword_t code;
+	sword_t i;
+	sword_t j;
+};
+
 /**
  * Initialize ERA interpreter: allocate memory and registers
  *
@@ -52,6 +59,14 @@ int free_era(struct era_t *era);
  * @returns	0 on success, error code on failure
  */
 sword_t read_file(char *filename, struct era_t *era);
+
+/**
+ * Parse the instruction into instuction_t structure
+ *
+ * @param instruction instruction word to try to parse
+ * @return parsed instruction information, even if the instruction is invalid
+ */
+struct instruction_t parse_instruction(word_t instruction);
 
 /**
  * Make one step in execution
