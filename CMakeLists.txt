@@ -40,6 +40,10 @@ endif()
 
 include_directories(include)
 
+if(${MSVC})
+	set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS true)
+endif()
+
 # Build all files as library so that they can be re-used for tests
 add_library(era_interpreter SHARED
 		src/era_interpreter.c
@@ -53,4 +57,12 @@ add_library(era_interpreter SHARED
 		)
 
 add_executable(${PROJECT_NAME} src/main.c)
+
 target_link_libraries(${PROJECT_NAME} era_interpreter)
+
+if(${CMAKE_HOST_WIN32})
+	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+			COMMAND ${CMAKE_COMMAND} -E copy_if_different
+			"${PROJECT_BINARY_DIR}/libera_interpreter.dll"
+			$<TARGET_FILE_DIR:${PROJECT_NAME}>/libera_interpreter.dll)
+endif()
