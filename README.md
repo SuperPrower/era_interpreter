@@ -5,8 +5,6 @@ Read more about options at `./era --help`
 
 Test file available: `test_binaries/v0_simple_ops.bin`
 
-IMPORTANT: You will need to move the libera_interpreter.dll to the directory with the binaries, at least on Windows, after compilation.
-
 ## Building
 
 ### Dependencies
@@ -23,9 +21,6 @@ You can add following options to this command:
 - `-DCMAKE_BUILD_TYPE=Debug` - will enable debug symbols and tests
 - `-DCoverage` - will enable coverage report with LCOV. Note that this requires LCOV installed and supported compiler (i.e. GCC, Clang, or AppleClang)
 - `-DCMAKE_EXPORT_COMPILE_COMMANDS=ON` - will generate `compile_commands.json` (This is standard CMake practice. It may be useful to anyone who uses cquery language server or vim autocomplete plugin from wide variety of choices)
-
-In case of compilation under Microsoft Visual Studio Compiler, an additional flag is needed to completely build the library:
-- `-DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=TRUE` - this will tell the compiler to export all functions from the library sources into the library file. Without it, the .lib file containing exported symbols won't be created.
 
 Finally, build binaries:
 ```
