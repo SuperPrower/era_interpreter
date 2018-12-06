@@ -24,6 +24,7 @@ static int teardown_branch_tests(void **state)
 static void cnd_tests(void **state)
 {
 	struct era_t * era = (struct era_t *) *state;
+	sword_t ret;
 
 	// Byte comparison test
 	// 10101010 11001110 11100101 00001011
@@ -31,55 +32,83 @@ static void cnd_tests(void **state)
 
 	// 00010100 01010010 01011101 10110011
 	era->registers[1] = 340942259;
-	cnd(era, 0, 1, F_8_BIT);
+	ret = cnd(era, 0, 1, F_8_BIT);
 	// CNDed = 00010100 01010010 01011101 10110010
 	assert_int_equal(era->registers[1], 340942258);
+	assert_int_equal(ret, ERA_STATUS_NONE);
 
 	// 00010100 01010010 01011101 10110011 = 23987
 	era->registers[1] = 340942259;
-	cnd(era, 0, 1, F_16_BIT);
+	ret = cnd(era, 0, 1, F_16_BIT);
 	// CNDed = 00010100 01010010 01011101 10110001
 	assert_int_equal(era->registers[1], 340942257);
+	assert_int_equal(ret, ERA_STATUS_NONE);
+
 
 	// 00010100 01010010 01011101 10110011
 	era->registers[1] = 340942259;
-	cnd(era, 0, 1, F_32_BIT);
+	ret = cnd(era, 0, 1, F_32_BIT);
 	// CNDed = 00010100 01010010 01011101 10110001
 	assert_int_equal(era->registers[1], 340942257);
+	assert_int_equal(ret, ERA_STATUS_NONE);
 
 	// Simple comparison tests
 	era->registers[0] = 10;
 
 	era->registers[1] = 10;
-	cnd(era, 0, 1, F_32_BIT);
+	ret = cnd(era, 0, 1, F_32_BIT);
 	assert_int_equal(era->registers[1], 4);
+	assert_int_equal(ret, ERA_STATUS_NONE);
 
 	era->registers[1] = 5;
-	cnd(era, 0, 1, F_32_BIT);
+	ret = cnd(era, 0, 1, F_32_BIT);
 	assert_int_equal(era->registers[1], 1);
+	assert_int_equal(ret, ERA_STATUS_NONE);
 
 	era->registers[1] = 15;
-	cnd(era, 0, 1, F_32_BIT);
+	ret = cnd(era, 0, 1, F_32_BIT);
 	assert_int_equal(era->registers[1], 2);
+	assert_int_equal(ret, ERA_STATUS_NONE);
+
+	// Negative Test: Bad Registers
+	ret = cnd(era, 100, 100, F_32_BIT);
+	assert_int_equal(ret, ERA_STATUS_WRONG_REGISTER);
 }
 
 static void cbr_tests(void **state)
 {
 	struct era_t * era = (struct era_t *) *state;
+	sword_t ret;
 
 	era->registers[PC] = 20;
 	era->registers[0] = 10;
 	era->registers[1] = 5;
-	cbr(era, 0, 1, F_32_BIT);
+	ret = cbr(era, 0, 1, F_32_BIT);
 	assert_int_equal(era->registers[0], 20);
 	assert_int_equal(era->registers[PC], 5);
+	assert_int_equal(ret, ERA_STATUS_NONE);
 
 	era->registers[PC] = 20;
 	era->registers[0] = 0;
 	era->registers[1] = 5;
-	cbr(era, 0, 1, F_32_BIT);
+	ret = cbr(era, 0, 1, F_32_BIT);
 	assert_int_equal(era->registers[0], 0);
 	assert_int_equal(era->registers[PC], 20);
+	assert_int_equal(ret, ERA_STATUS_NONE);
+
+	// Negative Test: Bad Format
+	ret = cbr(era, 0, 0, F_8_BIT);
+	assert_int_equal(ret, ERA_STATUS_WRONG_FORMAT);
+
+	// Negative Test: Bad Registers
+	ret = cbr(era, 100, 100, F_32_BIT);
+	assert_int_equal(ret, ERA_STATUS_WRONG_REGISTER);
+
+	// Negative Test: Out of Memory Bounds
+	era->registers[0] = 1;
+	era->registers[1] = era->memory_size;
+	ret = cbr(era, 0, 1, F_32_BIT);
+	assert_int_equal(ret, ERA_STATUS_MEMORY_OUT_OF_BOUNDS);
 }
 
 static void nop_tests(void **state)
@@ -109,6 +138,9 @@ static void nop_tests(void **state)
 	}
 
 	assert_int_equal(status, ERA_STATUS_NONE);
+
+	status = nop(era, 0, 1, F_32_BIT);
+	assert_int_equal(status, ERA_STATUS_WRONG_FORMAT);
 }
 
 static void stop_tests(void **state)
@@ -138,6 +170,9 @@ static void stop_tests(void **state)
 	}
 
 	assert_int_equal(status, ERA_STATUS_STOP);
+
+	status = stop(era, 0, 0, F_32_BIT);
+	assert_int_equal(status, ERA_STATUS_WRONG_FORMAT);
 }
 
 int main(void)
