@@ -12,7 +12,7 @@
 #define SP 29
 #define FP 28
 
-// TODO: Make dynamic later on: either get it from the file or from command line?
+// NOTE: Can be useful later
 // Sizes are in words
 #define HEAP_SIZE 100
 #define STACK_SIZE 100
@@ -39,7 +39,6 @@ struct era_t* init_era();
  */
 struct era_t* init_era_m(uint32_t _mem_size);
 
-
 /**
  * Deallocate ERA struct
  * @param[in]	ERA	struct to deallocate
@@ -55,14 +54,15 @@ int free_era(struct era_t *era);
  * @param[in]	filename	file to be loaded
  * @param[out]	era		pointer to allocated era structure
  *
- * @returns	0 on success, error code on failure
+ * @returns	ERA_STATUS_NONE on success, error code on failure
  */
 sword_t read_file(char *filename, struct era_t *era);
 
 /**
  * Parse the instruction into instuction_t structure
  *
- * @param instruction instruction word to try to parse
+ * @param[in] instruction instruction word to try to parse
+ *
  * @return parsed instruction information, even if the instruction is invalid
  */
 struct instruction_t parse_instruction(word_t instruction);
@@ -72,16 +72,16 @@ struct instruction_t parse_instruction(word_t instruction);
  *
  * @param[in]	era	pointer to era structure
  *
- * @returns 0 on success
+ * @returns status code returned by the executed instruction
  */
 sword_t step(struct era_t * era);
 
 /**
- * Execute until halted
+ * Execute until halted by some error
  *
  * @param[in]	era	pointer to era structure
  *
- * @returns 0 on success
+ * @returns final status code
  */
 sword_t execute(struct era_t * era);
 
