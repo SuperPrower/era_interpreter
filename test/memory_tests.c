@@ -30,6 +30,21 @@ static void ld_tests(void **state)
 	era->registers[1] = 10;
 	ld(era, 0, 1, F_32_BIT);
 	assert_int_equal(era->registers[1], 2865685771);
+
+	sword_t ret;
+
+	// Negative test: wrong command format
+	ret = ld(era, 0, 1, F_8_BIT);
+	assert_int_equal(ret, ERA_STATUS_WRONG_FORMAT);
+
+	// Negative test: bad registers
+	ret = ld(era, 0, 100, F_32_BIT);
+	assert_int_equal(ret, ERA_STATUS_WRONG_REGISTER);
+
+	// Negative test: memory out of bounds
+	era->registers[0] = era->memory_size + 1;
+	ret = ld(era, 0, 1, F_32_BIT);
+	assert_int_equal(ret, ERA_STATUS_MEMORY_OUT_OF_BOUNDS);
 }
 
 static void lda_tests(void **state)
@@ -44,6 +59,16 @@ static void lda_tests(void **state)
 	lda(era, 0, 1, F_8_BIT);
 	assert_int_equal(era->registers[1], 340942259);
 	assert_int_equal(era->registers[PC], 3);
+
+	sword_t ret;
+
+	// Negative test: wrong command format
+	ret = lda(era, 0, 0, F_32_BIT);
+	assert_int_equal(ret, ERA_STATUS_WRONG_FORMAT);
+
+	// Negative test: bad registers
+	ret = lda(era, 100, 100, F_8_BIT);
+	assert_int_equal(ret, ERA_STATUS_WRONG_REGISTER);
 }
 
 static void ldc_tests(void **state)
@@ -53,6 +78,16 @@ static void ldc_tests(void **state)
 	era->registers[0] = 292236222;
 	ldc(era, 31, 0, F_32_BIT);
 	assert_int_equal(era->registers[0], 31);
+
+	sword_t ret;
+
+	// Negative test: wrong command format
+	ret = ldc(era, 0, 5, F_16_BIT);
+	assert_int_equal(ret, ERA_STATUS_WRONG_FORMAT);
+
+	// Negative test: bad registers
+	ret = ldc(era, 100, 100, F_32_BIT);
+	assert_int_equal(ret, ERA_STATUS_WRONG_REGISTER);
 }
 
 static void st_tests(void **state)
@@ -63,6 +98,21 @@ static void st_tests(void **state)
 	era->registers[1] = 54;
 	st(era, 0, 1, F_32_BIT);
 	assert_int_equal(read_lword(era, 54), 292236222);
+
+	sword_t ret;
+
+	// Negative test: wrong command format
+	ret = st(era, 0, 5, F_16_BIT);
+	assert_int_equal(ret, ERA_STATUS_WRONG_FORMAT);
+
+	// Negative test: bad registers
+	ret = st(era, 100, 100, F_32_BIT);
+	assert_int_equal(ret, ERA_STATUS_WRONG_REGISTER);
+
+	// Negative test: memory out of bounds
+	era->registers[0] = era->memory_size + 1;
+	ret = st(era, 0, 0, F_32_BIT);
+	assert_int_equal(ret, ERA_STATUS_MEMORY_OUT_OF_BOUNDS);
 }
 
 static void mov_tests(void **state)
@@ -89,6 +139,12 @@ static void mov_tests(void **state)
 	mov(era, 0, 1, F_32_BIT);
 	// MOVed = // 10101010 11001110 11100101 00001011
 	assert_int_equal(era->registers[1], 2865685771);
+
+	sword_t ret;
+
+	// Negative test: bad registers
+	ret = mov(era, 100, 100, F_32_BIT);
+	assert_int_equal(ret, ERA_STATUS_WRONG_REGISTER);
 }
 
 int main(void)
