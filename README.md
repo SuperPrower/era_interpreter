@@ -23,6 +23,9 @@ You can add following options to this command:
 - `-DCMAKE_BUILD_TYPE=Debug` - will enable debug symbols and tests
 - `-DCMAKE_EXPORT_COMPILE_COMMANDS=ON` - will generate `compile_commands.json` (This is standard CMake practice. It may be useful to anyone who uses cquery language server or vim autocomplete plugin from wide variety of choices)
 
+In case of compilation under Microsoft Visual Studio Compiler, an additional flag is needed to completely build the library:
+- `-DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=TRUE` - this will tell the compiler to export all functions from the library sources into the library file. Without it, the .lib file containing exported symbols won't be created.
+
 Finally, build binaries:
 ```
 cmake --build build
