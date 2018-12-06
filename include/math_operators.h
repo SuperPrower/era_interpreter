@@ -18,7 +18,7 @@ sword_t add(struct era_t * era, sword_t i, sword_t j, enum format_t format);
 
 /**
  * @brief Rj -= Ri
- * Substract content of registers i from register j and store result in register j
+ * Subtract content of registers i from register j and store result in register j
  *
  * @param[in] era - pointer to era structure
  * @param[in] i	- no. of register

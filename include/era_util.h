@@ -44,7 +44,15 @@ lword_t read_lword(struct era_t *era, lword_t address);
  */
 lword_t get_mask(enum format_t format);
 
-// Returns 0 on success, 1 on failure
+/**
+ * Writes an lword into the memory
+ *
+ * @param[in]	era		pointer to era structure
+ * @param[in]	address	address to read the word from
+ * @param[in]	word	lword to write to the memory address
+ *
+ * @return 0 on success, 1 on failure
+ */
 // XXX: type-dependent, VERY bad
 int write_lword(struct era_t *era, lword_t address, lword_t word);
 
