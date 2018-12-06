@@ -24,14 +24,14 @@ static int teardown_memory_tests(void **state)
 static void ld_tests(void **state)
 {
 	struct era_t * era = (struct era_t *) *state;
+	sword_t ret;
 
 	write_lword(era, 0, 2865685771);
 	era->registers[0] = 0;
 	era->registers[1] = 10;
-	ld(era, 0, 1, F_32_BIT);
+	ret = ld(era, 0, 1, F_32_BIT);
 	assert_int_equal(era->registers[1], 2865685771);
-
-	sword_t ret;
+	assert_int_equal(ret, ERA_STATUS_NONE);
 
 	// Negative test: wrong command format
 	ret = ld(era, 0, 1, F_8_BIT);
@@ -50,17 +50,17 @@ static void ld_tests(void **state)
 static void lda_tests(void **state)
 {
 	struct era_t * era = (struct era_t *) *state;
+	sword_t ret;
 
 	write_lword(era, 0, 2865685771);
 	write_lword(era, 1, 48706037);
 	era->registers[PC] = 1;
 	era->registers[0] = 292236222;
 	era->registers[1] = 10;
-	lda(era, 0, 1, F_8_BIT);
+	ret = lda(era, 0, 1, F_8_BIT);
 	assert_int_equal(era->registers[1], 340942259);
 	assert_int_equal(era->registers[PC], 3);
-
-	sword_t ret;
+	assert_int_equal(ret, ERA_STATUS_NONE);
 
 	// Negative test: wrong command format
 	ret = lda(era, 0, 0, F_32_BIT);
@@ -74,12 +74,12 @@ static void lda_tests(void **state)
 static void ldc_tests(void **state)
 {
 	struct era_t * era = (struct era_t *) *state;
+	sword_t ret;
 
 	era->registers[0] = 292236222;
 	ldc(era, 31, 0, F_32_BIT);
 	assert_int_equal(era->registers[0], 31);
-
-	sword_t ret;
+	assert_int_equal(ret, ERA_STATUS_NONE);
 
 	// Negative test: wrong command format
 	ret = ldc(era, 0, 5, F_16_BIT);
@@ -93,13 +93,13 @@ static void ldc_tests(void **state)
 static void st_tests(void **state)
 {
 	struct era_t * era = (struct era_t *) *state;
+	sword_t ret;
 
 	era->registers[0] = 292236222;
 	era->registers[1] = 54;
-	st(era, 0, 1, F_32_BIT);
+	ret = st(era, 0, 1, F_32_BIT);
 	assert_int_equal(read_lword(era, 54), 292236222);
-
-	sword_t ret;
+	assert_int_equal(ret, ERA_STATUS_NONE);
 
 	// Negative test: wrong command format
 	ret = st(era, 0, 5, F_16_BIT);
@@ -118,29 +118,31 @@ static void st_tests(void **state)
 static void mov_tests(void **state)
 {
 	struct era_t * era = (struct era_t *) *state;
+	sword_t ret;
 
 	// 10101010 11001110 11100101 00001011
 	era->registers[0] = 2865685771;
 
 	// 00010100 01010010 01011101 10110011
 	era->registers[1] = 340942259;
-	mov(era, 0, 1, F_8_BIT);
+	ret = mov(era, 0, 1, F_8_BIT);
 	// MOVed = // 00010100 01010010 01011101 00001011
 	assert_int_equal(era->registers[1], 340942091);
+	assert_int_equal(ret, ERA_STATUS_NONE);
 
 	// 00010100 01010010 01011101 10110011
 	era->registers[1] = 340942259;
-	mov(era, 0, 1, F_16_BIT);
+	ret = mov(era, 0, 1, F_16_BIT);
 	// MOVed = // 00010100 01010010 11100101 00001011
 	assert_int_equal(era->registers[1], 340976907);
+	assert_int_equal(ret, ERA_STATUS_NONE);
 
 	// 00010100 01010010 01011101 10110011
 	era->registers[1] = 340942259;
-	mov(era, 0, 1, F_32_BIT);
+	ret = mov(era, 0, 1, F_32_BIT);
 	// MOVed = // 10101010 11001110 11100101 00001011
 	assert_int_equal(era->registers[1], 2865685771);
-
-	sword_t ret;
+	assert_int_equal(ret, ERA_STATUS_NONE);
 
 	// Negative test: bad registers
 	ret = mov(era, 100, 100, F_32_BIT);
