@@ -3,11 +3,11 @@
 
 #include <stdint.h>
 
-// Short word
+/// @brief one byte type. Called short in regards to regular word.
 typedef uint8_t sword_t;
-// Word
+/// @brief two byte type. Commands and memory are sized in words.
 typedef uint16_t word_t;
-// Long word
+/// @brief 4 byte type. Registers and constants are sized in long words.
 typedef uint32_t lword_t;
 
 // NB: can't use identifier like 8_BIT, had to add F_ (Format) prefix

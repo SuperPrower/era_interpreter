@@ -1,14 +1,18 @@
+# Machine Code Interpreter for ERRIC (prev. ERA) architecture
+
 ## Running
 `./era [--filename filename] [--memory_size words] [--help]`
 
 Read more about options at `./era --help`
 
-Test file available: `test_binaries/v0_simple_ops.bin`
+Program will load a file, provided or default, and attempt to execute the code. Regardless of the result, machine information, registers and memory will be dumped to `memdump` file.
+
+Test files available in `test_binaries` directory.
 
 ## Building
 
 ### Dependencies
-Project uses CMake building system, and CMocka testing framework. Please refer to your distribution documentation to find out how to install them.
+Project uses CMake building system, and, if needed CMocka testing framework and LCOV utility. Please refer to your distribution documentation to find out how to install them.
 
 ### Building process
 In the directory with `CMakeLists.txt` file, run following command:
@@ -31,4 +35,4 @@ Under Windows, you will still need to move the dll into executable's path if you
 
 ### Tests
 If you have enabled tests (as described above), you can run set of tests by changing directory to `build` and running `ctest`. You can add `-V` flag for verbose output.
-Under Windows, you will also need to move the libera_interpreter.dll to the binary directory
+Under Windows, you will also need to move the `libera_interpreter.dll` to the binary directory.
