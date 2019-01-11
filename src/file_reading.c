@@ -11,19 +11,15 @@ uint8_t little_endian()
 	return *(uint8_t *) &x;
 }
 
-word_t swap_word(word_t word)
+void swap_bytes(uint8_t *bytes, size_t length)
 {
-	return (word_t)(((word & get_mask(F_8_BIT)) << 8) + ((word >> 8) & get_mask(F_8_BIT)));
-}
-
-lword_t swap_lword(lword_t word)
-{
-	sword_t p1, p2, p3, p4;
-	p1 = word & get_mask(F_8_BIT);
-	p2 = (word >> 8) & get_mask(F_8_BIT);
-	p3 = (word >> 16) & get_mask(F_8_BIT);
-	p4 = (word >> 24) & get_mask(F_8_BIT);
-	return (lword_t)((p1 << 24) + (p2 << 16) + (p3 << 8) + p4);
+	uint8_t temp;
+	for(size_t c = 0; c < length / 2; ++c)
+	{
+		temp = bytes[c];
+		bytes[c] = bytes[length - c - 1];
+		bytes[length - c - 1] = temp;
+	}
 }
 
 sword_t read_v0_file(struct era_t *era, FILE *executable)
@@ -52,9 +48,9 @@ sword_t read_v0_file(struct era_t *era, FILE *executable)
 
 	// Deal with little-endianness
 	if (little_endian() == 1) {
-		length = swap_lword(length);
+		CHANGE_ENDIAN(length);
 		for (size_t c = 0; c < read; ++c) {
-			era->memory[c] = swap_word(era->memory[c]);
+			CHANGE_ENDIAN(era->memory[c]);
 		}
 	}
 
@@ -112,10 +108,10 @@ sword_t read_v1_file(struct era_t *era, FILE *executable)
 
 	// Deal with little-endianness
 	if (little_endian() == 1) {
-		code_start = swap_lword(code_start);
-		code_length = swap_lword(code_length);
-		data_start = swap_lword(data_start);
-		data_length = swap_lword(data_length);
+		CHANGE_ENDIAN(code_start);
+		CHANGE_ENDIAN(code_length);
+		CHANGE_ENDIAN(data_start);
+		CHANGE_ENDIAN(data_length);
 	}
 
 	fseek(executable, data_start, SEEK_SET);
@@ -141,7 +137,7 @@ sword_t read_v1_file(struct era_t *era, FILE *executable)
 	// Deal with little-endianness
 	if (little_endian() == 1) {
 		for(size_t c = 0; c < data_length + code_length; ++c) {
-			era->memory[c] = swap_word(era->memory[c]);
+			CHANGE_ENDIAN(era->memory[c]);
 		}
 	}
 
