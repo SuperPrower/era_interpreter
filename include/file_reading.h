@@ -4,6 +4,9 @@
 #include <stdio.h>
 #include "era_interpreter.h"
 
+// A macro to swap bytes for endianness in a quick and easy manner
+#define CHANGE_ENDIAN(x) swap_bytes((uint8_t*)&(x), sizeof(x))
+
 /**
  * Checks if the system is little-endian
  * Needed mostly for file I/O
@@ -12,25 +15,14 @@
  */
 uint8_t little_endian();
 
-// TODO: Yes, both of these functions are bad and WILL break if ported.
-// I can't figure out a way to make swapping bit-length independent right now. What type should we use and return?
 /**
- * Swaps the bytes in a word to change its endianness
+ * Tries to swap bytes in a byte array
+ * Used here to swap between little and big endianness by casting values to arrays with sizeof(variable)
  *
- * @param[in] word word to be converted to other endianness
- *
- * @return swapped word
+ * @param bytes pointer to an array of uint8_t (usually cast from other types)
+ * @param length length of the array (sizoef(original variable)
  */
-word_t swap_word(word_t word);
-
-/**
- * Swaps the bytes in a long word to change its endianness
- *
- * @param[in] word long word to be converted to other endianness
- *
- * @return swapped long word
- */
-lword_t swap_lword(lword_t word);
+void swap_bytes(uint8_t *bytes, size_t length);
 
 /**
  * Reads a version 0 executable file
