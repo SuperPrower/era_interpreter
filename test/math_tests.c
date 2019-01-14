@@ -54,6 +54,31 @@ static void add_tests(void **state)
 	assert_int_equal(era->registers[1], 3206628030);
 }
 
+static void add_overflow_tests(void **state)
+{
+	struct era_t * era = (struct era_t *) *state;
+	// 10101010 11001110 11100101 00001011
+	era->registers[0] = 2865685771;
+
+	// 00010100 01010010 01011101 11111111
+	era->registers[1] = 340942335;
+	add(era, 0, 1, F_8_BIT);
+	// ADDed = 00000000 00000000 00000000 00001010
+	assert_int_equal(era->registers[1], 10);
+
+	// 00010100 01010010 11111111 11111111
+	era->registers[1] = 340983807;
+	add(era, 0, 1, F_16_BIT);
+	// ADDed = 00000000 00000000 11100101 00001010
+	assert_int_equal(era->registers[1], 58634);
+
+	// 11111111 11111111 11111111 11111111
+	era->registers[1] = 4294967295;
+	add(era, 0, 1, F_32_BIT);
+	// ADDed = 10101010 11001110 11100101 00001010
+	assert_int_equal(era->registers[1], 2865685770);
+}
+
 static void sub_tests(void **state)
 {
 	struct era_t * era = (struct era_t *) *state;
@@ -134,6 +159,7 @@ int main(void)
 
 	const struct CMUnitTest math_tests[] = {
 		cmocka_unit_test(add_tests),
+		cmocka_unit_test(add_overflow_tests),
 		cmocka_unit_test(sub_tests),
 		cmocka_unit_test(asr_tests),
 		cmocka_unit_test(asl_tests)
