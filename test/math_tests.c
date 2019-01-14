@@ -79,6 +79,33 @@ static void add_overflow_tests(void **state)
 	assert_int_equal(era->registers[1], 2865685770);
 }
 
+// Not quite possible since internally, values are unsigned
+static void add_underflow_tests(void **state)
+{
+	// In this case, two's complement starts with bit 1 as a sign
+	struct era_t * era = (struct era_t *) *state;
+	// 00101010 11001110 01100101 00000011
+	era->registers[0] = 718169347;
+
+	// 00010100 01010010 01011101 11110111
+	era->registers[1] = 340942327;
+	add(era, 0, 1, F_8_BIT);
+	// ADDed = 00000000 00000000 00000000 11111010
+	assert_int_equal(era->registers[1], 250);
+
+	// 00010100 01010010 11011101 11110111
+	era->registers[1] = 340975095;
+	add(era, 0, 1, F_16_BIT);
+	// ADDed = 00000000 00000000 01000010 11111010
+	assert_int_equal(era->registers[1], 17146);
+
+	// 11111111 11111111 11111111 11111111
+	era->registers[1] = 4294967295;
+	add(era, 0, 1, F_32_BIT);
+	// ADDed = 00101010 11001110 01100101 00000010
+	assert_int_equal(era->registers[1], 718169346);
+}
+
 static void sub_tests(void **state)
 {
 	struct era_t * era = (struct era_t *) *state;
@@ -160,6 +187,7 @@ int main(void)
 	const struct CMUnitTest math_tests[] = {
 		cmocka_unit_test(add_tests),
 		cmocka_unit_test(add_overflow_tests),
+		cmocka_unit_test(add_underflow_tests),
 		cmocka_unit_test(sub_tests),
 		cmocka_unit_test(asr_tests),
 		cmocka_unit_test(asl_tests)
