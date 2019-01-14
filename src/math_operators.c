@@ -15,115 +15,28 @@
 
 /* ADD */
 
-sword_t add8(struct era_t *era, sword_t i, sword_t j)
-{
-	// get last 8 bits only
-	sword_t v1 = era->registers[i] & get_mask(F_8_BIT);
-	sword_t v2 = era->registers[j] & get_mask(F_8_BIT);
-
-	// avoid implicit casting by inserting bits with AND
-	lword_t res = get_mask(F_32_BIT) & ((v1 + v2) & get_mask(F_8_BIT));
-	era->registers[j] = res;
-
-	return ERA_STATUS_NONE;
-}
-
-sword_t add16(struct era_t *era, sword_t i, sword_t j)
-{
-	// get last 16 bits only
-	word_t v1 = era->registers[i] & get_mask(F_16_BIT);
-	word_t v2 = era->registers[j] & get_mask(F_16_BIT);
-
-	// avoid implicit casting by inserting bits with AND
-	lword_t res = get_mask(F_32_BIT) & ((v1 + v2) & get_mask(F_16_BIT));
-	era->registers[j] = res;
-
-	return ERA_STATUS_NONE;
-}
-
-sword_t add32(struct era_t *era, sword_t i, sword_t j)
-{
-	// get last 32 bits only
-	lword_t v1 = era->registers[i] & get_mask(F_32_BIT);
-	lword_t v2 = era->registers[j] & get_mask(F_32_BIT);
-
-	// avoid implicit casting by inserting bits with AND
-	lword_t res = get_mask(F_32_BIT) & ((v1 + v2) & get_mask(F_32_BIT));
-	era->registers[j] = res;
-
-	return ERA_STATUS_NONE;
-}
-
 sword_t add(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 {
-	switch(format) {
-	case F_8_BIT:
-		return add8(era, i, j);
+	// get the needed bits
+	lword_t v1 = era->registers[i] & get_mask(format);
+	lword_t v2 = era->registers[j] & get_mask(format);
 
-	case F_16_BIT:
-		return add16(era, i, j);
+	// The mask is needed to deal with over- and underflow
+	era->registers[j] = (v1 + v2) & get_mask(format);
 
-	case F_32_BIT:
-		return add32(era, i, j);
-
-	}
 	return ERA_STATUS_NONE;
 }
 
 /* SUB */
 
-sword_t sub8(struct era_t *era, sword_t i, sword_t j)
-{
-	// get last 8 bits only
-	sword_t v1 = era->registers[i] & get_mask(F_8_BIT);
-	sword_t v2 = era->registers[j] & get_mask(F_8_BIT);
-
-	// avoid implicit casting by inserting bits with AND
-	lword_t res = get_mask(F_16_BIT) & ((v2 - v1) & get_mask(F_8_BIT));
-	era->registers[j] = res;
-
-	return ERA_STATUS_NONE;
-}
-
-sword_t sub16(struct era_t *era, sword_t i, sword_t j)
-{
-	// get last 16 bits only
-	word_t v1 = era->registers[i] & get_mask(F_16_BIT);
-	word_t v2 = era->registers[j] & get_mask(F_16_BIT);
-
-	// avoid implicit casting by inserting bits with AND
-	lword_t res = get_mask(F_32_BIT) & ((v2 - v1) & get_mask(F_16_BIT));
-	era->registers[j] = res;
-
-	return ERA_STATUS_NONE;
-}
-
-sword_t sub32(struct era_t *era, sword_t i, sword_t j)
-{
-	// get last 32 bits only
-	lword_t v1 = era->registers[i] & get_mask(F_32_BIT);
-	lword_t v2 = era->registers[j] & get_mask(F_32_BIT);
-
-	// avoid implicit casting by inserting bits with AND
-	lword_t res = get_mask(F_32_BIT) & ((v2 - v1) & get_mask(F_32_BIT));
-	era->registers[j] = res;
-
-	return ERA_STATUS_NONE;
-}
-
 sword_t sub(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 {
-	switch(format) {
-	case F_8_BIT:
-		return sub8(era, i, j);
+	// get the needed bits
+	lword_t v1 = era->registers[i] & get_mask(format);
+	lword_t v2 = era->registers[j] & get_mask(format);
 
-	case F_16_BIT:
-		return sub16(era, i, j);
-
-	case F_32_BIT:
-		return sub32(era, i, j);
-
-	}
+	// The mask is needed to deal with over- and underflow
+	era->registers[j] = (v1 - v2) & get_mask(format);
 
 	return ERA_STATUS_NONE;
 }
