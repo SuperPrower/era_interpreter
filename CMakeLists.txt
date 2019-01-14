@@ -61,8 +61,11 @@ add_executable(${PROJECT_NAME} src/main.c)
 target_link_libraries(${PROJECT_NAME} era_interpreter)
 
 if(${CMAKE_HOST_WIN32})
+	# This command will put the .dll file into the /bin folder under Windows.
+	# The .dll is always needed for the example .exe and the tests.
+	# Also saves a lot of nerves during testing - tests didn't fetch the newly compiled .dll-s
 	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 			COMMAND ${CMAKE_COMMAND} -E copy
 			"$<TARGET_FILE_DIR:era_interpreter>/${CMAKE_SHARED_LIBRARY_PREFIX}era_interpreter.dll"
-			"$<TARGET_FILE_DIR:${PROJECT_NAME}>/${CMAKE_SHARED_LIBRARY_PREFIX}era_interpreter.dll")
+			"${EXECUTABLE_OUTPUT_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}era_interpreter.dll")
 endif()
