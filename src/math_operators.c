@@ -36,7 +36,7 @@ sword_t sub(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 	lword_t v2 = era->registers[j] & get_mask(format);
 
 	// The mask is needed to deal with over- and underflow
-	era->registers[j] = (v1 - v2) & get_mask(format);
+	era->registers[j] = (v2 - v1) & get_mask(format);
 
 	return ERA_STATUS_NONE;
 }
