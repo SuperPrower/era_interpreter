@@ -156,6 +156,31 @@ static void sub_overflow_tests(void **state)
 	assert_int_equal(era->registers[1], 3370952577);
 }
 
+static void sub_underflow_tests(void **state)
+{
+	struct era_t * era = (struct era_t *) *state;
+	// 000001000 00010000 01001010 0100010
+	era->registers[0] = 67642658;
+
+	// 00000000 00000000 00000000 00000001
+	era->registers[1] = 1;
+	sub(era, 0, 1, F_8_BIT);
+	// SUBed = 00000000 00000000 00000000 11011111
+	assert_int_equal(era->registers[1], 223);
+
+	// 00000000 00000000 00000001 00000001
+	era->registers[1] = 257;
+	sub(era, 0, 1, F_16_BIT);
+	// SUBed = 00000000 00000000 11011011 11011111
+	assert_int_equal(era->registers[1], 56287);
+
+	// 00000001 00000001 00000001 00000001
+	era->registers[1] = 16843009;
+	sub(era, 0, 1, F_32_BIT);
+	// SUBed = 11111100 11111000 11011011 11011111
+	assert_int_equal(era->registers[1], 4244167647);
+}
+
 static void asr_tests(void **state)
 {
 	struct era_t * era = (struct era_t *) *state;
@@ -215,6 +240,7 @@ int main(void)
 		cmocka_unit_test(add_underflow_tests),
 		cmocka_unit_test(sub_tests),
 		cmocka_unit_test(sub_overflow_tests),
+		cmocka_unit_test(sub_underflow_tests),
 		cmocka_unit_test(asr_tests),
 		cmocka_unit_test(asl_tests)
 	};
