@@ -13,6 +13,32 @@
 #define SIGN_16_BIT 0x8000
 #define SIGN_32_BIT 0x80000000
 
+lword_t get_shift_mask(enum format_t format)
+{
+	switch(format)
+	{
+		case F_8_BIT:
+			return LAST_7_BITS;
+		case F_16_BIT:
+			return LAST_15_BITS;
+		case F_32_BIT:
+			return LAST_31_BITS;
+	}
+}
+
+lword_t get_sign_mask(enum format_t format)
+{
+	switch(format)
+	{
+		case F_8_BIT:
+			return SIGN_8_BIT;
+		case F_16_BIT:
+			return SIGN_16_BIT;
+		case F_32_BIT:
+			return SIGN_32_BIT;
+	}
+}
+
 /* ADD */
 
 sword_t add(struct era_t *era, sword_t i, sword_t j, enum format_t format)
@@ -43,141 +69,39 @@ sword_t sub(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 
 /* ASR */
 
-sword_t asr8(struct era_t *era, sword_t i, sword_t j)
-{
-	// get last 7 bits only
-	sword_t v1 = era->registers[i] & LAST_7_BITS;
-	// shift
-	v1 >>= 1;
-
-	// add sign back
-	v1 = v1 | (era->registers[i] & SIGN_8_BIT);
-
-	// avoid implicit casting by inserting bits with AND
-	lword_t res = get_mask(F_32_BIT) & v1 & get_mask(F_8_BIT);
-	era->registers[j] = res;
-
-	return ERA_STATUS_NONE;
-}
-
-sword_t asr16(struct era_t *era, sword_t i, sword_t j)
-{
-	// get last 15 bits only
-	word_t v1 = era->registers[i] & LAST_15_BITS;
-	// shift
-	v1 >>= 1;
-
-	// add sign back
-	v1 = v1 | (era->registers[i] & SIGN_16_BIT);
-
-	// avoid implicit casting by inserting bits with AND
-	lword_t res = get_mask(F_32_BIT) & v1 & get_mask(F_16_BIT);
-	era->registers[j] = res;
-
-	return ERA_STATUS_NONE;
-}
-
-sword_t asr32(struct era_t *era, sword_t i, sword_t j)
-{
-	// get last 31 bits only
-	lword_t v1 = era->registers[i] & LAST_31_BITS;
-	// shift
-	v1 >>= 1;
-
-	// add sign back
-	v1 = v1 | (era->registers[i] & SIGN_32_BIT);
-
-
-	// avoid implicit casting by inserting bits wit AND
-	lword_t res = get_mask(F_32_BIT) & v1 & get_mask(F_32_BIT);
-	era->registers[j] = res;
-
-	return ERA_STATUS_NONE;
-}
-
 sword_t asr(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 {
-	switch(format) {
-	case F_8_BIT:
-		return asr8(era, i, j);
+	// get the bits to shift (all except for sign)
+	lword_t v1 = era->registers[i] & get_shift_mask(format);
+	// shift
+	v1 >>= 1;
 
-	case F_16_BIT:
-		return asr16(era, i, j);
+	// add sign back
+	v1 = v1 | (era->registers[i] & get_sign_mask(format));
 
-	case F_32_BIT:
-		return asr32(era, i, j);
-
-	}
+	// avoid implicit casting by inserting bits with AND
+	lword_t res = get_mask(F_32_BIT) & v1 & get_mask(format);
+	era->registers[j] = res;
 
 	return ERA_STATUS_NONE;
 }
 
 /* ASL */
 
-sword_t asl8(struct era_t *era, sword_t i, sword_t j)
-{
-	// get last 7 bits only
-	sword_t v1 = era->registers[i] & LAST_7_BITS;
-	// shift
-	v1 <<= 1;
-
-	// add sign back, but this time by setting it to 0 and then using OR
-	v1 = (v1 & LAST_7_BITS) | (era->registers[i] & SIGN_8_BIT);
-
-	// avoid implicit casting by inserting bits wit AND
-	lword_t res = get_mask(F_32_BIT) & v1 & get_mask(F_8_BIT);
-	era->registers[j] = res;
-
-	return ERA_STATUS_NONE;
-}
-
-sword_t asl16(struct era_t *era, sword_t i, sword_t j)
-{
-	// get last 15 bits only
-	int16_t v1 = era->registers[i] & LAST_15_BITS;
-	// shift
-	v1 <<= 1;
-
-	// add sign back, but this time by setting it to 0 and then using OR
-	v1 = (v1 & LAST_15_BITS) | (era->registers[i] & SIGN_16_BIT);
-
-	// avoid implicit casting by inserting bits wit AND
-	lword_t res = get_mask(F_32_BIT) & v1 & get_mask(F_16_BIT);
-	era->registers[j] = res;
-
-	return ERA_STATUS_NONE;
-}
-
-sword_t asl32(struct era_t *era, sword_t i, sword_t j)
-{
-	// get last 31 bits only
-	int32_t v1 = era->registers[i] & LAST_31_BITS;
-	// shift
-	v1 <<= 1;
-
-	// add sign back, but this time by setting it to 0 and then using OR
-	v1 = (v1 & LAST_31_BITS) | (era->registers[i] & SIGN_32_BIT);
-
-	// avoid implicit casting by inserting bits wit AND
-	lword_t res = get_mask(F_32_BIT) & v1 & get_mask(F_32_BIT);
-	era->registers[j] = res;
-
-	return ERA_STATUS_NONE;
-}
-
 sword_t asl(struct era_t *era, sword_t i, sword_t j, enum format_t format)
 {
-	switch(format) {
-	case F_8_BIT:
-		return asl8(era, i, j);
+	// get last 31 bits only
+	lword_t v1 = era->registers[i] & get_shift_mask(format);
+	// shift
+	v1 <<= 1;
 
-	case F_16_BIT:
-		return asl16(era, i, j);
+	// add sign back
+	// the current sign of v1 is ignored and the old sign is put back
+	v1 = (v1 & get_shift_mask(format)) | (era->registers[i] & get_sign_mask(format));
 
-	case F_32_BIT:
-		return asl32(era, i, j);
-
-	}
+	// avoid implicit casting by inserting bits wit AND
+	lword_t res = get_mask(F_32_BIT) & v1 & get_mask(format);
+	era->registers[j] = res;
 
 	return ERA_STATUS_NONE;
 }
