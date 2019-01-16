@@ -13,6 +13,12 @@
 #define SIGN_16_BIT 0x8000
 #define SIGN_32_BIT 0x80000000
 
+/**
+ * Get the bitmask for shifting that takes everything except the sign
+ *
+ * @param format needed format
+ * @return bitmask that ignores the number sign
+ */
 lword_t get_shift_mask(enum format_t format)
 {
 	switch(format)
@@ -26,6 +32,12 @@ lword_t get_shift_mask(enum format_t format)
 	}
 }
 
+/**
+ * Get the bitmask for shifting that takes only the sign
+ *
+ * @param format needed format
+ * @return bitmask that covers the number sign
+ */
 lword_t get_sign_mask(enum format_t format)
 {
 	switch(format)
