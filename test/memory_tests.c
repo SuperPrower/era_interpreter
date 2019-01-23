@@ -3,150 +3,150 @@
 #include <setjmp.h>
 #include <cmocka.h>
 
-#include "era_interpreter.h"
+#include "erric_interpreter.h"
 #include "memory_operators.h"
 
 static int setup_memory_tests(void **state)
 {
-	*state = init_era();
+	*state = init_erric();
 
 	return 0;
 }
 
 static int teardown_memory_tests(void **state)
 {
-	struct era_t * era = (struct era_t *) *state;
-	free_era(era);
+	struct erric_t * erric = (struct erric_t *) *state;
+	free_erric(erric);
 
 	return 0;
 }
 
 static void ld_tests(void **state)
 {
-	struct era_t * era = (struct era_t *) *state;
+	struct erric_t * erric = (struct erric_t *) *state;
 	sword_t ret;
 
-	write_lword(era, 0, 2865685771);
-	era->registers[0] = 0;
-	era->registers[1] = 10;
-	ret = ld(era, 0, 1, F_32_BIT);
-	assert_int_equal(era->registers[1], 2865685771);
-	assert_int_equal(ret, ERA_STATUS_NONE);
+	write_lword(erric, 0, 2865685771);
+	erric->registers[0] = 0;
+	erric->registers[1] = 10;
+	ret = ld(erric, 0, 1, F_32_BIT);
+	assert_int_equal(erric->registers[1], 2865685771);
+	assert_int_equal(ret, ERRIC_STATUS_NONE);
 
 	// Negative test: wrong command format
-	ret = ld(era, 0, 1, F_8_BIT);
-	assert_int_equal(ret, ERA_STATUS_WRONG_FORMAT);
+	ret = ld(erric, 0, 1, F_8_BIT);
+	assert_int_equal(ret, ERRIC_STATUS_WRONG_FORMAT);
 
 	// Negative test: bad registers
-	ret = ld(era, 0, 100, F_32_BIT);
-	assert_int_equal(ret, ERA_STATUS_WRONG_REGISTER);
+	ret = ld(erric, 0, 100, F_32_BIT);
+	assert_int_equal(ret, ERRIC_STATUS_WRONG_REGISTER);
 
 	// Negative test: memory out of bounds
-	era->registers[0] = era->memory_size + 1;
-	ret = ld(era, 0, 1, F_32_BIT);
-	assert_int_equal(ret, ERA_STATUS_MEMORY_OUT_OF_BOUNDS);
+	erric->registers[0] = erric->memory_size + 1;
+	ret = ld(erric, 0, 1, F_32_BIT);
+	assert_int_equal(ret, ERRIC_STATUS_MEMORY_OUT_OF_BOUNDS);
 }
 
 static void lda_tests(void **state)
 {
-	struct era_t * era = (struct era_t *) *state;
+	struct erric_t * erric = (struct erric_t *) *state;
 	sword_t ret;
 
-	write_lword(era, 0, 2865685771);
-	write_lword(era, 1, 48706037);
-	era->registers[PC] = 1;
-	era->registers[0] = 292236222;
-	era->registers[1] = 10;
-	ret = lda(era, 0, 1, F_8_BIT);
-	assert_int_equal(era->registers[1], 340942259);
-	assert_int_equal(era->registers[PC], 3);
-	assert_int_equal(ret, ERA_STATUS_NONE);
+	write_lword(erric, 0, 2865685771);
+	write_lword(erric, 1, 48706037);
+	erric->registers[PC] = 1;
+	erric->registers[0] = 292236222;
+	erric->registers[1] = 10;
+	ret = lda(erric, 0, 1, F_8_BIT);
+	assert_int_equal(erric->registers[1], 340942259);
+	assert_int_equal(erric->registers[PC], 3);
+	assert_int_equal(ret, ERRIC_STATUS_NONE);
 
 	// Negative test: wrong command format
-	ret = lda(era, 0, 0, F_32_BIT);
-	assert_int_equal(ret, ERA_STATUS_WRONG_FORMAT);
+	ret = lda(erric, 0, 0, F_32_BIT);
+	assert_int_equal(ret, ERRIC_STATUS_WRONG_FORMAT);
 
 	// Negative test: bad registers
-	ret = lda(era, 100, 100, F_8_BIT);
-	assert_int_equal(ret, ERA_STATUS_WRONG_REGISTER);
+	ret = lda(erric, 100, 100, F_8_BIT);
+	assert_int_equal(ret, ERRIC_STATUS_WRONG_REGISTER);
 }
 
 static void ldc_tests(void **state)
 {
-	struct era_t * era = (struct era_t *) *state;
+	struct erric_t * erric = (struct erric_t *) *state;
 	sword_t ret;
 
-	era->registers[0] = 292236222;
-	ldc(era, 31, 0, F_32_BIT);
-	assert_int_equal(era->registers[0], 31);
-	assert_int_equal(ret, ERA_STATUS_NONE);
+	erric->registers[0] = 292236222;
+	ldc(erric, 31, 0, F_32_BIT);
+	assert_int_equal(erric->registers[0], 31);
+	assert_int_equal(ret, ERRIC_STATUS_NONE);
 
 	// Negative test: wrong command format
-	ret = ldc(era, 0, 5, F_16_BIT);
-	assert_int_equal(ret, ERA_STATUS_WRONG_FORMAT);
+	ret = ldc(erric, 0, 5, F_16_BIT);
+	assert_int_equal(ret, ERRIC_STATUS_WRONG_FORMAT);
 
 	// Negative test: bad registers
-	ret = ldc(era, 100, 100, F_32_BIT);
-	assert_int_equal(ret, ERA_STATUS_WRONG_REGISTER);
+	ret = ldc(erric, 100, 100, F_32_BIT);
+	assert_int_equal(ret, ERRIC_STATUS_WRONG_REGISTER);
 }
 
 static void st_tests(void **state)
 {
-	struct era_t * era = (struct era_t *) *state;
+	struct erric_t * erric = (struct erric_t *) *state;
 	sword_t ret;
 
-	era->registers[0] = 292236222;
-	era->registers[1] = 54;
-	ret = st(era, 0, 1, F_32_BIT);
-	assert_int_equal(read_lword(era, 54), 292236222);
-	assert_int_equal(ret, ERA_STATUS_NONE);
+	erric->registers[0] = 292236222;
+	erric->registers[1] = 54;
+	ret = st(erric, 0, 1, F_32_BIT);
+	assert_int_equal(read_lword(erric, 54), 292236222);
+	assert_int_equal(ret, ERRIC_STATUS_NONE);
 
 	// Negative test: wrong command format
-	ret = st(era, 0, 5, F_16_BIT);
-	assert_int_equal(ret, ERA_STATUS_WRONG_FORMAT);
+	ret = st(erric, 0, 5, F_16_BIT);
+	assert_int_equal(ret, ERRIC_STATUS_WRONG_FORMAT);
 
 	// Negative test: bad registers
-	ret = st(era, 100, 100, F_32_BIT);
-	assert_int_equal(ret, ERA_STATUS_WRONG_REGISTER);
+	ret = st(erric, 100, 100, F_32_BIT);
+	assert_int_equal(ret, ERRIC_STATUS_WRONG_REGISTER);
 
 	// Negative test: memory out of bounds
-	era->registers[0] = era->memory_size + 1;
-	ret = st(era, 0, 0, F_32_BIT);
-	assert_int_equal(ret, ERA_STATUS_MEMORY_OUT_OF_BOUNDS);
+	erric->registers[0] = erric->memory_size + 1;
+	ret = st(erric, 0, 0, F_32_BIT);
+	assert_int_equal(ret, ERRIC_STATUS_MEMORY_OUT_OF_BOUNDS);
 }
 
 static void mov_tests(void **state)
 {
-	struct era_t * era = (struct era_t *) *state;
+	struct erric_t * erric = (struct erric_t *) *state;
 	sword_t ret;
 
 	// 10101010 11001110 11100101 00001011
-	era->registers[0] = 2865685771;
+	erric->registers[0] = 2865685771;
 
 	// 00010100 01010010 01011101 10110011
-	era->registers[1] = 340942259;
-	ret = mov(era, 0, 1, F_8_BIT);
+	erric->registers[1] = 340942259;
+	ret = mov(erric, 0, 1, F_8_BIT);
 	// MOVed = // 00010100 01010010 01011101 00001011
-	assert_int_equal(era->registers[1], 340942091);
-	assert_int_equal(ret, ERA_STATUS_NONE);
+	assert_int_equal(erric->registers[1], 340942091);
+	assert_int_equal(ret, ERRIC_STATUS_NONE);
 
 	// 00010100 01010010 01011101 10110011
-	era->registers[1] = 340942259;
-	ret = mov(era, 0, 1, F_16_BIT);
+	erric->registers[1] = 340942259;
+	ret = mov(erric, 0, 1, F_16_BIT);
 	// MOVed = // 00010100 01010010 11100101 00001011
-	assert_int_equal(era->registers[1], 340976907);
-	assert_int_equal(ret, ERA_STATUS_NONE);
+	assert_int_equal(erric->registers[1], 340976907);
+	assert_int_equal(ret, ERRIC_STATUS_NONE);
 
 	// 00010100 01010010 01011101 10110011
-	era->registers[1] = 340942259;
-	ret = mov(era, 0, 1, F_32_BIT);
+	erric->registers[1] = 340942259;
+	ret = mov(erric, 0, 1, F_32_BIT);
 	// MOVed = // 10101010 11001110 11100101 00001011
-	assert_int_equal(era->registers[1], 2865685771);
-	assert_int_equal(ret, ERA_STATUS_NONE);
+	assert_int_equal(erric->registers[1], 2865685771);
+	assert_int_equal(ret, ERRIC_STATUS_NONE);
 
 	// Negative test: bad registers
-	ret = mov(era, 100, 100, F_32_BIT);
-	assert_int_equal(ret, ERA_STATUS_WRONG_REGISTER);
+	ret = mov(erric, 100, 100, F_32_BIT);
+	assert_int_equal(ret, ERRIC_STATUS_WRONG_REGISTER);
 }
 
 int main(void)

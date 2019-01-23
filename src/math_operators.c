@@ -1,10 +1,6 @@
 #include "math_operators.h"
 
-/*
- * NOTE: all the different functions here are needed to more easily deal with potential overflow
- */
-
-// Can't think of a better name or way to use them
+// Can't think of a better name them
 #define LAST_7_BITS  0x7F
 #define LAST_15_BITS 0x7FFF
 #define LAST_31_BITS 0x7FFFFFFF
@@ -53,67 +49,67 @@ lword_t get_sign_mask(enum format_t format)
 
 /* ADD */
 
-sword_t add(struct era_t *era, sword_t i, sword_t j, enum format_t format)
+sword_t add(struct erric_t *erric, sword_t i, sword_t j, enum format_t format)
 {
 	// get the needed bits
-	lword_t v1 = era->registers[i] & get_mask(format);
-	lword_t v2 = era->registers[j] & get_mask(format);
+	lword_t v1 = erric->registers[i] & get_mask(format);
+	lword_t v2 = erric->registers[j] & get_mask(format);
 
 	// The mask is needed to deal with over- and underflow
-	era->registers[j] = (v1 + v2) & get_mask(format);
+	erric->registers[j] = (v1 + v2) & get_mask(format);
 
-	return ERA_STATUS_NONE;
+	return ERRIC_STATUS_NONE;
 }
 
 /* SUB */
 
-sword_t sub(struct era_t *era, sword_t i, sword_t j, enum format_t format)
+sword_t sub(struct erric_t *erric, sword_t i, sword_t j, enum format_t format)
 {
 	// get the needed bits
-	lword_t v1 = era->registers[i] & get_mask(format);
-	lword_t v2 = era->registers[j] & get_mask(format);
+	lword_t v1 = erric->registers[i] & get_mask(format);
+	lword_t v2 = erric->registers[j] & get_mask(format);
 
 	// The mask is needed to deal with over- and underflow
-	era->registers[j] = (v2 - v1) & get_mask(format);
+	erric->registers[j] = (v2 - v1) & get_mask(format);
 
-	return ERA_STATUS_NONE;
+	return ERRIC_STATUS_NONE;
 }
 
 /* ASR */
 
-sword_t asr(struct era_t *era, sword_t i, sword_t j, enum format_t format)
+sword_t asr(struct erric_t *erric, sword_t i, sword_t j, enum format_t format)
 {
 	// get the bits to shift (all except for sign)
-	lword_t v1 = era->registers[i] & get_shift_mask(format);
+	lword_t v1 = erric->registers[i] & get_shift_mask(format);
 	// shift
 	v1 >>= 1;
 
 	// add sign back
-	v1 = v1 | (era->registers[i] & get_sign_mask(format));
+	v1 = v1 | (erric->registers[i] & get_sign_mask(format));
 
 	// avoid implicit casting by inserting bits with AND
 	lword_t res = get_mask(F_32_BIT) & v1 & get_mask(format);
-	era->registers[j] = res;
+	erric->registers[j] = res;
 
-	return ERA_STATUS_NONE;
+	return ERRIC_STATUS_NONE;
 }
 
 /* ASL */
 
-sword_t asl(struct era_t *era, sword_t i, sword_t j, enum format_t format)
+sword_t asl(struct erric_t *erric, sword_t i, sword_t j, enum format_t format)
 {
 	// get last 31 bits only
-	lword_t v1 = era->registers[i] & get_shift_mask(format);
+	lword_t v1 = erric->registers[i] & get_shift_mask(format);
 	// shift
 	v1 <<= 1;
 
 	// add sign back
 	// the current sign of v1 is ignored and the old sign is put back
-	v1 = (v1 & get_shift_mask(format)) | (era->registers[i] & get_sign_mask(format));
+	v1 = (v1 & get_shift_mask(format)) | (erric->registers[i] & get_sign_mask(format));
 
 	// avoid implicit casting by inserting bits wit AND
 	lword_t res = get_mask(F_32_BIT) & v1 & get_mask(format);
-	era->registers[j] = res;
+	erric->registers[j] = res;
 
-	return ERA_STATUS_NONE;
+	return ERRIC_STATUS_NONE;
 }

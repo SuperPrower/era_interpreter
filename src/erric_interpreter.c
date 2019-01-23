@@ -1,4 +1,4 @@
-#include "era_interpreter.h"
+#include "erric_interpreter.h"
 
 #include <stdlib.h>
 #include "file_reading.h"
@@ -9,52 +9,52 @@
 #include "memory_operators.h"
 #include "math_operators.h"
 
-#define ERA_DEFAULT_MEM_SIZE 64 * 1024
+#define ERRIC_DEFAULT_MEM_SIZE 64 * 1024
 
 #define LAST_2_BITS 0x3
 #define LAST_4_BITS 0xF
 #define LAST_5_BITS 0x1F
 
 // Type of the instruction function pointer
-typedef sword_t (*era_instruction)(struct era_t*, sword_t, sword_t, enum format_t);
+typedef sword_t (*erric_instruction)(struct erric_t*, sword_t, sword_t, enum format_t);
 
 // The execution array is indexed by the command code. The format is parsed separately.
-era_instruction instructions[] = {&nopstop, &ld, &ldaldc, &st, &mov, &add, &sub, &asr, &asl, &or, &and, &xor, &lsl, &lsr, &cnd, &cbr};
+erric_instruction instructions[] = {&nopstop, &ld, &ldaldc, &st, &mov, &add, &sub, &asr, &asl, &or, &and, &xor, &lsl, &lsr, &cnd, &cbr};
 
 
-struct era_t* init_era()
+struct erric_t* init_erric()
 {
-	return init_era_m(ERA_DEFAULT_MEM_SIZE);
+	return init_erric_m(ERRIC_DEFAULT_MEM_SIZE);
 }
 
-struct era_t* init_era_m(uint32_t _mem_size)
+struct erric_t* init_erric_m(uint32_t _mem_size)
 {
-	struct era_t * era = (struct era_t *) malloc(sizeof(struct era_t));
+	struct erric_t * erric = (struct erric_t *) malloc(sizeof(struct erric_t));
 
-	era->memory_size = _mem_size;
+	erric->memory_size = _mem_size;
 
 	// Calloc clears everything to zero, which should be good for us
-	era->memory = (word_t*) calloc(era->memory_size, sizeof(word_t));
-	era->registers = (lword_t*) calloc(N_REGISTERS, sizeof(lword_t));
-	era->status_code = ERA_STATUS_NONE;
+	erric->memory = (word_t*) calloc(erric->memory_size, sizeof(word_t));
+	erric->registers = (lword_t*) calloc(N_REGISTERS, sizeof(lword_t));
+	erric->status_code = ERRIC_STATUS_NONE;
 
-	return era;
+	return erric;
 }
 
-int free_era(struct era_t *era)
+int free_erric(struct erric_t * erric)
 {
-	free(era->memory);
-	free(era->registers);
-	free(era);
+	free(erric->memory);
+	free(erric->registers);
+	free(erric);
 
 	return 0;
 }
 
 //GOTOs in here are responsible and sensible, so no need to worry about it
-sword_t read_file(char *filename, struct era_t *era)
+sword_t read_file(char *filename, struct erric_t *erric)
 {
 	FILE * executable;
-	sword_t status = ERA_STATUS_NONE;
+	sword_t status = ERRIC_STATUS_NONE;
 	// NOTE : header fields are independent from words and stuff and have fixed bit size
 	// 255 is used to make sure invalid reads are detected
 	uint8_t version = 255;
@@ -63,14 +63,14 @@ sword_t read_file(char *filename, struct era_t *era)
 
 	if(executable == NULL)
 	{
-		return ERA_STATUS_FILE_ERROR;
+		return ERRIC_STATUS_FILE_ERROR;
 	}
 
 	// Get the version
 	fread((void*)&version, sizeof(uint8_t), 1, executable);
 	if(ferror(executable) != 0 || feof(executable) != 0)
 	{
-		status = ERA_STATUS_FILE_READ_ERROR;
+		status = ERRIC_STATUS_FILE_READ_ERROR;
 		goto cleanup;
 	}
 
@@ -78,16 +78,16 @@ sword_t read_file(char *filename, struct era_t *era)
 	{
 		case(0):
 		{
-			status = read_v0_file(era, executable);
+			status = read_v0_file(erric, executable);
 			break;
 		}
 		case 1:
 		{
-			status = read_v1_file(era, executable);
+			status = read_v1_file(erric, executable);
 			break;
 		}
 		default:
-			status = ERA_STATUS_FILE_VERSION_ERROR;
+			status = ERRIC_STATUS_FILE_VERSION_ERROR;
 			goto cleanup;
 	}
 
@@ -123,21 +123,21 @@ struct instruction_t parse_instruction(word_t instruction)
 	return out;
 }
 
-sword_t step(struct era_t *era)
+sword_t step(struct erric_t *erric)
 {
-	word_t command = read_word(era, era->registers[PC]);
+	word_t command = read_word(erric, erric->registers[PC]);
 
 	struct instruction_t instruction = parse_instruction(command);
 
-	++(era->registers[PC]);
-	return instructions[instruction.code](era, instruction.i, instruction.j, instruction.format);
+	++(erric->registers[PC]);
+	return instructions[instruction.code](erric, instruction.i, instruction.j, instruction.format);
 }
 
-sword_t execute(struct era_t *era)
+sword_t execute(struct erric_t *erric)
 {
-	while (era->status_code == ERA_STATUS_NONE)
+	while (erric->status_code == ERRIC_STATUS_NONE)
 	{
-		era->status_code = step(era);
+		erric->status_code = step(erric);
 	}
-	return era->status_code;
+	return erric->status_code;
 }

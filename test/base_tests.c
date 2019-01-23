@@ -3,7 +3,7 @@
 #include <setjmp.h>
 #include <cmocka.h>
 
-#include "era_interpreter.h"
+#include "erric_interpreter.h"
 
 // read more at https://api.cmocka.org/group__cmocka__exec.html
 

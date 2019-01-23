@@ -6,85 +6,85 @@
 #define CND_LESS   0x00000002
 #define CND_MORE   0x00000001
 
-sword_t cnd(struct era_t *era, sword_t i, sword_t j, enum format_t format)
+sword_t cnd(struct erric_t *erric, sword_t i, sword_t j, enum format_t format)
 {
 	if (i >= N_REGISTERS || j >= N_REGISTERS || j == PC) {
-		return ERA_STATUS_WRONG_REGISTER;
+		return ERRIC_STATUS_WRONG_REGISTER;
 	}
 
 	lword_t mask = get_mask(format);
 
-	lword_t rj = era->registers[j] & mask;
-	lword_t ri = era->registers[i] & mask;
+	lword_t rj = erric->registers[j] & mask;
+	lword_t ri = erric->registers[i] & mask;
 
 	// Clear the space used by the result bits
-	era->registers[j] &= ~CND_RESULT;
+	erric->registers[j] &= ~CND_RESULT;
 
 	if (rj == ri) {
-		era->registers[j] |= CND_EQUAL;
+		erric->registers[j] |= CND_EQUAL;
 
 	} else if (rj > ri) {
-		era->registers[j] |= CND_LESS;
+		erric->registers[j] |= CND_LESS;
 
 	} else if (rj < ri) {
-		era->registers[j] |= CND_MORE;
+		erric->registers[j] |= CND_MORE;
 	}
 
-	return ERA_STATUS_NONE;
+	return ERRIC_STATUS_NONE;
 }
 
-sword_t cbr(struct era_t * era, sword_t i, sword_t j, enum format_t format)
+sword_t cbr(struct erric_t * erric, sword_t i, sword_t j, enum format_t format)
 {
 	if (format != F_32_BIT) {
-		return ERA_STATUS_WRONG_FORMAT;
+		return ERRIC_STATUS_WRONG_FORMAT;
 	}
 
 	// we don't want i to be PC since we store old PC value in i.
 	// Even though we do it before actual jump, this may possibly introduce
 	// some bad behaviour.
 	if (i == PC || i >= N_REGISTERS || j >= N_REGISTERS) {
-		return ERA_STATUS_WRONG_REGISTER;
+		return ERRIC_STATUS_WRONG_REGISTER;
 	}
 
-	if (era->registers[i] != 0) {
-		if (era->registers[j] >= era->memory_size) {
-			return ERA_STATUS_MEMORY_OUT_OF_BOUNDS;
+	if (erric->registers[i] != 0) {
+		if (erric->registers[j] >= erric->memory_size) {
+			return ERRIC_STATUS_MEMORY_OUT_OF_BOUNDS;
 		}
 
-		era->registers[i] = era->registers[PC];
-		era->registers[PC] = era->registers[j];
+		erric->registers[i] = erric->registers[PC];
+		erric->registers[PC] = erric->registers[j];
 	}
 
-	return ERA_STATUS_NONE;
+	return ERRIC_STATUS_NONE;
 }
 
-sword_t nop(struct era_t * era, sword_t i, sword_t j, enum format_t format)
+sword_t nop(struct erric_t * erric, sword_t i, sword_t j, enum format_t format)
 {
 	if (format != F_16_BIT) {
 		// Congratulations, you messed up a NOP function somehow.
-		return ERA_STATUS_WRONG_FORMAT;
+		return ERRIC_STATUS_WRONG_FORMAT;
 	}
 
-	return ERA_STATUS_NONE;
+	return ERRIC_STATUS_NONE;
 }
 
-sword_t stop(struct era_t *era, sword_t i, sword_t j, enum format_t format)
+sword_t stop(struct erric_t *erric, sword_t i, sword_t j, enum format_t format)
 {
 	if (format != F_8_BIT) {
-		return ERA_STATUS_WRONG_FORMAT;
+		return ERRIC_STATUS_WRONG_FORMAT;
 	}
 
-	return ERA_STATUS_STOP;
+	return ERRIC_STATUS_STOP;
 }
 
-sword_t nopstop(struct era_t *era, sword_t i, sword_t j, enum format_t format)
+sword_t nopstop(struct erric_t *erric, sword_t i, sword_t j, enum format_t format)
 {
 	switch (format) {
 		case F_8_BIT:
-			return stop(era, i, j, format);
+			return stop(erric, i, j, format);
 		case F_16_BIT:
-			return nop(era, i, j, format);
+			return nop(erric, i, j, format);
 		default:
-			return ERA_STATUS_WRONG_FORMAT;
+			return ERRIC_STATUS_WRONG_FORMAT;
 	}
 }

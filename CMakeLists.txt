@@ -46,8 +46,8 @@ endif()
 
 # Build all files as library so that they can be re-used for tests
 add_library(era_interpreter SHARED
-		src/era_interpreter.c
-		src/era_util.c
+        src/erric_interpreter.c
+		src/erric_util.c
 		src/branch_operators.c
 		src/math_operators.c
 		src/memory_operators.c
