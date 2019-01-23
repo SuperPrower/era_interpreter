@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
 
-project(era_tests)
+project(erric_tests)
 
 find_package(CMocka REQUIRED)
 
@@ -20,25 +20,25 @@ set(TEST_SOURCES
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
-add_executable(era_base_tests base_tests.c)
-add_executable(era_math_tests math_tests.c)
-add_executable(era_logic_tests logic_tests.c)
-add_executable(era_file_reading_tests file_reading_tests.c)
-add_executable(era_memory_tests memory_tests.c)
-add_executable(era_branch_tests branch_tests.c)
+add_executable(erric_base_tests base_tests.c)
+add_executable(erric_math_tests math_tests.c)
+add_executable(erric_logic_tests logic_tests.c)
+add_executable(erric_file_reading_tests file_reading_tests.c)
+add_executable(erric_memory_tests memory_tests.c)
+add_executable(erric_branch_tests branch_tests.c)
 
-target_link_libraries(era_base_tests era_interpreter cmocka)
-target_link_libraries(era_math_tests era_interpreter cmocka)
-target_link_libraries(era_logic_tests era_interpreter cmocka)
-target_link_libraries(era_file_reading_tests era_interpreter cmocka)
-target_link_libraries(era_memory_tests era_interpreter cmocka)
-target_link_libraries(era_branch_tests era_interpreter cmocka)
+target_link_libraries(erric_base_tests erric_interpreter cmocka)
+target_link_libraries(erric_math_tests erric_interpreter cmocka)
+target_link_libraries(erric_logic_tests erric_interpreter cmocka)
+target_link_libraries(erric_file_reading_tests erric_interpreter cmocka)
+target_link_libraries(erric_memory_tests erric_interpreter cmocka)
+target_link_libraries(erric_branch_tests erric_interpreter cmocka)
 
-add_test(NAME base_tests COMMAND ${EXECUTABLE_OUTPUT_PATH}/era_base_tests WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/test")
-add_test(NAME math_tests COMMAND ${EXECUTABLE_OUTPUT_PATH}/era_math_tests WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/test")
-add_test(NAME logic_tests COMMAND ${EXECUTABLE_OUTPUT_PATH}/era_logic_tests WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/test")
-add_test(NAME file_reading_tests COMMAND ${EXECUTABLE_OUTPUT_PATH}/era_file_reading_tests WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/test")
-add_test(NAME memory_tests COMMAND ${EXECUTABLE_OUTPUT_PATH}/era_memory_tests WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/test")
-add_test(NAME branch_tests COMMAND ${EXECUTABLE_OUTPUT_PATH}/era_branch_tests WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/test")
+add_test(NAME base_tests COMMAND ${EXECUTABLE_OUTPUT_PATH}/erric_base_tests WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/test")
+add_test(NAME math_tests COMMAND ${EXECUTABLE_OUTPUT_PATH}/erric_math_tests WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/test")
+add_test(NAME logic_tests COMMAND ${EXECUTABLE_OUTPUT_PATH}/erric_logic_tests WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/test")
+add_test(NAME file_reading_tests COMMAND ${EXECUTABLE_OUTPUT_PATH}/erric_file_reading_tests WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/test")
+add_test(NAME memory_tests COMMAND ${EXECUTABLE_OUTPUT_PATH}/erric_memory_tests WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/test")
+add_test(NAME branch_tests COMMAND ${EXECUTABLE_OUTPUT_PATH}/erric_branch_tests WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/test")
 
 # add more test in similar manner

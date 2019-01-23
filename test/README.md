@@ -1,4 +1,4 @@
-## ERA Interpreter Tests
+## ERRIC Interpreter Tests
 Testing is done with `CMocka` framework. Please refer to your distribution documentation for installation instructions.
 
 ### Writing tests
