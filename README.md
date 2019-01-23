@@ -1,9 +1,9 @@
 # Machine Code Interpreter for ERRIC (prev. ERA) architecture
 
 ## Running
-`./era [--filename filename] [--memory_size words] [--help]`
+`./erric [--filename filename] [--memory_size words] [--help]`
 
-Read more about options at `./era --help`
+Read more about options at `./erric --help`
 
 Program will load a file, provided or default, and attempt to execute the code. Regardless of the result, machine information, registers and memory will be dumped to `memdump` file.
 
@@ -35,4 +35,4 @@ Under Windows, you will still need to move the dll into executable's path if you
 
 ### Tests
 If you have enabled tests (as described above), you can run set of tests by changing directory to `build` and running `ctest`. You can add `-V` flag for verbose output.
-Under Windows, you will also need to move the `libera_interpreter.dll` to the binary directory.
+Under Windows, you will also need to move the `liberric_interpreter.dll` to the binary directory.

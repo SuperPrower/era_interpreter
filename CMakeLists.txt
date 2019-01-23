@@ -3,7 +3,7 @@ cmake_minimum_required (VERSION 3.1)
 set(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/CMakeModules)
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_SOURCE_DIR}/bin)
 
-project(era)
+project(erric)
 
 set (CMAKE_C_STANDART 11) # Use C11
 option(Coverage "Enable Coverage" OFF)
@@ -29,9 +29,9 @@ if (CMAKE_BUILD_TYPE MATCHES Debug)
 		)
 
 		SETUP_TARGET_FOR_COVERAGE_LCOV(
-			NAME era_coverage
+			NAME erric_coverage
 			EXECUTABLE ctest
-			DEPENDENCIES era
+			DEPENDENCIES erric
 		)
 
 	endif()
@@ -45,9 +45,9 @@ if(${MSVC})
 endif()
 
 # Build all files as library so that they can be re-used for tests
-add_library(era_interpreter SHARED
-		src/era_interpreter.c
-		src/era_util.c
+add_library(erric_interpreter SHARED
+		src/erric_interpreter.c
+		src/erric_util.c
 		src/branch_operators.c
 		src/math_operators.c
 		src/memory_operators.c
@@ -58,7 +58,7 @@ add_library(era_interpreter SHARED
 
 add_executable(${PROJECT_NAME} src/main.c)
 
-target_link_libraries(${PROJECT_NAME} era_interpreter)
+target_link_libraries(${PROJECT_NAME} erric_interpreter)
 
 if(${CMAKE_HOST_WIN32})
 	# This command will put the .dll file into the /bin folder under Windows.
@@ -66,6 +66,6 @@ if(${CMAKE_HOST_WIN32})
 	# Also saves a lot of nerves during testing - tests didn't fetch the newly compiled .dll-s
 	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 			COMMAND ${CMAKE_COMMAND} -E copy
-			"$<TARGET_FILE_DIR:era_interpreter>/${CMAKE_SHARED_LIBRARY_PREFIX}era_interpreter.dll"
-			"${EXECUTABLE_OUTPUT_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}era_interpreter.dll")
+			"$<TARGET_FILE_DIR:erric_interpreter>/${CMAKE_SHARED_LIBRARY_PREFIX}erric_interpreter.dll"
+			"${EXECUTABLE_OUTPUT_PATH}/${CMAKE_SHARED_LIBRARY_PREFIX}erric_interpreter.dll")
 endif()

@@ -3,176 +3,176 @@
 #include <setjmp.h>
 #include <cmocka.h>
 
-#include "era_interpreter.h"
+#include "erric_interpreter.h"
 #include "branch_operators.h"
 
 static int setup_branch_tests(void **state)
 {
-	*state = init_era();
+	*state = init_erric();
 
 	return 0;
 }
 
 static int teardown_branch_tests(void **state)
 {
-	struct era_t * era = (struct era_t *) *state;
-	free_era(era);
+	struct erric_t * erric = (struct erric_t *) *state;
+	free_erric(erric);
 
 	return 0;
 }
 
 static void cnd_tests(void **state)
 {
-	struct era_t * era = (struct era_t *) *state;
+	struct erric_t * erric = (struct erric_t *) *state;
 	sword_t ret;
 
 	// Byte comparison test
 	// 10101010 11001110 11100101 00001011
-	era->registers[0] = 2865685771;
+	erric->registers[0] = 2865685771;
 
 	// 00010100 01010010 01011101 10110011
-	era->registers[1] = 340942259;
-	ret = cnd(era, 0, 1, F_8_BIT);
+	erric->registers[1] = 340942259;
+	ret = cnd(erric, 0, 1, F_8_BIT);
 	// CNDed = 00010100 01010010 01011101 10110010
-	assert_int_equal(era->registers[1], 340942258);
-	assert_int_equal(ret, ERA_STATUS_NONE);
+	assert_int_equal(erric->registers[1], 340942258);
+	assert_int_equal(ret, ERRIC_STATUS_NONE);
 
 	// 00010100 01010010 01011101 10110011 = 23987
-	era->registers[1] = 340942259;
-	ret = cnd(era, 0, 1, F_16_BIT);
+	erric->registers[1] = 340942259;
+	ret = cnd(erric, 0, 1, F_16_BIT);
 	// CNDed = 00010100 01010010 01011101 10110001
-	assert_int_equal(era->registers[1], 340942257);
-	assert_int_equal(ret, ERA_STATUS_NONE);
+	assert_int_equal(erric->registers[1], 340942257);
+	assert_int_equal(ret, ERRIC_STATUS_NONE);
 
 
 	// 00010100 01010010 01011101 10110011
-	era->registers[1] = 340942259;
-	ret = cnd(era, 0, 1, F_32_BIT);
+	erric->registers[1] = 340942259;
+	ret = cnd(erric, 0, 1, F_32_BIT);
 	// CNDed = 00010100 01010010 01011101 10110001
-	assert_int_equal(era->registers[1], 340942257);
-	assert_int_equal(ret, ERA_STATUS_NONE);
+	assert_int_equal(erric->registers[1], 340942257);
+	assert_int_equal(ret, ERRIC_STATUS_NONE);
 
 	// Simple comparison tests
-	era->registers[0] = 10;
+	erric->registers[0] = 10;
 
-	era->registers[1] = 10;
-	ret = cnd(era, 0, 1, F_32_BIT);
-	assert_int_equal(era->registers[1], 4);
-	assert_int_equal(ret, ERA_STATUS_NONE);
+	erric->registers[1] = 10;
+	ret = cnd(erric, 0, 1, F_32_BIT);
+	assert_int_equal(erric->registers[1], 4);
+	assert_int_equal(ret, ERRIC_STATUS_NONE);
 
-	era->registers[1] = 5;
-	ret = cnd(era, 0, 1, F_32_BIT);
-	assert_int_equal(era->registers[1], 1);
-	assert_int_equal(ret, ERA_STATUS_NONE);
+	erric->registers[1] = 5;
+	ret = cnd(erric, 0, 1, F_32_BIT);
+	assert_int_equal(erric->registers[1], 1);
+	assert_int_equal(ret, ERRIC_STATUS_NONE);
 
-	era->registers[1] = 15;
-	ret = cnd(era, 0, 1, F_32_BIT);
-	assert_int_equal(era->registers[1], 2);
-	assert_int_equal(ret, ERA_STATUS_NONE);
+	erric->registers[1] = 15;
+	ret = cnd(erric, 0, 1, F_32_BIT);
+	assert_int_equal(erric->registers[1], 2);
+	assert_int_equal(ret, ERRIC_STATUS_NONE);
 
 	// Negative Test: Bad Registers
-	ret = cnd(era, 100, 100, F_32_BIT);
-	assert_int_equal(ret, ERA_STATUS_WRONG_REGISTER);
+	ret = cnd(erric, 100, 100, F_32_BIT);
+	assert_int_equal(ret, ERRIC_STATUS_WRONG_REGISTER);
 }
 
 static void cbr_tests(void **state)
 {
-	struct era_t * era = (struct era_t *) *state;
+	struct erric_t * erric = (struct erric_t *) *state;
 	sword_t ret;
 
-	era->registers[PC] = 20;
-	era->registers[0] = 10;
-	era->registers[1] = 5;
-	ret = cbr(era, 0, 1, F_32_BIT);
-	assert_int_equal(era->registers[0], 20);
-	assert_int_equal(era->registers[PC], 5);
-	assert_int_equal(ret, ERA_STATUS_NONE);
+	erric->registers[PC] = 20;
+	erric->registers[0] = 10;
+	erric->registers[1] = 5;
+	ret = cbr(erric, 0, 1, F_32_BIT);
+	assert_int_equal(erric->registers[0], 20);
+	assert_int_equal(erric->registers[PC], 5);
+	assert_int_equal(ret, ERRIC_STATUS_NONE);
 
-	era->registers[PC] = 20;
-	era->registers[0] = 0;
-	era->registers[1] = 5;
-	ret = cbr(era, 0, 1, F_32_BIT);
-	assert_int_equal(era->registers[0], 0);
-	assert_int_equal(era->registers[PC], 20);
-	assert_int_equal(ret, ERA_STATUS_NONE);
+	erric->registers[PC] = 20;
+	erric->registers[0] = 0;
+	erric->registers[1] = 5;
+	ret = cbr(erric, 0, 1, F_32_BIT);
+	assert_int_equal(erric->registers[0], 0);
+	assert_int_equal(erric->registers[PC], 20);
+	assert_int_equal(ret, ERRIC_STATUS_NONE);
 
 	// Negative Test: Bad Format
-	ret = cbr(era, 0, 0, F_8_BIT);
-	assert_int_equal(ret, ERA_STATUS_WRONG_FORMAT);
+	ret = cbr(erric, 0, 0, F_8_BIT);
+	assert_int_equal(ret, ERRIC_STATUS_WRONG_FORMAT);
 
 	// Negative Test: Bad Registers
-	ret = cbr(era, 100, 100, F_32_BIT);
-	assert_int_equal(ret, ERA_STATUS_WRONG_REGISTER);
+	ret = cbr(erric, 100, 100, F_32_BIT);
+	assert_int_equal(ret, ERRIC_STATUS_WRONG_REGISTER);
 
 	// Negative Test: Out of Memory Bounds
-	era->registers[0] = 1;
-	era->registers[1] = era->memory_size;
-	ret = cbr(era, 0, 1, F_32_BIT);
-	assert_int_equal(ret, ERA_STATUS_MEMORY_OUT_OF_BOUNDS);
+	erric->registers[0] = 1;
+	erric->registers[1] = erric->memory_size;
+	ret = cbr(erric, 0, 1, F_32_BIT);
+	assert_int_equal(ret, ERRIC_STATUS_MEMORY_OUT_OF_BOUNDS);
 }
 
 static void nop_tests(void **state)
 {
-	struct era_t * era = (struct era_t *) *state;
+	struct erric_t * erric = (struct erric_t *) *state;
 
 	for(int c = 0; c < N_REGISTERS; ++c)
 	{
-		era->registers[c] = 0;
+		erric->registers[c] = 0;
 	}
 	for(int c = 0; c < 10; ++c)
 	{
-		era->registers[c] = 0;
+		erric->registers[c] = 0;
 	}
 
-	sword_t status = nop(era, 0, 1, F_16_BIT);
+	sword_t status = nop(erric, 0, 1, F_16_BIT);
 
 	for(int c = 0; c < N_REGISTERS; ++c)
 	{
-		assert_int_equal(era->registers[c], 0);
+		assert_int_equal(erric->registers[c], 0);
 	}
 
 	// Small memory check
 	for(int c = 0; c < 10; ++c)
 	{
-		assert_int_equal(era->memory[c], 0);
+		assert_int_equal(erric->memory[c], 0);
 	}
 
-	assert_int_equal(status, ERA_STATUS_NONE);
+	assert_int_equal(status, ERRIC_STATUS_NONE);
 
-	status = nop(era, 0, 1, F_32_BIT);
-	assert_int_equal(status, ERA_STATUS_WRONG_FORMAT);
+	status = nop(erric, 0, 1, F_32_BIT);
+	assert_int_equal(status, ERRIC_STATUS_WRONG_FORMAT);
 }
 
 static void stop_tests(void **state)
 {
-	struct era_t * era = (struct era_t *) *state;
+	struct erric_t * erric = (struct erric_t *) *state;
 
 	for(int c = 0; c < N_REGISTERS; ++c)
 	{
-		era->registers[c] = 0;
+		erric->registers[c] = 0;
 	}
 	for(int c = 0; c < 10; ++c)
 	{
-		era->registers[c] = 0;
+		erric->registers[c] = 0;
 	}
 
-	sword_t status = stop(era, 0, 1, F_8_BIT);
+	sword_t status = stop(erric, 0, 1, F_8_BIT);
 
 	for(int c = 0; c < N_REGISTERS; ++c)
 	{
-		assert_int_equal(era->registers[c], 0);
+		assert_int_equal(erric->registers[c], 0);
 	}
 
 	// Small memory check
 	for(int c = 0; c < 10; ++c)
 	{
-		assert_int_equal(era->memory[c], 0);
+		assert_int_equal(erric->memory[c], 0);
 	}
 
-	assert_int_equal(status, ERA_STATUS_STOP);
+	assert_int_equal(status, ERRIC_STATUS_STOP);
 
-	status = stop(era, 0, 0, F_32_BIT);
-	assert_int_equal(status, ERA_STATUS_WRONG_FORMAT);
+	status = stop(erric, 0, 0, F_32_BIT);
+	assert_int_equal(status, ERRIC_STATUS_WRONG_FORMAT);
 }
 
 int main(void)

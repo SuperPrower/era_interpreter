@@ -1,7 +1,7 @@
 #include "reverse_translation.h"
 
 // Small translation table for storing. Has 2 edge cases handled by the function
-char *era_instruction_text[] = {
+char *erric_instruction_text[] = {
 	"NS",	// Special case - format dependent
 	"LD",
 	"LDAC",	// Special case - format dependent
@@ -24,5 +24,5 @@ char *get_instruction_name(enum format_t format, sword_t code)
 			return "LDA";
 		return "LDC";
 	}
-	return era_instruction_text[code];
+	return erric_instruction_text[code];
 }

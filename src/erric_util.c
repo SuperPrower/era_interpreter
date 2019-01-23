@@ -1,25 +1,25 @@
-#include "era_util.h"
+#include "erric_util.h"
 
-sword_t read_sword(struct era_t *era, lword_t address)
+sword_t read_sword(struct erric_t *erric, lword_t address)
 {
-	if(address > era->memory_size)
+	if(address > erric->memory_size)
 		return 0;
-	return (sword_t)(era->memory[address] & get_mask(F_8_BIT));
+	return (sword_t)(erric->memory[address] & get_mask(F_8_BIT));
 }
 
-word_t read_word(struct era_t *era, lword_t address)
+word_t read_word(struct erric_t *erric, lword_t address)
 {
-	if(address > era->memory_size)
+	if(address > erric->memory_size)
 		return 0;
-	return era->memory[address];
+	return erric->memory[address];
 }
 
-lword_t read_lword(struct era_t *era, lword_t address)
+lword_t read_lword(struct erric_t *erric, lword_t address)
 {
-	if(address + 1 > era->memory_size)
+	if(address + 1 > erric->memory_size)
 		return 0;
 	// sizeof(word_t) * 8 returns number of bits
-	return (lword_t)(era->memory[address] << (sizeof(word_t) * 8) | era->memory[address + 1]);
+	return (lword_t)(erric->memory[address] << (sizeof(word_t) * 8) | erric->memory[address + 1]);
 }
 
 lword_t get_mask(enum format_t format)
@@ -37,13 +37,13 @@ lword_t get_mask(enum format_t format)
 	}
 }
 
-int write_lword(struct era_t *era, lword_t address, lword_t word)
+int write_lword(struct erric_t *erric, lword_t address, lword_t word)
 {
-	if(address > era->memory_size || address + 1 > era->memory_size)
+	if(address > erric->memory_size || address + 1 > erric->memory_size)
 		return 1;
 
-	era->memory[address] = (word_t)((word >> 16) & get_mask(F_16_BIT));
-	era->memory[address + 1] = (word_t)(word & get_mask(F_16_BIT));
+	erric->memory[address] = (word_t)((word >> 16) & get_mask(F_16_BIT));
+	erric->memory[address + 1] = (word_t)(word & get_mask(F_16_BIT));
 
 	return 0;
 }
