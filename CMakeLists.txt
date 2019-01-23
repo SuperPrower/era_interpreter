@@ -46,15 +46,15 @@ endif()
 
 # Build all files as library so that they can be re-used for tests
 add_library(erric_interpreter SHARED
-        src/erric_interpreter.c
-		src/erric_util.c
-		src/branch_operators.c
-		src/math_operators.c
-		src/memory_operators.c
-		src/logic_operators.c
-		src/file_reading.c
-		src/reverse_translation.c
-		)
+			src/erric_interpreter.c
+			src/erric_util.c
+			src/branch_operators.c
+			src/math_operators.c
+			src/memory_operators.c
+			src/logic_operators.c
+			src/file_reading.c
+			src/reverse_translation.c
+			)
 
 add_executable(${PROJECT_NAME} src/main.c)
 

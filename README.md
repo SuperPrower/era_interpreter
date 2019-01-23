@@ -35,4 +35,4 @@ Under Windows, you will still need to move the dll into executable's path if you
 
 ### Tests
 If you have enabled tests (as described above), you can run set of tests by changing directory to `build` and running `ctest`. You can add `-V` flag for verbose output.
-Under Windows, you will also need to move the `liberic_interpreter.dll` to the binary directory.
+Under Windows, you will also need to move the `liberric_interpreter.dll` to the binary directory.
