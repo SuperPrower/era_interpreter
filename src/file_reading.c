@@ -1,16 +1,5 @@
 #include "file_reading.h"
 
-uint8_t little_endian()
-{
-	// Little-endian:
-	// 01 00
-	// Big endian:
-	// 00 01
-	// Therefore, 1 will be read on little-endian and 0 on big-endian
-	uint16_t x = 1;
-	return *(uint8_t *) &x;
-}
-
 void swap_bytes(uint8_t *bytes, size_t length)
 {
 	uint8_t temp;
