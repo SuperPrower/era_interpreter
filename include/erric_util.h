@@ -74,7 +74,7 @@ int write_lword(struct erric_t *erric, lword_t address, lword_t word);
  *
  * @return 0 on success, 1 on failure
  */
-int write_word(struct erric_t *erric, lword_t address, uint8_t* data, size_t data_length);
+int write_data(struct erric_t * erric, lword_t address, uint8_t * data, size_t data_length);
 
 /**
  * Helper function used to put 2th complement integers in registers

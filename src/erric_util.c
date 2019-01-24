@@ -50,10 +50,10 @@ lword_t get_mask(enum format_t format)
 
 int write_lword(struct erric_t *erric, lword_t address, lword_t word)
 {
-	return write_word(erric, address, (uint8_t*)(&word), sizeof(word));
+	return write_data(erric, address, (uint8_t *) (&word), sizeof(word));
 }
 
-int write_word(struct erric_t *erric, lword_t address, uint8_t* data, size_t data_length)
+int write_data(struct erric_t * erric, lword_t address, uint8_t * data, size_t data_length)
 {
 	size_t mem_size = sizeof(erric->memory[address]);
 
