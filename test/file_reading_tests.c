@@ -40,7 +40,6 @@ static void v0_tests(void **state)
 	assert_int_equal(read_word(erric, 3), 22121);
 	assert_int_equal(read_word(erric, 4), 63409);
 	assert_int_equal(read_word(erric, 5), 0);
-	// TODO: When memory is fully fleshed-out, check that everything else is 0.
 
 	remove_erric(erric);
 }
@@ -69,7 +68,6 @@ static void v1_tests(void **state)
 	assert_int_equal(read_word(erric, 3), 22121);
 	assert_int_equal(read_word(erric, 4), 63409);
 	assert_int_equal(read_word(erric, 5), 0);
-	// TODO: When memory is fully fleshed-out, check that everything else is 0.
 
 	remove_erric(erric);
 }
