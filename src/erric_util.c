@@ -1,5 +1,16 @@
 #include "erric_util.h"
 
+uint8_t little_endian()
+{
+	// Little-endian:
+	// 01 00
+	// Big endian:
+	// 00 01
+	// Therefore, 1 will be read on little-endian and 0 on big-endian
+	uint16_t x = 1;
+	return *(uint8_t *) &x;
+}
+
 sword_t read_sword(struct erric_t *erric, lword_t address)
 {
 	if(address > erric->memory_size)
@@ -39,11 +50,34 @@ lword_t get_mask(enum format_t format)
 
 int write_lword(struct erric_t *erric, lword_t address, lword_t word)
 {
-	if(address > erric->memory_size || address + 1 > erric->memory_size)
+	return write_data(erric, address, (uint8_t *) (&word), sizeof(word));
+}
+
+int write_data(struct erric_t * erric, lword_t address, uint8_t * data, size_t data_length)
+{
+	size_t mem_size = sizeof(erric->memory[address]);
+
+	if(address > erric->memory_size || address + data_length - mem_size > erric->memory_size)
 		return 1;
 
-	erric->memory[address] = (word_t)((word >> 16) & get_mask(F_16_BIT));
-	erric->memory[address + 1] = (word_t)(word & get_mask(F_16_BIT));
+	uint8_t *memory = (uint8_t*)erric->memory;
+
+	for(int c = 0; c < data_length; ++c)
+	{
+		memory[(address * mem_size) + c] = data[c];
+	}
+
+	// Under little endian, we need to swap parts of the number, not just bytes
+	if(little_endian())
+	{
+		for(int c = 0; c < mem_size / 2; ++c)
+		{
+			erric->memory[address + c] += erric->memory[address + mem_size - c - 1];
+			erric->memory[address + mem_size - c - 1] = erric->memory[address + c] -
+					erric->memory[address + mem_size - c - 1];
+			erric->memory[address + c] -= erric->memory[address + mem_size - c - 1];
+		}
+	}
 
 	return 0;
 }

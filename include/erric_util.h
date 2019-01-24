@@ -4,6 +4,14 @@
 #include "erric_interpreter.h"
 
 /**
+ * Checks if the system is little-endian
+ * Needed mostly for file I/O
+ *
+ * @return 1 if little-endian, 0 otherwise
+ */
+uint8_t little_endian();
+
+/**
  * Reads a short word from memory
  *
  * @param[in]	erric 	pointer to erric structure
@@ -53,8 +61,20 @@ lword_t get_mask(enum format_t format);
  *
  * @return 0 on success, 1 on failure
  */
-// XXX: type-dependent, VERY bad
 int write_lword(struct erric_t *erric, lword_t address, lword_t word);
+
+/**
+ * Writes a byte array into the memory.
+ * Intended to be used rarely and sparingly.
+ *
+ * @param[in]	erric		pointer to erric structure
+ * @param[in]	address		address to read the word from
+ * @param[in]	data		byte array to write to the memory address
+ * @param[in]	data_length	length of the byte array
+ *
+ * @return 0 on success, 1 on failure
+ */
+int write_data(struct erric_t * erric, lword_t address, uint8_t * data, size_t data_length);
 
 /**
  * Helper function used to put 2th complement integers in registers

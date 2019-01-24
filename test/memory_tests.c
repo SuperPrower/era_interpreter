@@ -52,14 +52,15 @@ static void lda_tests(void **state)
 	struct erric_t * erric = (struct erric_t *) *state;
 	sword_t ret;
 
+	// Memory 0 is written to ensure we don't read from it.
 	write_lword(erric, 0, 2865685771);
-	write_lword(erric, 1, 48706037);
-	erric->registers[PC] = 1;
+	write_lword(erric, 2, 48706037);
+	erric->registers[PC] = 2;
 	erric->registers[0] = 292236222;
 	erric->registers[1] = 10;
 	ret = lda(erric, 0, 1, F_8_BIT);
 	assert_int_equal(erric->registers[1], 340942259);
-	assert_int_equal(erric->registers[PC], 3);
+	assert_int_equal(erric->registers[PC], 4);
 	assert_int_equal(ret, ERRIC_STATUS_NONE);
 
 	// Negative test: wrong command format

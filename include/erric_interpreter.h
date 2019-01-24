@@ -51,7 +51,7 @@ int free_erric(struct erric_t * erric);
  *
  * @returns	ERRIC_STATUS_NONE on success, error code on failure
  */
-sword_t read_file(char *filename, struct erric_t *erric);
+sword_t read_file(const char *filename, struct erric_t *erric);
 
 /**
  * Parse the instruction into instuction_t structure

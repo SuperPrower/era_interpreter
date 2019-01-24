@@ -8,14 +8,6 @@
 #define CHANGE_ENDIAN(x) swap_bytes((uint8_t*)&(x), sizeof(x))
 
 /**
- * Checks if the system is little-endian
- * Needed mostly for file I/O
- *
- * @return 1 if little-endian, 0 otherwise
- */
-uint8_t little_endian();
-
-/**
  * Tries to swap bytes in a byte array
  * Used here to swap between little and big endianness by casting values to arrays with sizeof(variable)
  *
