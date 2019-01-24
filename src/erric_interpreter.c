@@ -51,7 +51,7 @@ int free_erric(struct erric_t * erric)
 }
 
 //GOTOs in here are responsible and sensible, so no need to worry about it
-sword_t read_file(char *filename, struct erric_t *erric)
+sword_t read_file(const char *filename, struct erric_t *erric)
 {
 	FILE * executable;
 	sword_t status = ERRIC_STATUS_NONE;
