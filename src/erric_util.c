@@ -13,33 +13,36 @@ uint8_t little_endian()
 
 sword_t read_sword(struct erric_t *erric, lword_t address)
 {
-	if(address > erric->memory_size)
+	if(address > erric->memory_size) {
 		return 0;
+	}
 	return (sword_t)(erric->memory[address] & get_mask(F_8_BIT));
 }
 
 word_t read_word(struct erric_t *erric, lword_t address)
 {
-	if(address > erric->memory_size)
+	if(address > erric->memory_size) {
 		return 0;
+	}
 	return erric->memory[address];
 }
 
 lword_t read_lword(struct erric_t *erric, lword_t address)
 {
-	if(address + 1 > erric->memory_size)
+	if(address + 1 > erric->memory_size) {
 		return 0;
+	}
 	// sizeof(word_t) * 8 returns number of bits
 	// Little endian reverses the bits, so we need to read them in a different order
-	if(little_endian())
-		return (lword_t)((lword_t)erric->memory[address + 1] << (sizeof(word_t) * 8) | erric->memory[address]);
+	if(little_endian()) {
+		return (lword_t) ((lword_t) erric->memory[address + 1] << (sizeof(word_t) * 8) | erric->memory[address]);
+	}
 	return (lword_t)((lword_t)erric->memory[address] << (sizeof(word_t) * 8) | erric->memory[address + 1]);
 }
 
 lword_t get_mask(enum format_t format)
 {
-	switch(format)
-	{
+	switch(format) {
 		case F_32_BIT:
 			return 0xFFFFFFFF;
 		case F_16_BIT:
@@ -62,14 +65,14 @@ int write_data(struct erric_t * erric, lword_t address, uint8_t * data, size_t d
 	// If data_length is less or equal to data_length, then no additional space is taken.
 	size_t max_addr = mem_size > data_length ? 0 : data_length - mem_size;
 
-	if(address > erric->memory_size || address + max_addr > erric->memory_size)
+	if(address > erric->memory_size || address + max_addr > erric->memory_size) {
 		return 1;
+	}
 
 	// Treat the memory as an array of 8-bit values
 	uint8_t *memory = (uint8_t*)erric->memory;
 
-	for(int c = 0; c < data_length; ++c)
-	{
+	for(int c = 0; c < data_length; ++c) {
 		memory[(address * mem_size) + c] = data[c];
 	}
 
