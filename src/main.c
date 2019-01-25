@@ -25,8 +25,7 @@ void simple_mem_dump(struct erric_t *erric)
 	fprintf(dump, "ERRIC status: %u, %s\n", erric->status_code, status_what(erric->status_code));
 
 	fprintf(dump, "Registers:\n");
-	for(int c = 0; c < N_REGISTERS; ++c)
-	{
+	for(int c = 0; c < N_REGISTERS; ++c) {
 		if(c == FP)
 			fprintf(dump, "R%u (FP): %u\n", c, erric->registers[c]);
 		else if(c == SP)
@@ -41,8 +40,7 @@ void simple_mem_dump(struct erric_t *erric)
 
 	fprintf(dump, "Raw memory:\n");
 
-	for(uint32_t c = 0; c < erric->memory_size; ++c)
-	{
+	for(uint32_t c = 0; c < erric->memory_size; ++c) {
 		if (c % 8 == 0)
 			fprintf(dump, "\n");
 		fprintf(dump, "%04X\t", erric->memory[c]);

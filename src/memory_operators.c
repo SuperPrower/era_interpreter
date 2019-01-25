@@ -89,8 +89,7 @@ sword_t mov(struct erric_t *erric, sword_t i, sword_t j, enum format_t format)
 
 sword_t ldaldc(struct erric_t *erric, sword_t i, sword_t j, enum format_t format)
 {
-	switch (format)
-	{
+	switch (format) {
 		case F_8_BIT:
 			return lda(erric, i, j, format);
 		case F_32_BIT:

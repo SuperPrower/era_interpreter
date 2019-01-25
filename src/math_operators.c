@@ -17,8 +17,7 @@
  */
 lword_t get_shift_mask(enum format_t format)
 {
-	switch(format)
-	{
+	switch(format) {
 		case F_8_BIT:
 			return LAST_7_BITS;
 		case F_16_BIT:
@@ -36,8 +35,7 @@ lword_t get_shift_mask(enum format_t format)
  */
 lword_t get_sign_mask(enum format_t format)
 {
-	switch(format)
-	{
+	switch(format) {
 		case F_8_BIT:
 			return SIGN_8_BIT;
 		case F_16_BIT:
