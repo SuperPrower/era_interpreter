@@ -30,7 +30,10 @@ lword_t read_lword(struct erric_t *erric, lword_t address)
 	if(address + 1 > erric->memory_size)
 		return 0;
 	// sizeof(word_t) * 8 returns number of bits
-	return (lword_t)(erric->memory[address] << (sizeof(word_t) * 8) | erric->memory[address + 1]);
+	// Little endian reverses the bits, so we need to read them in a different order
+	if(little_endian())
+		return (lword_t)((lword_t)erric->memory[address + 1] << (sizeof(word_t) * 8) | erric->memory[address]);
+	return (lword_t)((lword_t)erric->memory[address] << (sizeof(word_t) * 8) | erric->memory[address + 1]);
 }
 
 lword_t get_mask(enum format_t format)
@@ -56,27 +59,18 @@ int write_lword(struct erric_t *erric, lword_t address, lword_t word)
 int write_data(struct erric_t * erric, lword_t address, uint8_t * data, size_t data_length)
 {
 	size_t mem_size = sizeof(erric->memory[address]);
+	// If data_length is less or equal to data_length, then no additional space is taken.
+	size_t max_addr = mem_size > data_length ? 0 : data_length - mem_size;
 
-	if(address > erric->memory_size || address + data_length - mem_size > erric->memory_size)
+	if(address > erric->memory_size || address + max_addr > erric->memory_size)
 		return 1;
 
+	// Treat the memory as an array of 8-bit values
 	uint8_t *memory = (uint8_t*)erric->memory;
 
 	for(int c = 0; c < data_length; ++c)
 	{
 		memory[(address * mem_size) + c] = data[c];
-	}
-
-	// Under little endian, we need to swap parts of the number, not just bytes
-	if(little_endian())
-	{
-		for(int c = 0; c < mem_size / 2; ++c)
-		{
-			erric->memory[address + c] += erric->memory[address + mem_size - c - 1];
-			erric->memory[address + mem_size - c - 1] = erric->memory[address + c] -
-					erric->memory[address + mem_size - c - 1];
-			erric->memory[address + c] -= erric->memory[address + mem_size - c - 1];
-		}
 	}
 
 	return 0;
