@@ -13,7 +13,7 @@ uint8_t little_endian()
 
 sword_t read_sword(struct erric_t *erric, lword_t address)
 {
-	if(address > erric->memory_size) {
+	if(address >= erric->memory_size) {
 		return 0;
 	}
 	return (sword_t)(erric->memory[address] & get_mask(F_8_BIT));
@@ -21,7 +21,7 @@ sword_t read_sword(struct erric_t *erric, lword_t address)
 
 word_t read_word(struct erric_t *erric, lword_t address)
 {
-	if(address > erric->memory_size) {
+	if(address >= erric->memory_size) {
 		return 0;
 	}
 	return erric->memory[address];
@@ -29,7 +29,7 @@ word_t read_word(struct erric_t *erric, lword_t address)
 
 lword_t read_lword(struct erric_t *erric, lword_t address)
 {
-	if(address + 1 > erric->memory_size) {
+	if(address + 1 >= erric->memory_size) {
 		return 0;
 	}
 	// sizeof(word_t) * 8 returns number of bits
@@ -54,18 +54,23 @@ lword_t get_mask(enum format_t format)
 	}
 }
 
-int write_lword(struct erric_t *erric, lword_t address, lword_t word)
+uint8_t write_lword(struct erric_t *erric, lword_t address, lword_t word)
 {
 	return write_data(erric, address, (uint8_t *) (&word), sizeof(word));
 }
 
-int write_data(struct erric_t * erric, lword_t address, uint8_t * data, size_t data_length)
+uint8_t write_data(struct erric_t * erric, lword_t address, uint8_t * data, size_t data_length)
 {
 	size_t mem_size = sizeof(erric->memory[address]);
-	// If data_length is less or equal to data_length, then no additional space is taken.
-	size_t max_addr = mem_size > data_length ? 0 : data_length - mem_size;
+	// If data_length is less or equal to than mem_size, then no additional space is taken.
+	size_t max_addr = data_length <= mem_size ? 0 : data_length / mem_size - 1;
 
-	if(address > erric->memory_size || address + max_addr > erric->memory_size) {
+	if(data_length > 1 && data_length % 2 == 1) {
+		// Shouldn't happen, but just in case an odd-sized integers are used
+		max_addr += 1;
+	}
+
+	if(address + max_addr >= erric->memory_size) {
 		return 1;
 	}
 
