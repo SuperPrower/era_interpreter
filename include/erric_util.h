@@ -1,6 +1,8 @@
 #ifndef ERRIC_UTIL_H
 #define ERRIC_UTIL_H
 
+#include <stddef.h>
+
 #include "erric_interpreter.h"
 
 /**
