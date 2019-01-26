@@ -33,10 +33,6 @@ lword_t read_lword(struct erric_t *erric, lword_t address)
 		return 0;
 	}
 	// sizeof(word_t) * 8 returns number of bits
-	// Little endian reverses the bits, so we need to read them in a different order
-	if(little_endian()) {
-		return (lword_t) ((lword_t) erric->memory[address + 1] << (sizeof(word_t) * 8) | erric->memory[address]);
-	}
 	return (lword_t)((lword_t)erric->memory[address] << (sizeof(word_t) * 8) | erric->memory[address + 1]);
 }
 
@@ -79,6 +75,27 @@ uint8_t write_data(struct erric_t * erric, lword_t address, uint8_t * data, size
 
 	for(int c = 0; c < data_length; ++c) {
 		memory[(address * mem_size) + c] = data[c];
+	}
+
+	// Under little-endian, we need to reverse the words in order to read it correctly.
+	// E.g. 3821823414
+	// Bytes(big-endian): E3 CC 65 B6
+	// Bytes(little-endian): B6 65 CC E3
+	// During direct writing, the words are written as B6 65 and CC E3
+	// Upon reversing: CC E3 B6 65
+	// Little-endian reads bytes right-to-left in every word, therefore:
+	// Word 1 read: E3 CC
+	// Word 2 read: 65 B6
+	// Which is what we want
+
+	if(little_endian()) {
+		for (int c = 0; c < max_addr; ++c) {
+			// We can't use a temp var here since we can't know the memory length
+			erric->memory[address + c] += erric->memory[address + max_addr - c];
+			erric->memory[address + max_addr - c] = erric->memory[address + c] -
+					erric->memory[address + max_addr - c];
+			erric->memory[address + c] -= erric->memory[address + max_addr - c];
+		}
 	}
 
 	return 0;

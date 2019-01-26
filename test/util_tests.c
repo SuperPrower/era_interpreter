@@ -37,14 +37,9 @@ static void write_tests(void **state)
 	assert_int_equal(erric->memory[10], 26038);
 	assert_int_equal(ret, 0);
 
-	ret = write_data(erric, 10, (uint8_t*)&x, 4);
-	if(little_endian()) {
-		assert_int_equal(erric->memory[10], 26038);
-		assert_int_equal(erric->memory[11], 58316);
-	} else {
-		assert_int_equal(erric->memory[10], 58316);
-		assert_int_equal(erric->memory[11], 26038);
-	}
+	ret = write_data(erric, 15, (uint8_t*)&x, 4);
+	assert_int_equal(erric->memory[15], 58316);
+	assert_int_equal(erric->memory[16], 26038);
 	assert_int_equal(ret, 0);
 
 	// Edge cases
@@ -59,36 +54,21 @@ static void write_tests(void **state)
 	assert_int_equal(ret, 0);
 
 	ret = write_data(erric, 126, (uint8_t*)&x, 4);
-	if(little_endian()) {
-		assert_int_equal(erric->memory[126], 26038);
-		assert_int_equal(erric->memory[127], 58316);
-	} else {
-		assert_int_equal(erric->memory[126], 58316);
-		assert_int_equal(erric->memory[127], 26038);
-	}
+	assert_int_equal(erric->memory[126], 58316);
+	assert_int_equal(erric->memory[127], 26038);
 	assert_int_equal(ret, 0);
 
 	// Negative cases
 	// Trying to write too much
 	ret = write_data(erric, 127, (uint8_t*)&x, 4);
-	if(little_endian()) {
-		assert_int_equal(erric->memory[126], 26038);
-		assert_int_equal(erric->memory[127], 58316);
-	} else {
-		assert_int_equal(erric->memory[126], 58316);
-		assert_int_equal(erric->memory[127], 26038);
-	}
+	assert_int_equal(erric->memory[126], 58316);
+	assert_int_equal(erric->memory[127], 26038);
 	assert_int_equal(ret, 1);
 
 	// Trying to write past memory
 	ret = write_data(erric, 128, (uint8_t*)&x, 1);
-	if(little_endian()) {
-		assert_int_equal(erric->memory[126], 26038);
-		assert_int_equal(erric->memory[127], 58316);
-	} else {
-		assert_int_equal(erric->memory[126], 58316);
-		assert_int_equal(erric->memory[127], 26038);
-	}
+	assert_int_equal(erric->memory[126], 58316);
+	assert_int_equal(erric->memory[127], 26038);
 	assert_int_equal(ret, 1);
 }
 
@@ -102,14 +82,11 @@ static void read_tests(void **state)
 	lword_t x = 3821823414;
 	write_data(erric, 0, (uint8_t*)&x, 4);
 	ret = read_sword(erric, 0);
-	assert_int_equal(ret, 182);
+	// Byte 2 of the original number
+	assert_int_equal(ret, 204);
 
 	ret = read_word(erric, 0);
-	if(little_endian()) {
-		assert_int_equal(ret, 26038);
-	} else {
-		assert_int_equal(ret, 58316);
-	}
+	assert_int_equal(ret, 58316);
 
 	ret = read_lword(erric, 0);
 	assert_int_equal(ret, 3821823414);
