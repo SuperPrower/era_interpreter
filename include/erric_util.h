@@ -1,6 +1,8 @@
 #ifndef ERRIC_UTIL_H
 #define ERRIC_UTIL_H
 
+#include <stddef.h>
+
 #include "erric_interpreter.h"
 
 /**
@@ -61,7 +63,7 @@ lword_t get_mask(enum format_t format);
  *
  * @return 0 on success, 1 on failure
  */
-int write_lword(struct erric_t *erric, lword_t address, lword_t word);
+uint8_t write_lword(struct erric_t *erric, lword_t address, lword_t word);
 
 /**
  * Writes a byte array into the memory.
@@ -74,7 +76,7 @@ int write_lword(struct erric_t *erric, lword_t address, lword_t word);
  *
  * @return 0 on success, 1 on failure
  */
-int write_data(struct erric_t * erric, lword_t address, uint8_t * data, size_t data_length);
+uint8_t write_data(struct erric_t * erric, lword_t address, uint8_t * data, size_t data_length);
 
 /**
  * Helper function used to put 2th complement integers in registers

@@ -3,8 +3,7 @@
 void swap_bytes(uint8_t *bytes, size_t length)
 {
 	uint8_t temp;
-	for(size_t c = 0; c < length / 2; ++c)
-	{
+	for(size_t c = 0; c < length / 2; ++c) {
 		temp = bytes[c];
 		bytes[c] = bytes[length - c - 1];
 		bytes[length - c - 1] = temp;

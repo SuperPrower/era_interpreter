@@ -61,34 +61,27 @@ sword_t read_file(const char *filename, struct erric_t *erric)
 
 	executable = fopen(filename, "rb");
 
-	if(executable == NULL)
-	{
+	if(executable == NULL) {
 		return ERRIC_STATUS_FILE_ERROR;
 	}
 
 	// Get the version
 	fread((void*)&version, sizeof(uint8_t), 1, executable);
-	if(ferror(executable) != 0 || feof(executable) != 0)
-	{
+	if(ferror(executable) != 0 || feof(executable) != 0) {
 		status = ERRIC_STATUS_FILE_READ_ERROR;
 		goto cleanup;
 	}
 
-	switch(version)
-	{
+	switch(version) {
 		case(0):
-		{
 			status = read_v0_file(erric, executable);
 			break;
-		}
 		case 1:
-		{
 			status = read_v1_file(erric, executable);
 			break;
-		}
 		default:
 			status = ERRIC_STATUS_FILE_VERSION_ERROR;
-			goto cleanup;
+			break;
 	}
 
 	cleanup:
@@ -105,8 +98,7 @@ struct instruction_t parse_instruction(word_t instruction)
 	out.i = (sword_t)(instruction >> 5 & LAST_5_BITS);
 	out.j = (sword_t)(instruction & LAST_5_BITS);
 
-	switch(format_code)
-	{
+	switch(format_code) {
 		case 0:
 			out.format = F_8_BIT;
 			break;
@@ -135,8 +127,7 @@ sword_t step(struct erric_t *erric)
 
 sword_t execute(struct erric_t *erric)
 {
-	while (erric->status_code == ERRIC_STATUS_NONE)
-	{
+	while (erric->status_code == ERRIC_STATUS_NONE) {
 		erric->status_code = step(erric);
 	}
 	return erric->status_code;
